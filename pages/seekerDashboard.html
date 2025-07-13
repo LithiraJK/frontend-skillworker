@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seeker Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/seekerDashboard.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#job-postings">Job Postings</a></li>
+                <li><a href="#applications">Applications</a></li>
+                <li><a href="#settings">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <div class="row mb-5">
+            <div class="col-lg-6 col-md-12 mb-4">
+                <section class="search-section h-100">
+                    <h2>What are you looking for?</h2>
+                    <form id="search-form">
+                        <input type="text" id="search-input" class="form-control" placeholder="Search for jobs, skills, or locations...">
+                        <button type="submit" class="btn btn-warning">Search</button>
+                    </form>
+                    <div class="mt-4 category-list">
+                        <h4>All Categories</h4>
+                        <ul>
+                            <li><a href="#category1">Category 1</a></li>
+                            <li><a href="#category2">Category 2</a></li>
+                            <li><a href="#category3">Category 3</a></li>
+                            <li><a href="#category4">Category 4</a></li>
+                            <li><a href="#category5">Category 5</a></li>
+                            <li><a href="#category6">Category 6</a></li>
+                            <li><a href="#category7">Category 7</a></li>
+                            <li><a href="#category8">Category 8</a></li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+            
+            <div class="col-lg-6 col-md-12 mb-4">
+                <section class="map-container h-100">
+                    <h4>Select by District (Sri Lanka Map)</h4>
+                    <p class="map-instruction">Click on any district to filter jobs by location</p>
+                    <div class="map-wrapper">
+                        <div id="map"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <section>
+            <div class="card-container">
+                <div class="card">
+                    <h5>Job Title 1</h5>
+                    <p>Company: Company A</p>
+                    <p>Location: City A</p>
+                    <button class="apply-btn">Apply Now</button>
+                </div>
+                <div class="card">
+                    <h5>Job Title 2</h5>
+                    <p>Company: Company B</p>
+                    <p>Location: City B</p>
+                    <button class="apply-btn">Apply Now</button>
+                </div>
+                <div class="card">
+                    <h5>Job Title 3</h5>
+                    <p>Company: Company C</p>
+                    <p>Location: City C</p>
+                    <button class="apply-btn">Apply Now</button>
+                </div>
+                 <div class="card">
+                    <h5>Job Title 4</h5>
+                    <p>Company: Company D</p>
+                    <p>Location: City D</p>
+                    <button class="apply-btn">Apply Now</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="pagination">
+            <button class="btn btn-outline-dark">Previous</button>
+            <button class="btn btn-outline-dark">Next</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 SkillWorker. All rights reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/mapdata.js"></script>
+    <script src="../js/countrymap.js"></script>
+    <script src="../js/seekerDashboard.js"></script>
+</body>
+</html>
