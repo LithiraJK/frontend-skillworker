@@ -1,0 +1,48 @@
+header img {
+    width: 120px;
+    height: 50px ;
+    object-fit: cover ;
+}
+
+img[alt="Freelancer Icon"] {
+    width: 50px;
+    height: 50px;
+}
+
+img[alt="Client Icon"] {
+    width: 50px;
+    height: 50px;
+}
+
+/* Toggle button styles */
+.user-type-toggle {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    text-decoration: none;
+}
+
+.user-type-toggle:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    border-color: #ffc107;
+}
+
+.user-type-toggle.active {
+    border-color: #ffc107;
+    background-color: #fff8e1;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3) !important;
+}
+
+.user-type-toggle.active h5 {
+    color: #ff8c00 !important;
+}
+
+.user-type-toggle.active p {
+    color: #666 !important;
+}
+
+#continueBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
