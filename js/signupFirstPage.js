@@ -25,9 +25,9 @@ $(document).ready(function () {
     // Handle continue button click
     $('#continueBtn').on('click', function () {
         if (selectedType === 'freelancer') {
-            window.location.href = '../pages/signupSecondPage.html?role=freelancer';
+            window.location.href = '../pages/signupSecondPage.html?role=FREELANCER';
         } else if (selectedType === 'client') {
-            window.location.href = '../pages/signupSecondPage.html?role=client';
+            window.location.href = '../pages/signupSecondPage.html?role=CLIENT';
         }
     });
 });
