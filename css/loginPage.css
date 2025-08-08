@@ -2,49 +2,26 @@
   box-sizing: border-box;
 }
 
-body,
-html {
+body, html {
   margin: 0;
   padding: 0;
   height: 100%;
   font-family: "Segoe UI", sans-serif;
-  background-color: #fff;
 }
 
+/* Center the card */
 .main-container {
   display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* === Left Panel === */
-.left-panel {
-  flex: 1;
-  background-color: #fff7df;
-  display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  height: 100vh; /* Full height for centering */
+  background-color: #FFF7DF; /* Keep white */
 }
 
-.left-panel img {
-  max-width: 90%;
-  height: auto;
-}
-
-/* === Right Panel === */
-.right-panel {
-  flex: 1;
-  background-color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-}
-
+/* Login Card */
 .login-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 60vw;
   background-color: #ffffff;
   border-radius: 20px;
   box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.08);
@@ -82,7 +59,7 @@ html {
 }
 
 .btn-login:hover {
-  background-color: #e6b800;
+  background-color: #ffdd57;
 }
 
 .form-footer {
@@ -103,18 +80,6 @@ html {
 }
 
 @media (max-width: 768px) {
-  .main-container {
-    flex-direction: column;
-  }
-
-  .left-panel {
-    display: none;
-  }
-
-  .right-panel {
-    padding: 20px;
-  }
-
   .login-card {
     padding: 30px 20px;
   }

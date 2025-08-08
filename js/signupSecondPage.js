@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('#signupButton').click(function (e) {
+    $('#signupBtn').click(function (e) {
         e.preventDefault();
 
         console.log("Signing up clicked");

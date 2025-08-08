@@ -1,8 +1,11 @@
-header img {
-    width: 120px;
-    height: 50px ;
-    object-fit: cover ;
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Segoe UI", sans-serif;
+background-color: #FFF7DF;
 }
+
 
 img[alt="Freelancer Icon"] {
     width: 50px;
@@ -12,6 +15,23 @@ img[alt="Freelancer Icon"] {
 img[alt="Client Icon"] {
     width: 50px;
     height: 50px;
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.form-footer a {
+  font-weight: 600;
+  text-decoration: none;
+  color: #000;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
 }
 
 /* Toggle button styles */
