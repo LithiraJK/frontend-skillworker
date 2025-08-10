@@ -1,5 +1,6 @@
-$(document).ready(function() {
-    $('#loginBtn').click(function(event) {
+
+$(document).ready(function () {
+    $('#loginBtn').click(async function (event) {
         event.preventDefault();
 
         const email = $('#email').val();
@@ -19,46 +20,47 @@ $(document).ready(function() {
             password: password
         };
 
-        $.ajax({
-            type: 'POST',
-            url: 'http://localhost:8080/api/v1/auth/login',
-            data: JSON.stringify(loginData),
-            contentType: 'application/json',
-            success: function(response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Login Successful',
-                    text: response.message
-                }).then(() => {
-                    cookieStore.set('token', response.data.token);
-                    cookieStore.set('user_role', response.data.role);
-                    cookieStore.set('first_name', response.data.firstName);
+        try {
+            const response = await $.ajax({
+                type: 'POST',
+                url: 'http://localhost:8080/api/v1/auth/login',
+                data: JSON.stringify(loginData),
+                contentType: 'application/json'
+            });
 
-                    if (response.data.role === 'FREELANCER') {
-                        window.location.href = '../pages/freelancerDashboard.html';
-                        return;
-                    }
+            await Swal.fire({
+                icon: 'success',
+                title: 'Login Successful',
+                text: response.message
+            });
 
-                    if (response.data.role === 'CLIENT') {
-                        window.location.href = '../pages/clientDashboard.html';
-                        return;
-                    }
-                    
-                    if (response.data.role === 'ADMIN') {
-                        window.location.href = '../pages/adminDashboard.html';
-                        return;
-                    }
-                });
+            $.cookie('token', response.data.token, { path: '/' });
+            $.cookie('refresh_token', response.data.refreshToken, { path: '/' });
+            $.cookie('user_role', response.data.role, { path: '/' });
+            $.cookie('first_name', response.data.firstName, { path: '/' });
 
-            },
-            error: function(xhr, status, error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Login Failed',
-                    text: 'Invalid email or password.'
-                });
+            // Redirect based on role
+            if (response.data.role === 'FREELANCER') {
+                window.location.href = '../pages/freelancerDashboard.html';
+                return;
             }
-        });
+            if (response.data.role === 'CLIENT') {
+                window.location.href = '../pages/clientDashboard.html';
+                return;
+            }
+            if (response.data.role === 'ADMIN') {
+                window.location.href = '../pages/adminDashboard.html';
+                return;
+            }
+
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Failed',
+                text: 'Invalid email or password.'
+            });
+        }
 
     });
+
 });
