@@ -1,11 +1,7 @@
-import tokenHandler from './util/tokenRefreshHandler.js';
+import tokenHandler from './util/tokenRefreshHandler.js'; 
 
 $(document).ready(function() {
-    console.log("Admin Dashboard Loaded");
-    
     $('#changeTextBtn').click(async function() {
-        console.log("Change Text button clicked");
-
         const token = await $.cookie('token');
 
         if (token) {
@@ -33,8 +29,13 @@ $(document).ready(function() {
         });
 
         } else {
-        window.location.href = '../pages/loginPage.html';
-    }
-
+            Swal.fire({
+                icon: 'error',
+                title: 'Authentication Required',
+                text: 'Please login to access this feature.',
+            }).then(() => {
+                window.location.href = '../pages/loginPage.html';
+            });
+        }
     });
 });
