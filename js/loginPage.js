@@ -40,8 +40,8 @@ $(document).ready(function () {
             $.cookie('first_name', response.data.firstName, { path: '/' });
 
             // Redirect based on role
-            if (response.data.role === 'FREELANCER') {
-                window.location.href = '../pages/freelancerDashboard.html';
+            if (response.data.role === 'WORKER') {
+                window.location.href = '../pages/workerDashboard.html';
                 return;
             }
             if (response.data.role === 'CLIENT') {

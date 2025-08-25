@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     // Initialize dashboard
     initializeDashboard();
@@ -93,6 +92,7 @@ $(document).ready(function() {
             timer: 1500,
             showConfirmButton: false
         });
+        window.location.href = '../pages/profileCompletion.html';
         // Here you would redirect to profile completion page
     });
 

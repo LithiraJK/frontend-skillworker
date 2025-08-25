@@ -1,0 +1,28 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.card {
+    border-radius: 15px;
+}
+
+.btn-warning {
+    background-color: #FFD700 !important;
+    border: none;
+}
+
+.btn-dark {
+    background-color: #000 !important;
+}
+
+.badge.bg-warning {
+    font-size: 0.85rem;
+}
+
+.badge.bg-secondary {
+    font-size: 0.8rem;
+}
+
+textarea {
+    resize: none;
+}

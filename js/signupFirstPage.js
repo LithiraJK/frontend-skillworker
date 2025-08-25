@@ -15,8 +15,8 @@ $(document).ready(function () {
         $('#continueBtn').prop('disabled', false);
 
         // Update button text based on selection
-        if (selectedType === 'freelancer') {
-            $('#continueBtn').text('Join as a Freelancer');
+        if (selectedType === 'worker') {
+            $('#continueBtn').text('Join as a Worker');
         } else {
             $('#continueBtn').text('Join as a Client');
         }
@@ -24,8 +24,8 @@ $(document).ready(function () {
 
     // Handle continue button click
     $('#continueBtn').on('click', function () {
-        if (selectedType === 'freelancer') {
-            window.location.href = '../pages/signupSecondPage.html?role=FREELANCER';
+        if (selectedType === 'worker') {
+            window.location.href = '../pages/signupSecondPage.html?role=WORKER';
         } else if (selectedType === 'client') {
             window.location.href = '../pages/signupSecondPage.html?role=CLIENT';
         }

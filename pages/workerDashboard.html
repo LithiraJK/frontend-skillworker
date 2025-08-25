@@ -7,7 +7,7 @@
     <title>Freelancer | SkillWorker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/freelancerDashboard.css">
+    <link rel="stylesheet" href="../css/workerDashboard.css">
 </head>
 
 <body>
@@ -20,22 +20,22 @@
                 <ul>
                     <li><a href="#dashboard" class="nav-link" data-section="dashboard-section">Dashboard</a></li>
                     <li><a href="#messages" class="nav-link" data-section="messages-section">Messages</a></li>
-                    <li><a href="#applications" class="nav-link" data-section="applications-section">Applications</a></li>
+                    <li><a href="#ads" class="nav-link" data-section="ads-section">My Ads</a></li>
                     <li>
                         <div class="dropdown">
-                            <!-- <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 Profile
-                            </button> -->
-                            <button class="btn btn-outline-warning" id="logoutBtn">
+                            </button>
+                            <!-- <button class="btn btn-outline-warning" id="logoutBtn">
                                 <i class="fas fa-sign-out-alt me-2"></i>
                                 Logout
-                            </button>
-                            <!-- <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">View Profile</a></li>
+                            </button> -->
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="../pages/workerProfile-view.html">View Profile</a></li>
                                 <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
-                            </ul> -->
+                                <li><a class="dropdown-item" href="#" id="logoutBtn" >Logout</a></li>
+                            </ul>
                         </div>
                     </li>
                 </ul>
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <!-- Statistics Cards -->
+        <!-- Statistics Cards
         <div class="row mb-4">
             <div class="col-md-3">
                 <div class="card text-center">
@@ -90,7 +90,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Dashboard Content Sections -->
         <div id="dashboard-section" class="dashboard-content">
@@ -130,7 +130,7 @@
                         </div>
                         <div class="card-body">
                             <div class="progress mb-3">
-                                <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
                             </div>
                             <ul class="list-unstyled">
                                 <li><i class="fas fa-check text-success"></i> Basic Info</li>
@@ -138,7 +138,7 @@
                                 <li><i class="fas fa-check text-success"></i> Portfolio</li>
                                 <li><i class="fas fa-times text-danger"></i> Certifications</li>
                             </ul>
-                            <button class="btn btn-warning btn-sm">Complete Profile</button>
+                            <button class="btn btn-warning btn-sm" >Complete Profile</button>
                         </div>
                     </div>
                 </div>
@@ -172,10 +172,10 @@
         </div>
 
         <!-- Applications Section -->
-        <div id="applications-section" class="dashboard-content" style="display: none;">
+        <div id="ads-section" class="dashboard-content" style="display: none;">
             <div class="card">
                 <div class="card-header">
-                    <h5>My Applications</h5>
+                    <h5>My Ads</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -220,7 +220,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="../js/freelancerDashboard.js"></script>
+    <script type="module" src="../js/workerDashboard.js"></script>
 </body>
 
 </html>
