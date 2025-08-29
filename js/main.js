@@ -3,7 +3,7 @@ $(document).ready(function() {
 
     $('#getStartedBtn').on('click', function() {
         console.log("Get Started button clicked!");
-        window.location.href = 'pages/loginPage.html';
+        window.location.href = 'pages/login-page.html';
     });
     
 });

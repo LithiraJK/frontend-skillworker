@@ -34,7 +34,7 @@ $(document).ready(function() {
                 title: 'Authentication Required',
                 text: 'Please login to access this feature.',
             }).then(() => {
-                window.location.href = '../pages/loginPage.html';
+                window.location.href = '../pages/login-page.html';
             });
         }
     });

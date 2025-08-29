@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillWorker | Worker Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/worker-dashboard.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+        <a class="navbar-brand fw-bold text-white" href="#">Skill<span class="text-warning">W</span>orker.</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link active" href="/pages/worker-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Ads</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
+            </ul>
+            <!-- User Dropdown -->
+
+            <a href="#" class="me-3 text-white fs-5"><i class="fas fa-envelope"></i></a>
+            <a href="#" class="me-3 text-white fs-5"><i class="fas fa-bell"></i></a>
+            <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
+
+            
+            <div class="dropdown">
+                <button class="profile-btn" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="/assets/images/workerDefualtPP.png" alt="Profile">
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                    <li><a class="dropdown-item" href="#">Account Settings</a></li>
+                    <li><a class="dropdown-item" href="/pages/worker-profile.html">Profile</a></li>
+                    <li><a class="dropdown-item" href="/pages/login-page.html"">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="container-fluid my-4">
+        <div class="row g-4">
+            <!-- Left Column (Profile) -->
+            <div class="col-lg-4">
+                <div class="container profile-card">
+                    <div class="profile-card text-center mb-4">
+                    <img src="/assets/images/workerDefualtPP.png" class="rounded-circle mb-3 object-fit-cover w-25 h-25" alt="Profile">
+                    <h5 class="fw-bold">Lithira Jayanaka</h5>
+                    <p class="text-muted">lithira@gmail.com</p>
+                    <div class="mb-2 text-warning fs-5">☆☆☆☆☆</div>
+                    <a href="/pages/worker-profile.html" class="btn btn-dark w-100">View Profile</a>
+                </div>
+
+                <div class="mb-4 profile-card">
+                    <h5 class="fw-bold mb-3">Reviews</h5>
+                    <div class="inbox-item">
+                        <strong>Anna</strong><br>"Great job, thanks!"
+                    </div>
+                    <div class="inbox-item">
+                        <strong>Namal</strong><br>"Highly recommend."
+                    </div>
+                    <div class="inbox-item">
+                        <strong>Mihirsh</strong><br>"Good communication."
+                    </div>
+                    <div class="inbox-item">
+                        <strong>Zow</strong><br>"Fast and professional."
+                    </div>
+                </div>
+
+                <div class="mb-4 profile-card">
+                    <h5 class="fw-bold mb-3">Inbox</h5>
+                    <div class="inbox-item">
+                        <strong>Anna</strong><br>New Message...
+                    </div>
+                    <div class="inbox-item">
+                        <strong>Namal</strong><br>Hey, can you update me?
+                    </div>
+                    <div class="inbox-item">
+                        <strong>Mihirsh</strong><br>Project deadline update.
+                    </div>
+                </div>
+
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-8">
+        
+                <div class="container">
+                    <div class="welcome-card p-4 mb-4">
+                        <h3 class="fw-bold mb-3">Welcome, Lithira</h3>
+                        <p class="text-muted">Find important messages, tips, and links to helpful resources here..</p>
+
+                        <hr>
+                    </div>
+
+                     <div class="card">
+                        <div class="card-header">
+                            <h5>Profile Completion</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="progress mb-4">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-black" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                            </div>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Basic Info</li>
+                                <li><i class="fas fa-check text-success"></i> Skills Added</li>
+                                <li><i class="fas fa-check text-success"></i> Portfolio</li>
+                                <li><i class="fas fa-times text-danger"></i> Certifications</li>
+                            </ul>
+                                <a href="/pages/worker-profile-completion.html" class="btn btn-dark btn-sm" >Complete Profile</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light pt-5 pb-3">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
+                    <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted platform for finding talent and opportunities.</p>
+                    <div class="footer-social mb-2">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Quick Links</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/worker-profile.html" class="text-light text-decoration-none">Profile</a></li>
+                        <li><a href="/pages/worker-dashboard.html" class="text-light text-decoration-none">Dashboard</a></li>
+                        <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a></li>
+                        <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <div class="footer-links-title">Support</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support Center</a></li>
+                        <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a></li>
+                        <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Contact</div>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-envelope"></i></span>support@skillworker.com</p>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234) 567-890</p>
+                    <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123 Main St, City, Country</p>
+                </div>
+            </div>
+            <hr class="border-light my-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
+                <div>
+                    <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
+                    <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+
+</html>

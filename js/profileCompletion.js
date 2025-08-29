@@ -1,20 +1,19 @@
-$(document).ready(function() {
+$(document).ready(function () {
   let currentStep = 1;
   const totalSteps = $(".step").length;
-  let isPremiumUser = false; // This would be set based on user's subscription
   let activeCategories = []; // Store fetched categories
   let activeLocations = []; // Store fetched locations
 
   // Fallback cookie utility if jQuery Cookie is not available
   const cookieUtil = {
-    get: function(name) {
+    get: function (name) {
       if (typeof $.cookie === 'function') {
         return $.cookie(name);
       }
       // Fallback to vanilla JavaScript
       const nameEQ = name + "=";
       const ca = document.cookie.split(';');
-      for(let i = 0; i < ca.length; i++) {
+      for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) === ' ') c = c.substring(1, c.length);
         if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
@@ -470,7 +469,7 @@ $(document).ready(function() {
       optionsHtml = '<option value="">No locations available</option>';
     } else {
       activeLocations.forEach(location => {
-  
+
         const locationId = location.location_id;
         const locationName = location.district;
 
@@ -527,23 +526,13 @@ $(document).ready(function() {
   // Update category button based on premium status
   function updateCategoryButton() {
     const categoryCount = $(".category-item").length;
-    const maxCategories = isPremiumUser ? 5 : 1;
+    const maxCategories = 5;
 
-    if (!isPremiumUser) {
-      $("#addCategoryBtn").html('<i class="fas fa-crown me-1"></i>Add Category (Premium Only)')
-        .removeClass('btn-success')
-        .addClass('btn-warning');
+    if (categoryCount >= maxCategories) {
+      $("#addCategoryBtn").prop('disabled', true)
+        .html(`<i class="fas fa-check me-1"></i>Maximum Categories (${maxCategories})`);
     } else {
-      $("#addCategoryBtn").html('<i class="fas fa-plus me-1"></i>Add Category')
-        .removeClass('btn-warning')
-        .addClass('btn-success');
-
-      if (categoryCount >= maxCategories) {
-        $("#addCategoryBtn").prop('disabled', true)
-          .html(`<i class="fas fa-check me-1"></i>Maximum Categories (${maxCategories})`);
-      } else {
-        $("#addCategoryBtn").prop('disabled', false);
-      }
+      $("#addCategoryBtn").prop('disabled', false);
     }
   }
 
@@ -578,7 +567,7 @@ $(document).ready(function() {
         $("#phone2").val()
       ],
       experience: $("#experience").val(),
-      bio: $("#bio").val(),
+      bio: $("#about").val(),
       skills: $("#skills").val().split(",").map(skill => skill.trim()),
       categoryIds: [],
       locationIds: [],
@@ -625,7 +614,7 @@ $(document).ready(function() {
       confirmButtonText: 'Continue to Dashboard'
     }).then(() => {
       // Redirect to appropriate dashboard
-      window.location.href = '../pages/workerDashboard.html';
+      window.location.href = '../pages/worker-dashBoard.html';
     });
 
 
@@ -639,17 +628,17 @@ $(document).ready(function() {
       headers: {
         'Authorization': 'Bearer ' + $.cookie('token')
       },
-      success: function(response) {
+      success: function (response) {
         console.log('Profile saved successfully:', response);
         Swal.fire({
           icon: 'success',
           title: 'Profile Saved!',
           text: 'Your profile has been completed successfully.'
         }).then(() => {
-          window.location.href = '../pages/workerDashboard.html';
+          window.location.href = '../pages/worker-dashBoard.html';
         });
       },
-      error: function(xhr, status, error) {
+      error: function (xhr, status, error) {
         console.error('Profile save failed:', error);
         Swal.fire({
           icon: 'error',
@@ -658,6 +647,6 @@ $(document).ready(function() {
         });
       }
     });
-    
+
   });
 });

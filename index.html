@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillWorker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <style>
         body {
@@ -43,24 +44,75 @@
         .feature-card:hover {
             transform: translateY(-10px);
         }
+
+        
+/* footer style> */
+footer {
+  background: #000;
+  color: #fff;
+}
+
+.footer-links-title {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.footer-links-list li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-contact-icon {
+  width: 22px;
+  text-align: center;
+  margin-right: 8px;
+}
+
+.footer-social a {
+  font-size: 1.2rem;
+  margin-right: 10px;
+  color: #fff;
+  transition: color 0.2s;
+}
+
+.footer-social a:hover {
+  color: #ffc107;
+}
+
+.footer-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.footer-description {
+  font-size: 0.95rem;
+  color: #ccc;
+}
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Skill<span style="color: #FFD700;"">W</span>orker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Jobs</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Workers</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
-                </ul>
+   <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+        <a class="navbar-brand fw-bold" href="#">Skill<span class="text-warning">W</span>orker.</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="/pages/worker-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Ads</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
+            </ul>
+
+            <div class="d-flex align-items-center">
+                <a class="me-3 text-white fs-5" href="#"><i class="fas fa-envelope"></i></a>
+                <a class="me-3 text-white fs-5" href="#"><i class="fas fa-bell"></i></a>
+                <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
+                <a class="btn btn-outline-warning m-2" href="/pages/login-page.html"><i class="fas fa-user"></i> Login</a>
+                <a class="btn btn-outline-warning m-2" href="/pages/signup-first-page.html">Sign Up</a>
+
             </div>
         </div>
     </nav>
@@ -70,7 +122,7 @@
         <div class="container">
             <h1>Find the Right Talent, Fast</h1>
             <p class="lead mt-3">SkillWorker connects skilled workers with clients across Sri Lanka. Get your job done with confidence.</p>
-            <a href="#" class="btn btn-warning btn-lg mt-4" id="getStartedBtn">Get Started</a>
+            <a href="/pages/login-page.html" class="btn btn-warning btn-lg mt-4" id="getStartedBtn">Get Started</a>
         </div>
     </section>
 
@@ -103,9 +155,62 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="text-center py-4 bg-dark text-white">
-        <p class="mb-0">© 2025 SkillWorker. All Rights Reserved.</p>
+   
+    <footer class="bg-dark text-light pt-5 pb-3">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
+                    <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted
+                        platform for finding talent and opportunities.</p>
+                    <div class="footer-social mb-2">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Quick Links</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/worker-profile.html" class="text-light text-decoration-none">Profile</a></li>
+                        <li><a href="/pages/workerDashboard.html" class="text-light text-decoration-none">Dashboard</a>
+                        </li>
+                        <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a>
+                        </li>
+                        <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <div class="footer-links-title">Support</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support
+                                Center</a></li>
+                        <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a></li>
+                        <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Contact</div>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i
+                                class="fas fa-envelope"></i></span>support@skillworker.com</p>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234)
+                        567-890</p>
+                    <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123
+                        Main St, City, Country</p>
+                </div>
+            </div>
+            <hr class="border-light my-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
+                <div>
+                    <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
+                    <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

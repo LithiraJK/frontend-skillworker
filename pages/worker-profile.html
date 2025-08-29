@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SkillWorker | Worker Profile</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/css/worker-profile.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+        <a class="navbar-brand fw-bold" href="#">Skill<span class="text-warning">W</span>orker.</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="/pages/worker-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Ads</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
+            </ul>
+
+            <div class="d-flex align-items-center">
+                <a class="me-3 text-white fs-5" href="#"><i class="fas fa-envelope"></i></a>
+                <a class="me-3 text-white fs-5" href="#"><i class="fas fa-bell"></i></a>
+                <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
+
+                <div class="dropdown">
+                    <button class="btn p-0 border-0 bg-transparent" id="userMenu" data-bs-toggle="dropdown">
+                        <img src="/assets/images/workerDefualtPP.png" class="rounded-circle" width="40" height="40"
+                            alt="pp">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/pages/worker-profile.html">Profile</a></li>
+                        <li><a class="dropdown-item" href="/pages/login-page.html">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="container my-4">
+        <div class="row gx-4">
+
+            <!-- LEFT: PROFILE & SECTIONS (Large area to match your drawing) -->
+            <div class="col-lg-8">
+                <!-- Profile Header -->
+                <div class="profile-header d-flex align-items-center gap-3 mb-3">
+                    <img id="profilePic" src="/assets/images/workerDefualtPP.png" class="profile-pic" alt="profile">
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div>
+                                <h4 class="mb-1 fw-bold d-flex align-items-center gap-2">
+                                    <span id="displayName">Lithira</span>
+                                    <i class="fa-solid fa-pen-to-square edit-icon" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasProfile" title="Edit profile"></i>
+                                </h4>
+                                <p class="mb-1 text-muted"><i class="fa-regular fa-envelope me-2"></i><span
+                                        id="displayEmail">lithira@gmail.com</span></p>
+                                <p class="mb-0 text-muted"><i class="fa-solid fa-location-dot me-2"></i><span
+                                        id="displayLocation">Galle</span></p>
+                                <p class="mb-0 text-muted"><i class="fa-solid fa-briefcase me-2"></i><span
+                                        id="displayLocation"><span id="displayExperience">10</span> years
+                                        experience</span></p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Share / Preview -->
+                <div class="mb-4">
+                    <a href="#" class="btn btn-dark me-2"><i class="fa-solid fa-share-nodes me-2"></i>Share</a>
+                    <a href="/pages/worker-profile-preview.html" class="btn btn-outline-dark"><i class="fa-solid fa-eye me-2"></i>Preview</a>
+                </div>
+
+                <!-- About -->
+                <div class="section-card d-flex flex-column align-items-start justify-content-between">
+                    <h5 class="fw-bold mb-2">About</h5>
+                    <p id="displayAbout">I am a professional Plumber. I do plumbing, pipe installations, and
+                        maintenance. Quick, reliable and affordable services.</p>
+                    <button class="btn btn-sm btn-outline-dark" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasAbout">
+                        <i class="fa-solid fa-pen me-1"></i>Edit
+                    </button>
+                </div>
+
+                <!-- Skills -->
+                <div class="section-card d-flex flex-column align-items-start justify-content-between">
+                    <h5 class="fw-bold mb-2">Skills &amp; Expertise</h5>
+                    <div id="skillsContainer" class="mb-3">
+                        <!-- badges will be rendered here -->
+                    </div>
+                    <div class="mb-2">
+                        <button class="btn btn-sm btn-outline-dark me-2" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasSkills"><i class="fa-solid fa-plus me-1"></i>Add/Edit</button>
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <div class="section-card d-flex flex-column align-items-start justify-content-between">
+                    <h5 class="fw-bold mb-2">Contact Details</h5>
+                    <div class="mb-2">
+                        <p class="mb-1"><strong>Mobile:</strong> <span id="displayMobile">077xxxxxxx</span></p>
+                        <p class="mb-0"><strong>Home/Work:</strong> <span id="displayHome">076xxxxxxx</span></p>
+                    </div>
+                    <button class="btn btn-sm btn-outline-dark" data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasContact"><i class="fa-solid fa-pen me-1"></i>Edit</button>
+                </div>
+            </div>
+
+            <!-- RIGHT: Quick Links -->
+            <div class="col-lg-4">
+                <div class="section-card">
+                    <h5 class="fw-bold mb-3">Quick Links</h5>
+                    <a href="#" class="btn btn-dark w-100 d-flex justify-content-between align-items-center mb-2">
+                        <span><i class="fa-solid fa-rectangle-ad me-2"></i>My Ads</span> <i
+                            class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#" class="btn btn-outline-dark w-100 d-flex justify-content-between align-items-center">
+                        <span><i class="fa-solid fa-envelope me-2"></i>Messages</span> <i
+                            class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light pt-5 pb-3">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
+                    <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted
+                        platform for finding talent and opportunities.</p>
+                    <div class="footer-social mb-2">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Quick Links</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/worker-profile.html" class="text-light text-decoration-none">Profile</a></li>
+                        <li><a href="/pages/workerDashboard.html" class="text-light text-decoration-none">Dashboard</a>
+                        </li>
+                        <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a>
+                        </li>
+                        <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <div class="footer-links-title">Support</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support
+                                Center</a></li>
+                        <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a></li>
+                        <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Contact</div>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i
+                                class="fas fa-envelope"></i></span>support@skillworker.com</p>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234)
+                        567-890</p>
+                    <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123
+                        Main St, City, Country</p>
+                </div>
+            </div>
+            <hr class="border-light my-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
+                <div>
+                    <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
+                    <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- OFFCANVASES (Right side editors) -->
+
+    <!-- PROFILE offcanvas (name, email, location, photo) -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasProfile">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Edit Profile</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form id="formProfile">
+                <div class="mb-3">
+                    <label class="form-label">Full name</label>
+                    <input type="text" id="inputName" class="form-control" value="Lithira" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Location</label>
+                    <input type="text" id="inputLocation" class="form-control" value="Galle">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Experience</label>
+                    <input type="text" id="inputExperience" class="form-control" value="10">
+                </div>
+                <div class="mb-3">
+                    <label for="profilePicture" class="form-label fw-bold">Upload Professional Profile Picture</label>
+                    <div class="d-flex align-items-center gap-3">
+                        <!-- Image Preview -->
+                        <img id="profilePreview" src="/assets/images/workerDefualtPP.png" alt="Profile Preview"
+                            style="width:120px; height:120px; border-radius:50%; border:2px solid #ddd; object-fit:cover;">
+
+                        <!-- File Input + Upload Button -->
+                        <div>
+                            <input type="file" class="form-control mb-2" id="profilePicture" accept="image/*">
+                            <button type="button" class="btn btn-dark" id="uploadBtn">
+                                <i class="bi bi-cloud-upload"></i> Upload
+                            </button>
+                        </div>
+                    </div>
+                    <small class="text-muted d-block mt-2">
+                        Recommended: Clear headshot, square image, max 2MB.
+                    </small>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-dark">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ABOUT offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAbout">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Edit About</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form id="formAbout">
+                <div class="mb-3">
+                    <label class="form-label">About you</label>
+                    <textarea id="inputAbout" class="form-control"
+                        rows="6">I am a professional Plumber. I do plumbing, pipe installations, and maintenance. Quick, reliable and affordable services.</textarea>
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-dark" type="submit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SKILLS offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasSkills">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Edit Skills</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form id="formSkills">
+                <div class="mb-3">
+                    <label class="form-label">Add skills (comma separated)</label>
+                    <input id="inputSkills" class="form-control" placeholder="e.g. Plumbing, Pipe Installation">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Existing skills</label>
+                    <div id="existingSkills" class="d-flex flex-wrap">
+                        <!-- existing badges are rendered here -->
+                    </div>
+                </div>
+
+                <div class="d-grid">
+                    <button class="btn btn-dark" type="submit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- CONTACT offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasContact">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Edit Contact</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form id="formContact">
+                <div class="mb-3">
+                    <label class="form-label">Mobile</label>
+                    <input id="inputMobile" type="text" class="form-control" value="077xxxxxxx">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Home / Work</label>
+                    <input id="inputHome" type="text" class="form-control" value="076xxxxxxx">
+                </div>
+
+                <div class="d-grid">
+                    <button class="btn btn-dark" type="submit">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- jQuery + Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/workerProfile.js"></script>
+    
+</body>
+
+</html>

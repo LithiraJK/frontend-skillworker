@@ -25,9 +25,9 @@ $(document).ready(function () {
     // Handle continue button click
     $('#continueBtn').on('click', function () {
         if (selectedType === 'worker') {
-            window.location.href = '../pages/signupSecondPage.html?role=WORKER';
+            window.location.href = '../pages/signup-SecondPage.html?role=WORKER';
         } else if (selectedType === 'client') {
-            window.location.href = '../pages/signupSecondPage.html?role=CLIENT';
+            window.location.href = '../pages/signup-SecondPage.html?role=CLIENT';
         }
     });
 });

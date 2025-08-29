@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worker Profile Preview</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/worker-profile-preview.css">
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+        <a class="navbar-brand fw-bold" href="#">Skill<span class="text-warning">W</span>orker.</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMain">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="/pages/worker-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Ads</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
+            </ul>
+
+            <div class="d-flex align-items-center">
+                <a class="me-3 text-white fs-5" href="#"><i class="fas fa-envelope"></i></a>
+                <a class="me-3 text-white fs-5" href="#"><i class="fas fa-bell"></i></a>
+                <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
+
+                <div class="dropdown">
+                    <button class="btn p-0 border-0 bg-transparent" id="userMenu" data-bs-toggle="dropdown">
+                        <img src="/assets/images/workerDefualtPP.png" class="rounded-circle" width="40" height="40"
+                            alt="pp">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/pages/worker-profile.html">Profile</a></li>
+                        <li><a class="dropdown-item" href="/pages/login-page.html"">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row">
+            <!-- LEFT SIDE -->
+            <div class="col-lg-8">
+                <div class="profile-header d-flex align-items-center">
+
+                    <img src="/assets/images/workerDefualtPP.png" class="profile-pic" alt="Profile Picture">
+
+                    <div class="d-flex flex-column text-start ms-4 ">
+                        <h3 class="mt-3">Lithira</h3>
+                        <p class="mb-1">lithira@gmail.com</p>
+                        <p class="mb-1"><span class="star"><i class="fa-sharp fa-solid fa-star"></i><i
+                                    class="fa-sharp fa-solid fa-star"></i><i class="fa-sharp fa-solid fa-star"></i><i
+                                    class="fa-sharp fa-solid fa-star"></i></i><i
+                                    class="fa-sharp fa-solid fa-star-half-stroke"></i></span>
+                            4.8</p>
+                        <p class="mb-1"><strong>Plumber</strong></p>
+                        <p class="mb-1"><i class="bi bi-geo-alt"></i> Galle, Colombo</p>
+                        <p class="text-muted">11 Years Experience</p>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <!-- About Me -->
+                <div class="mb-4">
+                    <h5 class="mb-4">About Me</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. I provide reliable plumbing services
+                        with 11 years of hands-on experience.</p>
+                </div>
+
+                <hr>
+
+                <!-- Skills -->
+                <div class="mb-4">
+                    <h5 class="mb-4">Skills</h5>
+                    <span class="skill-badge">Pipes</span>
+                    <span class="skill-badge">Water Systems</span>
+                    <span class="skill-badge">Repairs</span>
+                </div>
+
+                <hr>
+
+                <!-- My Services -->
+                <div class="mb-4">
+                    <h5 class="mb-4">My Services</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+
+
+
+                            <div class="card service-card modern-service-card border-0 shadow-sm h-100">
+
+                                <div class="card-body p-4">
+                                    <!-- Service Provider Info -->
+                                    <div class="d-flex align-items-center mb-3">
+                                        <img src="/assets/images/workerDefualtPP.png" class="rounded-circle me-3"
+                                            width="50" height="50" alt="Profile Picture"
+                                            style="object-fit: cover; border: 2px solid #f8f9fa;">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1 fw-semibold text-dark">Lithira</h6>
+                                            <p class="mb-0 text-muted small">Professional Plumber</p>
+                                            <p class="mb-0 text-muted small">
+                                                <i class="fas fa-map-marker-alt text-warning me-1"></i>
+                                                Galle & Colombo
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Service Details -->
+                                    <div class="service-details">
+                                        <h5 class="card-title mb-2 fw-bold text-dark">Pipe Installation Service</h5>
+
+                                        <!-- Rating -->
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="rating-stars me-2">
+                                                <i class="fas fa-star text-warning"></i>
+                                                <span class="fw-semibold text-dark ms-1">4.8</span>
+                                            </div>
+                                            <span class="text-muted small">(16 reviews)</span>
+                                        </div>
+
+                                        <!-- Price and Contact -->
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="pricing">
+                                                <span class="text-muted small">Starting from</span>
+                                                <div class="fw-bold text-black fs-5">Rs. 2,000</div>
+                                            </div>
+                                            <button class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                                <i class="fas fa-phone me-1"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card service-card modern-service-card border-0 shadow-sm h-100">
+                                <div class="card-body p-4">
+                                    <!-- Service Provider Info -->
+                                    <div class="d-flex align-items-center mb-3">
+                                        <img src="/assets/images/workerDefualtPP.png" class="rounded-circle me-3"
+                                            width="50" height="50" alt="Profile Picture"
+                                            style="object-fit: cover; border: 2px solid #f8f9fa;">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1 fw-semibold text-dark">Kamal</h6>
+                                            <p class="mb-0 text-muted small">Professional Mason</p>
+                                            <p class="mb-0 text-muted small">
+                                                <i class="fas fa-map-marker-alt text-warning me-1"></i>
+                                                Kandy & Colombo
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Service Details -->
+                                    <div class="service-details">
+                                        <h5 class="card-title mb-2 fw-bold text-dark">Wall Construction & Repair</h5>
+
+                                        <!-- Rating -->
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="rating-stars me-2">
+                                                <i class="fas fa-star text-warning"></i>
+                                                <span class="fw-semibold text-dark ms-1">4.9</span>
+                                            </div>
+                                            <span class="text-muted small">(23 reviews)</span>
+                                        </div>
+
+                                        <!-- Price and Contact -->
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div class="pricing">
+                                                <span class="text-muted small">Starting from</span>
+                                                <div class="fw-bold text-black fs-5">Rs. 1,500</div>
+                                            </div>
+                                            <button class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                                <i class="fas fa-phone me-1"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+            <div class="col-lg-4">
+                <!-- Contact Card -->
+                <div class="card mb-4 p-3 shadow-sm">
+                    <div class="d-flex align-items-center mb-3 p-3">
+                        <img src="/assets/images/workerDefualtPP.png" class="rounded-circle me-3" width="40" height="40"
+                            alt="pp">
+                        <div>
+                            <h6 class="mb-0">Lithira</h6>
+                            <small>Plumber</small>
+                        </div>
+                    </div>
+                    <a href="#" class="btn btn-dark w-100"><i class="fa-regular fa-paper-plane"></i> Contact Me</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row d-flex">
+
+            <hr class="mb-3">
+            <!-- Reviews Summary -->
+            <div class="col-md-8 mb-4">
+                <h5 class="mb-4">(5) Reviews</h5>
+                <div class="d-flex align-items-center mb-3 w-75">
+                    <span class="me-2">5 Stars</span>
+                    <div class="flex-grow-1 review-bar">
+                        <div class="review-bar-fill" style="width:100%"></div>
+                    </div>
+                    <span class="ms-2">(4)</span>
+                </div>
+                <div class="d-flex align-items-center mb-3 w-75">
+                    <span class="me-2">4 Stars</span>
+                    <div class="flex-grow-1 review-bar">
+                        <div class="review-bar-fill" style="width:80%"></div>
+                    </div>
+                    <span class="ms-2">(1)</span>
+                </div>
+                <div class="d-flex align-items-center mb-3 w-75">
+                    <span class="me-2">3 Stars</span>
+                    <div class="flex-grow-1 review-bar"></div>
+                    <span class="ms-2">(0)</span>
+                </div>
+                <div class="d-flex align-items-center mb-3 w-75">
+                    <span class="me-2">2 Stars</span>
+                    <div class="flex-grow-1 review-bar"></div>
+                    <span class="ms-2">(0)</span>
+                </div>
+                <div class="d-flex align-items-center mb-3 w-75">
+                    <span class="me-2">1 Stars</span>
+                    <div class="flex-grow-1 review-bar"></div>
+                    <span class="ms-2">(0)</span>
+                </div>
+            </div>
+
+            <!-- Write Review -->
+            <div class="card p-3 col-md-4 mb-4">
+                <h6>Write a Review</h6>
+                <input type="text" class="form-control mb-2" placeholder="Name">
+                <input type="email" class="form-control mb-2" placeholder="Email">
+                <textarea class="form-control mb-2" placeholder="Review"></textarea>
+                <p class="mb-1">Rating:</p>
+                <div class="mb-2">
+                    <span class="star"><i class="fa-etch fa-solid fa-star"></i></span>
+                    <span class="star"><i class="fa-etch fa-solid fa-star"></i></span>
+                    <span class="star"><i class="fa-etch fa-solid fa-star"></i></span>
+                    <span class="star"><i class="fa-etch fa-solid fa-star"></i></span>
+                    <span class="star"><i class="fa-sharp-duotone fa-solid fa-star-half-stroke"></i></span>
+
+                </div>
+                <button class="btn btn-dark w-100">Submit</button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light pt-5 pb-3">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
+                    <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted
+                        platform for finding talent and opportunities.</p>
+                    <div class="footer-social mb-2">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Quick Links</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/workerProfile.html" class="text-light text-decoration-none">Profile</a></li>
+                        <li><a href="/pages/workerDashboard.html" class="text-light text-decoration-none">Dashboard</a>
+                        </li>
+                        <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a>
+                        </li>
+                        <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <div class="footer-links-title">Support</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support
+                                Center</a></li>
+                        <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a></li>
+                        <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Contact</div>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i
+                                class="fas fa-envelope"></i></span>support@skillworker.com</p>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234)
+                        567-890</p>
+                    <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123
+                        Main St, City, Country</p>
+                </div>
+            </div>
+            <hr class="border-light my-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
+                <div>
+                    <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
+                    <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
+  background: #f6f7fb;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.navbar .profile-btn {
+  padding: 0;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+}
+.navbar .profile-btn img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.inbox-item {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  padding: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.inbox-item:hover {
+  background: #f1f1f1;
+}
+
+/* footer style> */
+footer {
+  background: #000;
+  color: #fff;
+}
+
+.footer-links-title {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.footer-links-list li {
+  margin-bottom: 0.5rem;
+}
+.footer-contact-icon {
+  width: 22px;
+  text-align: center;
+  margin-right: 8px;
+}
+.footer-social a {
+  font-size: 1.2rem;
+  margin-right: 10px;
+  color: #fff;
+  transition: color 0.2s;
+}
+.footer-social a:hover {
+  color: #ffc107;
+}
+.footer-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.footer-description {
+  font-size: 0.95rem;
+  color: #ccc;
+}

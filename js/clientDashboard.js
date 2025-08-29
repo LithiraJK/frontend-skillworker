@@ -6,6 +6,6 @@ $(document).ready(function() {
         $.removeCookie('user_role', { path: '/' });
         $.removeCookie('first_name', { path: '/' });
 
-        window.location.href = '../pages/loginPage.html';
+        window.location.href = '../pages/login-page.html';
     });
 });

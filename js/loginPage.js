@@ -41,15 +41,15 @@ $(document).ready(function () {
 
             // Redirect based on role
             if (response.data.role === 'WORKER') {
-                window.location.href = '../pages/workerDashboard.html';
+                window.location.href = '../pages/worker-dashboard.html';
                 return;
             }
             if (response.data.role === 'CLIENT') {
-                window.location.href = '../pages/clientDashboard.html';
+                window.location.href = '../pages/client-dashboard.html';
                 return;
             }
             if (response.data.role === 'ADMIN') {
-                window.location.href = '../pages/adminDashboard.html';
+                window.location.href = '../pages/admin-dashboard.html';
                 return;
             }
 
