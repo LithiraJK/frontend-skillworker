@@ -1,9 +1,9 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Initialize dashboard
     initializeDashboard();
-    
+
     // Logout functionality
-    $('#logoutBtn').click(function() {
+    $('#logoutBtn').click(function () {
         Swal.fire({
             title: 'Are you sure?',
             text: 'You will be logged out of your account.',
@@ -18,6 +18,8 @@ $(document).ready(function() {
                 $.removeCookie('refresh_token', { path: '/' });
                 $.removeCookie('user_role', { path: '/' });
                 $.removeCookie('first_name', { path: '/' });
+                $.removeCookie('last_name', { path: '/' });
+                $.removeCookie('email', { path: '/' });
 
                 Swal.fire({
                     icon: 'success',
@@ -32,28 +34,28 @@ $(document).ready(function() {
     });
 
     // Navigation functionality
-    $('.nav-link').click(function(e) {
+    $('.nav-link').click(function (e) {
         e.preventDefault();
-        
+
         // Remove active class from all nav links
         $('.nav-link').removeClass('active');
         $(this).addClass('active');
-        
+
         // Hide all sections
         $('.dashboard-content').hide();
-        
+
         // Show selected section
         const targetSection = $(this).data('section');
         $('#' + targetSection).show();
-        
+
         // Update URL hash
         window.location.hash = $(this).attr('href');
     });
 
     // Job application functionality
-    $('.job-item button').click(function() {
+    $('.job-item button').click(function () {
         const jobTitle = $(this).closest('.job-item').find('h6').text();
-        
+
         Swal.fire({
             title: 'Apply for Job',
             text: `Do you want to apply for "${jobTitle}"?`,
@@ -73,18 +75,18 @@ $(document).ready(function() {
                     timer: 2000,
                     showConfirmButton: false
                 });
-                
+
                 // Update button state
                 $(this).removeClass('btn-outline-primary')
-                       .addClass('btn-success')
-                       .text('Applied')
-                       .prop('disabled', true);
+                    .addClass('btn-success')
+                    .text('Applied')
+                    .prop('disabled', true);
             }
         });
     });
 
     // Profile completion functionality
-    $('.card-body button:contains("Complete Profile")').click(function() {
+    $('.card-body button:contains("Complete Profile")').click(function () {
         Swal.fire({
             icon: 'info',
             title: 'Complete Your Profile',
@@ -107,10 +109,22 @@ $(document).ready(function() {
 // Initialize dashboard with user data
 function initializeDashboard() {
     const firstName = $.cookie('first_name');
+    const lastName = $.cookie('last_name');
+    const email = $.cookie('email');
+
+    console.log('User Info:', { firstName, lastName, email });
+
     if (firstName) {
-        $('#freelancerName').text(firstName);
+        $('#firstName').text(firstName);
+        $('#userName').text(firstName);
     }
-    
+    if (lastName) {
+        $('#lastName').text(lastName);
+    }
+    if (email) {
+        $('#email').text(email);
+    }
+
     // Check authentication
     const token = $.cookie('token');
     if (!token) {

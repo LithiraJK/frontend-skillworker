@@ -38,6 +38,8 @@ $(document).ready(function () {
             $.cookie('refresh_token', response.data.refreshToken, { path: '/' });
             $.cookie('user_role', response.data.role, { path: '/' });
             $.cookie('first_name', response.data.firstName, { path: '/' });
+            $.cookie('last_name', response.data.lastName, { path: '/' });
+            $.cookie('email', response.data.email, { path: '/' });
 
             // Redirect based on role
             if (response.data.role === 'WORKER') {

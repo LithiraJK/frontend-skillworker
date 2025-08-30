@@ -1,19 +1,20 @@
-$(document).ready(function () {
+$(document).ready(function() {
   let currentStep = 1;
   const totalSteps = $(".step").length;
+  let isPremiumUser = false; // This would be set based on user's subscription
   let activeCategories = []; // Store fetched categories
   let activeLocations = []; // Store fetched locations
 
   // Fallback cookie utility if jQuery Cookie is not available
   const cookieUtil = {
-    get: function (name) {
+    get: function(name) {
       if (typeof $.cookie === 'function') {
         return $.cookie(name);
       }
       // Fallback to vanilla JavaScript
       const nameEQ = name + "=";
       const ca = document.cookie.split(';');
-      for (let i = 0; i < ca.length; i++) {
+      for(let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) === ' ') c = c.substring(1, c.length);
         if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
@@ -22,7 +23,6 @@ $(document).ready(function () {
     }
   };
 
-  // Check user premium status (you would get this from backend)
   // For demo purposes, let's simulate this
   checkPremiumStatus();
 
@@ -38,15 +38,50 @@ $(document).ready(function () {
   // Next button
   $(".nextBtn").click(function () {
     const stepDiv = $(".step[data-step='" + currentStep + "']");
+    
     // Basic validation
     let valid = true;
     stepDiv.find("input[required]").each(function () {
       if ($(this).val() === "") valid = false;
     });
+    
+    // Additional validation for step 2 (Categories & Skills)
+    if (currentStep === 2) {
+      const categoryCount = $(".category-item").length;
+      if (categoryCount === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Category Required',
+          text: 'Please add at least one category before proceeding.',
+          confirmButtonText: 'OK'
+        });
+        return;
+      }
+      
+      // Check if any category is selected
+      let categorySelected = false;
+      $(".category-item select").each(function () {
+        if ($(this).val() !== "" && $(this).val() !== null) {
+          categorySelected = true;
+        }
+      });
+      
+      if (!categorySelected) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Category Selection Required',
+          text: 'Please select a category from the dropdown before proceeding.',
+          confirmButtonText: 'OK'
+        });
+        return;
+      }
+    }
+    
     if (!valid) {
       alert("Please fill all required fields");
       return;
     }
+    
     stepDiv.removeClass("active");
     currentStep++;
     $(".step[data-step='" + currentStep + "']").addClass("active");
@@ -65,39 +100,75 @@ $(document).ready(function () {
 
   // Add new category dynamically (Premium feature)
   $("#addCategoryBtn").click(function () {
-    if (!isPremiumUser) {
+    const categoryCount = $(".category-item").length;
+    const maxCategories = isPremiumUser ? 5 : 1;
+
+    // For the first category, always allow it (both free and premium)
+    if (categoryCount === 0) {
+      addNewCategory();
+      return;
+    }
+
+    // Check if user is trying to add more than 1 category without premium
+    if (!isPremiumUser && categoryCount >= 1) {
       Swal.fire({
         icon: 'info',
-        title: 'Premium Feature',
-        text: 'Multiple categories are available for premium users only. Upgrade to Premium to unlock this feature!',
-        confirmButtonText: 'Upgrade to Premium',
+        title: 'Premium Feature Required',
+        html: `
+          <div class="text-start">
+            <p>You already have <strong>1 category</strong> selected (free plan limit).</p>
+            <p>To add multiple categories, you need to upgrade to our Premium plan.</p>
+            <div class="mt-3 p-3 bg-light rounded">
+              <h6 class="text-primary"><i class="fas fa-crown me-2"></i>Premium Benefits:</h6>
+              <ul class="small mb-0">
+                <li>Add up to 5 categories</li>
+                <li>Priority job notifications</li>
+                <li>Advanced profile features</li>
+                <li>Enhanced visibility to clients</li>
+              </ul>
+            </div>
+          </div>
+        `,
+        confirmButtonText: '<i class="fas fa-crown me-2"></i>Upgrade to Premium',
         showCancelButton: true,
-        cancelButtonText: 'Maybe Later'
+        cancelButtonText: 'Maybe Later',
+        confirmButtonColor: '#ffc107',
+        width: '500px'
       }).then((result) => {
         if (result.isConfirmed) {
-          // Redirect to premium upgrade page
-          window.open('#premium-upgrade', '_blank');
+          // Redirect to premium upgrade page or show upgrade modal
+          showPremiumUpgradeModal();
         }
       });
       return;
     }
 
-    const categoryCount = $(".category-item").length;
-    const maxCategories = isPremiumUser ? 5 : 1;
-
+    // Check maximum categories for premium users
     if (categoryCount >= maxCategories) {
-      alert(`Maximum ${maxCategories} categories allowed for your plan.`);
+      Swal.fire({
+        icon: 'warning',
+        title: 'Maximum Categories Reached',
+        text: `You have reached the maximum of ${maxCategories} categories for your plan.`,
+        confirmButtonText: 'Got it'
+      });
       return;
     }
 
+    // Add new category for premium users
+    addNewCategory();
+  });
+
+  // Function to add a new category
+  function addNewCategory() {
+    const categoryCount = $(".category-item").length;
     const newCategoryId = "category_" + (categoryCount + 1);
 
     const categoryHtml = `<div class="mb-3 category-item">
-      <label class="form-label">Category 0${categoryCount + 1}</label>
-      <select class="form-select selectpicker categoryInput" id="${newCategoryId}" data-live-search="true" data-size="5">
+      <label class="form-label">Category ${String(categoryCount + 1).padStart(2, '0')}</label>
+      <select class="form-select selectpicker categoryInput" id="${newCategoryId}" data-live-search="true" data-size="5" required>
         ${generateCategoryOptions()}
       </select>
-      <button type="button" class="btn btn-sm btn-danger mt-2 removeCategoryBtn">Remove</button>
+      ${categoryCount > 0 ? '<button type="button" class="btn btn-sm btn-danger mt-2 removeCategoryBtn"><i class="fas fa-trash me-1"></i>Remove</button>' : ''}
     </div>`;
 
     // Append the new category
@@ -108,29 +179,62 @@ $(document).ready(function () {
 
     console.log("New category dropdown added with ID:", newCategoryId);
     updateCategoryButton();
-  });
+    updatePlanStatus();
+  }
 
   // Remove category
   $(document).on("click", ".removeCategoryBtn", function () {
     const categoryItem = $(this).closest(".category-item");
     const selectElement = categoryItem.find('.selectpicker');
-
-    // Destroy bootstrap-select instance before removing
-    if (selectElement.length) {
-      selectElement.selectpicker('destroy');
-    }
-
-    // Remove the category item
-    categoryItem.remove();
+    const totalCategories = $(".category-item").length;
 
     // Don't allow removing if it's the last category
-    if ($(".category-item").length === 0) {
-      alert("You must have at least one category selected.");
-      $("#addCategoryBtn").click(); // Add one back
+    if (totalCategories <= 1) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Cannot Remove',
+        text: 'You must have at least one category selected.',
+        confirmButtonText: 'Understood'
+      });
+      return;
     }
 
-    console.log("Category removed. Remaining categories:", $(".category-item").length);
-    updateCategoryButton();
+    // Show confirmation dialog
+    Swal.fire({
+      icon: 'question',
+      title: 'Remove Category?',
+      text: 'Are you sure you want to remove this category?',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Remove',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#dc3545'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Destroy bootstrap-select instance before removing
+        if (selectElement.length) {
+          selectElement.selectpicker('destroy');
+        }
+
+        // Remove the category item
+        categoryItem.remove();
+
+        // Update labels for remaining categories
+        updateCategoryLabels();
+
+        console.log("Category removed. Remaining categories:", $(".category-item").length);
+        updateCategoryButton();
+        updatePlanStatus();
+
+        // Show success message
+        Swal.fire({
+          icon: 'success',
+          title: 'Category Removed',
+          text: 'The category has been successfully removed.',
+          timer: 1500,
+          showConfirmButton: false
+        });
+      }
+    });
   });
 
   // Add new location dynamically
@@ -199,6 +303,7 @@ $(document).ready(function () {
 
     console.log('User plan:', userPlan, 'isPremium:', isPremiumUser);
     updateCategoryButton();
+    updatePlanStatus();
   }
 
   // Fetch active categories from API
@@ -251,6 +356,9 @@ $(document).ready(function () {
         // Populate existing category dropdowns
         populateCategoryDropdowns();
 
+        // Remove retry button if it exists (data loaded successfully)
+        $('.retry-categories-container').remove();
+
         // Show success toast
         if (activeCategories.length > 0) {
           showToast(`${activeCategories.length} categories loaded successfully`, 'success');
@@ -274,15 +382,17 @@ $(document).ready(function () {
         console.log('Using fallback categories:', activeCategories);
         populateCategoryDropdowns();
 
-        // Add retry button in the first category dropdown
-        const retryHtml = `
-          <div class="mt-2">
-            <button type="button" class="btn btn-sm btn-outline-primary" onclick="fetchActiveCategories()">
-              <i class="fas fa-refresh me-1"></i>Retry Loading Categories
-            </button>
-          </div>
-        `;
-        $('.category-item:first').append(retryHtml);
+        // Add retry button in the first category dropdown only if it doesn't exist
+        if ($('.category-item:first .retry-categories-btn').length === 0) {
+          const retryHtml = `
+            <div class="mt-2 retry-categories-container">
+              <button type="button" class="btn btn-sm btn-outline-primary retry-categories-btn" onclick="fetchActiveCategories()">
+                <i class="fas fa-refresh me-1"></i>Retry Loading Categories
+              </button>
+            </div>
+          `;
+          $('.category-item:first').append(retryHtml);
+        }
       }
     });
   }
@@ -421,6 +531,9 @@ $(document).ready(function () {
         // Populate existing location dropdowns
         populateLocationDropdowns();
 
+        // Remove retry button if it exists (data loaded successfully)
+        $('.retry-locations-container').remove();
+
         // Show success toast
         if (activeLocations.length > 0) {
           showToast(`${activeLocations.length} locations loaded successfully`, 'success');
@@ -444,15 +557,17 @@ $(document).ready(function () {
         console.log('Using fallback locations:', activeLocations);
         populateLocationDropdowns();
 
-        // Add retry button in the first location dropdown
-        const retryHtml = `
-          <div class="mt-2">
-            <button type="button" class="btn btn-sm btn-outline-primary" onclick="fetchActiveLocations()">
-              <i class="fas fa-refresh me-1"></i>Retry Loading Locations
-            </button>
-          </div>
-        `;
-        $('.location-item:first').append(retryHtml);
+        // Add retry button in the first location dropdown only if it doesn't exist
+        if ($('.location-item:first .retry-locations-btn').length === 0) {
+          const retryHtml = `
+            <div class="mt-2 retry-locations-container">
+              <button type="button" class="btn btn-sm btn-outline-primary retry-locations-btn" onclick="fetchActiveLocations()">
+                <i class="fas fa-refresh me-1"></i>Retry Loading Locations
+              </button>
+            </div>
+          `;
+          $('.location-item:first').append(retryHtml);
+        }
       }
     });
   }
@@ -469,7 +584,7 @@ $(document).ready(function () {
       optionsHtml = '<option value="">No locations available</option>';
     } else {
       activeLocations.forEach(location => {
-
+  
         const locationId = location.location_id;
         const locationName = location.district;
 
@@ -523,55 +638,188 @@ $(document).ready(function () {
     return optionsHtml;
   }
 
-  // Update category button based on premium status
+  // Demo toggle for premium status (remove in production)
+  $("#togglePremiumDemo").click(function() {
+    const newPlan = isPremiumUser ? 'free' : 'premium';
+    localStorage.setItem('userPlan', newPlan);
+    isPremiumUser = !isPremiumUser;
+    updateCategoryButton();
+    updatePlanStatus();
+    
+    Swal.fire({
+      icon: 'info',
+      title: 'Plan Changed',
+      text: `Switched to ${newPlan.toUpperCase()} plan for demo purposes`,
+      timer: 1500,
+      showConfirmButton: false
+    });
+  });
+
+  // Update plan status display
+  function updatePlanStatus() {
+    const statusElement = $("#planStatusText");
+    const categoryCount = $(".category-item").length;
+    const maxCategories = isPremiumUser ? 5 : 1;
+    
+    if (isPremiumUser) {
+      statusElement.html(`
+        <i class="fas fa-crown text-warning me-1"></i>
+        <strong>Premium Plan:</strong> You can add up to ${maxCategories} categories (${categoryCount}/${maxCategories} used)
+      `);
+      $("#planStatus").removeClass('alert-warning').addClass('alert-success');
+    } else {
+      statusElement.html(`
+        <i class="fas fa-user me-1"></i>
+        <strong>Free Plan:</strong> You can add ${maxCategories} category (${categoryCount}/${maxCategories} used). 
+        <a href="#" onclick="showPremiumUpgradeModal()" class="alert-link">Upgrade to Premium</a> for more categories.
+      `);
+      $("#planStatus").removeClass('alert-success').addClass('alert-warning');
+    }
+  }
   function updateCategoryButton() {
     const categoryCount = $(".category-item").length;
-    const maxCategories = 5;
+    const maxCategories = isPremiumUser ? 5 : 1;
 
-    if (categoryCount >= maxCategories) {
-      $("#addCategoryBtn").prop('disabled', true)
-        .html(`<i class="fas fa-check me-1"></i>Maximum Categories (${maxCategories})`);
+    if (!isPremiumUser) {
+      if (categoryCount >= 1) {
+        // Free user already has 1 category - show premium upgrade button
+        $("#addCategoryBtn")
+          .html('<i class="fas fa-crown me-1"></i>Add More Categories (Premium)')
+          .removeClass('btn-success btn-outline-dark')
+          .addClass('btn-warning')
+          .prop('disabled', false);
+      } else {
+        // Free user can still add their first category
+        $("#addCategoryBtn")
+          .html('<i class="fas fa-plus me-1"></i>Add Category')
+          .removeClass('btn-warning')
+          .addClass('btn-outline-dark')
+          .prop('disabled', false);
+      }
     } else {
-      $("#addCategoryBtn").prop('disabled', false);
+      // Premium user
+      if (categoryCount >= maxCategories) {
+        $("#addCategoryBtn")
+          .html(`<i class="fas fa-check me-1"></i>Maximum Categories (${maxCategories})`)
+          .removeClass('btn-warning btn-outline-dark')
+          .addClass('btn-success')
+          .prop('disabled', true);
+      } else {
+        $("#addCategoryBtn")
+          .html('<i class="fas fa-plus me-1"></i>Add Category')
+          .removeClass('btn-warning')
+          .addClass('btn-success')
+          .prop('disabled', false);
+      }
+    }
+
+    // Update button text with current count
+    const currentText = $("#addCategoryBtn").text();
+    if (categoryCount > 0 && !$("#addCategoryBtn").prop('disabled')) {
+      const countText = ` (${categoryCount}/${maxCategories})`;
+      if (!currentText.includes('(')) {
+        $("#addCategoryBtn").append(countText);
+      }
     }
   }
 
   // Simulate premium upgrade
-  // window.simulatePremiumUpgrade = function () {
-  //   localStorage.setItem('userPlan', 'premium');
-  //   isPremiumUser = true;
-  //   updateCategoryButton();
+  function showPremiumUpgradeModal() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Upgrade to Premium',
+      html: `
+        <div class="text-start">
+          <div class="card border-warning mb-3">
+            <div class="card-header bg-warning text-dark">
+              <h5 class="mb-0"><i class="fas fa-crown me-2"></i>Premium Plan Benefits</h5>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Add up to 5 categories</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Priority job notifications</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Advanced profile features</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Enhanced visibility to clients</li>
+                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>24/7 Premium support</li>
+              </ul>
+              <div class="text-center mt-3">
+                <h4 class="text-primary">$9.99/month</h4>
+                <small class="text-muted">Cancel anytime</small>
+              </div>
+            </div>
+          </div>
+          <p class="text-center text-muted small">
+            <strong>For demo purposes:</strong> Click "Upgrade Now" to simulate premium activation
+          </p>
+        </div>
+      `,
+      confirmButtonText: '<i class="fas fa-crown me-2"></i>Upgrade Now',
+      showCancelButton: true,
+      cancelButtonText: 'Maybe Later',
+      confirmButtonColor: '#ffc107',
+      width: '500px'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Simulate premium upgrade for demo
+        simulatePremiumUpgrade();
+      }
+    });
+  }
 
-  //   Swal.fire({
-  //     icon: 'success',
-  //     title: 'Welcome to Premium!',
-  //     text: 'You can now add up to 5 categories.',
-  //     timer: 2000
-  //   });
-  // };
+  // Simulate premium upgrade for demo purposes
+  function simulatePremiumUpgrade() {
+    localStorage.setItem('userPlan', 'premium');
+    isPremiumUser = true;
+    updateCategoryButton();
+    updatePlanStatus();
 
-  // Make fetchActiveCategories globally accessible for retry button
+    Swal.fire({
+      icon: 'success',
+      title: 'Welcome to Premium!',
+      html: `
+        <div class="text-center">
+          <i class="fas fa-crown text-warning" style="font-size: 3rem;"></i>
+          <p class="mt-3">Congratulations! You're now a Premium member.</p>
+          <p>You can now add up to <strong>5 categories</strong> to your profile.</p>
+        </div>
+      `,
+      timer: 3000,
+      showConfirmButton: false
+    });
+  }
+
+  // Update category labels after removal
+  function updateCategoryLabels() {
+    $(".category-item").each(function(index) {
+      const label = $(this).find('.form-label');
+      label.text(`Category ${String(index + 1).padStart(2, '0')}`);
+    });
+  }
+
+  // Initialize with first category
+  // Make functions globally accessible
   window.fetchActiveCategories = fetchActiveCategories;
-
-  // Make fetchActiveLocations globally accessible for retry button
   window.fetchActiveLocations = fetchActiveLocations;
+  window.showPremiumUpgradeModal = showPremiumUpgradeModal;
+  window.simulatePremiumUpgrade = simulatePremiumUpgrade;
 
   // Submit form
   $("#profileWizard").submit(function (e) {
     e.preventDefault();
 
+
     // Collect form data
     const profileData = {
       phoneNumbers: [
-        $("#phone1").val(),
-        $("#phone2").val()
+      $("#phone1").val(),
+      $("#phone2").val()
       ],
       experience: $("#experience").val(),
       bio: $("#about").val(),
       skills: $("#skills").val().split(",").map(skill => skill.trim()),
       categoryIds: [],
       locationIds: [],
-      profilePictureUrl: $("#profilePicture")[0]?.files[0] ? URL.createObjectURL($("#profilePicture")[0].files[0]) : "",
+      profilePictureUrl: $("#profilePicture").val() || $("#profilePreview").attr("src"),
     };
 
     // Collect all category values
@@ -614,7 +862,7 @@ $(document).ready(function () {
       confirmButtonText: 'Continue to Dashboard'
     }).then(() => {
       // Redirect to appropriate dashboard
-      window.location.href = '../pages/worker-dashBoard.html';
+      window.location.href = '../pages/worker-dashboard.html';
     });
 
 
@@ -628,17 +876,17 @@ $(document).ready(function () {
       headers: {
         'Authorization': 'Bearer ' + $.cookie('token')
       },
-      success: function (response) {
+      success: function(response) {
         console.log('Profile saved successfully:', response);
         Swal.fire({
           icon: 'success',
           title: 'Profile Saved!',
           text: 'Your profile has been completed successfully.'
         }).then(() => {
-          window.location.href = '../pages/worker-dashBoard.html';
+          window.location.href = '../pages/worker-dashboard.html';
         });
       },
-      error: function (xhr, status, error) {
+      error: function(xhr, status, error) {
         console.error('Profile save failed:', error);
         Swal.fire({
           icon: 'error',
@@ -647,6 +895,6 @@ $(document).ready(function () {
         });
       }
     });
-
+    
   });
 });

@@ -14,7 +14,34 @@
   <link rel="stylesheet" href="/css/worker-profile-completion.css">
 
   <style>
+    .demo-controls {
+      background-color: #f8f9fa;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px dashed #dee2e6;
+    }
 
+    .category-item {
+      border-left: 3px solid #007bff;
+      padding-left: 15px;
+      margin-bottom: 20px !important;
+    }
+
+    .premium-badge {
+      background: linear-gradient(45deg, #ffc107, #ffeb3b);
+      color: #212529;
+      font-weight: bold;
+    }
+
+    .plan-status-premium {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      border-color: #c3e6cb;
+    }
+
+    .plan-status-free {
+      background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+      border-color: #ffeaa7;
+    }
   </style>
 </head>
 
@@ -54,299 +81,316 @@
     </div>
   </nav>
 
-  <main class="container mt-5">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h3 class="card-title mb-3">Complete Your Profile</h3>
+  <main class=" container mt-5">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h3 class="card-title mb-3">Complete Your Profile</h3>
 
-        <!-- Step Indicator -->
-        <div class="step-indicator mb-4">
-          <div class="step-item completed" data-step="1">
-            <span class="badge rounded-pill bg-secondary">1</span>
-            <div class="small">Personal Info</div>
-          </div>
-          <div class="step-item" data-step="2">
-            <span class="badge rounded-pill bg-secondary">2</span>
-            <div class="small">Skills & Categories</div>
-          </div>
-          <div class="step-item" data-step="3">
-            <span class="badge rounded-pill bg-secondary">3</span>
-            <div class="small">Locations</div>
-          </div>
-          <div class="step-item" data-step="4">
-            <span class="badge rounded-pill bg-secondary">4</span>
-            <div class="small">Profile Picture</div>
-          </div>
-        </div>
+                  <!-- Step Indicator -->
+                  <div class="step-indicator mb-4">
+                    <div class="step-item completed" data-step="1">
+                      <span class="badge rounded-pill bg-secondary">1</span>
+                      <div class="small">Personal Info</div>
+                    </div>
+                    <div class="step-item" data-step="2">
+                      <span class="badge rounded-pill bg-secondary">2</span>
+                      <div class="small">Skills & Categories</div>
+                    </div>
+                    <div class="step-item" data-step="3">
+                      <span class="badge rounded-pill bg-secondary">3</span>
+                      <div class="small">Locations</div>
+                    </div>
+                    <div class="step-item" data-step="4">
+                      <span class="badge rounded-pill bg-secondary">4</span>
+                      <div class="small">Profile Picture</div>
+                    </div>
+                  </div>
 
-        <!-- Progress Bar -->
-        <div class="progress mb-4">
-          <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
-            style="width: 25%;" id="wizardProgress"></div>
-        </div>
+                  <!-- Progress Bar -->
+                  <div class="progress mb-4">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
+                      style="width: 25%;" id="wizardProgress"></div>
+                  </div>
 
-        <!-- Form Wizard -->
-        <form id="profileWizard">
-          <!-- Step 1: Personal Info -->
-          <div class="step active" data-step="1">
-            <div class="d-flex gap-3">
-              <div class="mb-3">
-                <label for="phone1" class="form-label">Mobile</label>
-                <input type="text" class="form-control " id="phone1" required>
-              </div>
-              <div class="mb-3">
-                <label for="phone2" class="form-label">Work / Home </label>
-                <input type="text" class="form-control" id="phone2">
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="experience" class="form-label">Experience *</label>
-              <input type="text" class="form-control" id="experience" required>
-            </div>
-            <div class="mb-3">
-              <label for="about" class="form-label">About</label>
-              <textarea class="form-control" id="about" rows="8"></textarea>
-            </div>
-            <a href="/pages/worker-dashboard.html" type="button" class="btn btn-secondary">Back</a>
-            <button type="button" class="btn btn-dark nextBtn">Next</button>
+                  <!-- Form Wizard -->
+                  <form id="profileWizard">
+                    <!-- Step 1: Personal Info -->
+                    <div class="step active" data-step="1">
+                      <div class="d-flex gap-3">
+                        <div class="mb-3">
+                          <label for="phone1" class="form-label">Mobile</label>
+                          <input type="text" class="form-control " id="phone1" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="phone2" class="form-label">Work / Home </label>
+                          <input type="text" class="form-control" id="phone2">
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="experience" class="form-label">Experience *</label>
+                        <input type="text" class="form-control" id="experience" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="about" class="form-label">About</label>
+                        <textarea class="form-control" id="about" rows="8"></textarea>
+                      </div>
+                      <a href="/pages/worker-dashboard.html" type="button" class="btn btn-secondary">Back</a>
+                      <button type="button" class="btn btn-dark nextBtn">Next</button>
 
-          </div>
+                    </div>
 
-          <!-- Step 2: Skills & Categories -->
-          <div class="step" data-step="2">
-            <div id="categoryContainer">
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-dark mb-3" id="addCategoryBtn"><i
-                class="fa-solid fa-plus me-1"></i>Add Category</button>
-            <div class="mb-3">
-              <label for="skills" class="form-label">Additional Skills (comma separated)</label>
-              <input type="text" class="form-control" id="skills"
-                placeholder="e.g. Advanced Plumbing, Custom Carpentry">
-            </div>
-            <button type="button" class="btn btn-secondary prevBtn">Previous</button>
-            <button type="button" class="btn btn-dark nextBtn">Next</button>
-          </div>
+                    <!-- Step 2: Skills & Categories -->
+                    <div class="step" data-step="2">
+                      <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Categories & Skills</h5>
+                        <!-- Demo premium toggle (remove in production) -->
+                        <div class="demo-controls">
+                          <small class="text-muted me-2">Demo:</small>
+                          <button type="button" class="btn btn-sm btn-outline-warning" id="togglePremiumDemo">
+                            <i class="fas fa-crown me-1"></i>Toggle Premium
+                          </button>
+                        </div>
+                      </div>
 
-          <!-- Step 3: Locations -->
-          <div class="step" data-step="3">
-            <div id="locationContainer">
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-dark mb-3" id="addLocationBtn"><i
-                class="fa-solid fa-plus me-1"></i>Add Location</button>
-            <br>
-            <button type="button" class="btn btn-secondary prevBtn">Previous</button>
-            <button type="button" class="btn btn-dark nextBtn">Next</button>
-          </div>
+                      <div class="alert alert-info" id="planStatus">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <span id="planStatusText">Loading plan status...</span>
+                      </div>
 
-          <!-- Step 4: Profile Picture -->
+                      <div id="categoryContainer">
+                      </div>
+                      <button type="button" class="btn btn-sm btn-outline-dark mb-3" id="addCategoryBtn"><i
+                          class="fa-solid fa-plus me-1"></i>Add Category</button>
+                      <div class="mb-3">
+                        <label for="skills" class="form-label">Additional Skills (comma separated)</label>
+                        <input type="text" class="form-control" id="skills"
+                          placeholder="e.g. Advanced Plumbing, Custom Carpentry">
+                      </div>
+                      <button type="button" class="btn btn-secondary prevBtn">Previous</button>
+                      <button type="button" class="btn btn-dark nextBtn">Next</button>
+                    </div>
+
+                    <!-- Step 3: Locations -->
+                    <div class="step" data-step="3">
+                      <div id="locationContainer">
+                      </div>
+                      <button type="button" class="btn btn-sm btn-outline-dark mb-3" id="addLocationBtn"><i
+                          class="fa-solid fa-plus me-1"></i>Add Location</button>
+                      <br>
+                      <button type="button" class="btn btn-secondary prevBtn">Previous</button>
+                      <button type="button" class="btn btn-dark nextBtn">Next</button>
+                    </div>
+
+                    <!-- Step 4: Profile Picture -->
 
 
 
-          <div class="step" data-step="4">
-            <div class="mb-3">
-              <label for="profilePicture" class="form-label fw-bold">Upload Professional Profile Picture</label>
-              <div class="d-flex align-items-center gap-3">
-                <!-- Image Preview -->
-                <img id="profilePreview" src="/assets/images/workerDefualtPP.png" alt="Profile Preview"
-                  style="width:120px; height:120px; border-radius:50%; border:2px solid #ddd; object-fit:cover;">
+                    <div class="step" data-step="4">
+                      <div class="mb-3">
+                        <label for="profilePicture" class="form-label fw-bold">Upload Professional Profile
+                          Picture</label>
+                        <div class="d-flex align-items-center gap-3">
+                          <!-- Image Preview -->
+                          <img id="profilePreview" src="/assets/images/workerDefualtPP.png" alt="Profile Preview"
+                            style="width:120px; height:120px; border-radius:50%; border:2px solid #ddd; object-fit:cover;">
 
-                <!-- File Input + Upload Button -->
-                <div>
-                  <input type="file" class="form-control mb-2" id="profilePicture" accept="image/*">
-                  <button type="button" class="btn btn-dark" id="uploadBtn">
-                    <i class="bi bi-cloud-upload"></i> Upload
-                  </button>
+                          <!-- File Input + Upload Button -->
+                          <div>
+                            <input type="file" class="form-control mb-2" id="profilePicture" accept="image/*">
+                            <button type="button" class="btn btn-dark" id="uploadBtn">
+                              <i class="bi bi-cloud-upload"></i> Upload
+                            </button>
+                          </div>
+                        </div>
+                        <small class="text-muted d-block mt-2">
+                          Recommended: Clear headshot, square image, max 2MB.
+                        </small>
+                      </div>
+
+                      <button type="button" class="btn btn-secondary prevBtn">Previous</button>
+                      <button type="submit" class="btn btn-dark">Finish</button>
+                    </div>
+
+                    <!-- Script -->
+                    <script>
+                      let selectedFile = null;
+
+                      // Preview locally before upload
+                      document.getElementById('profilePicture').addEventListener('change', function (e) {
+                        selectedFile = e.target.files[0];
+                        if (selectedFile && selectedFile.type.startsWith('image/')) {
+                          // Validate file size (max 2MB)
+                          if (selectedFile.size > 2 * 1024 * 1024) {
+                            alert("File size must be less than 2MB");
+                            this.value = '';
+                            return;
+                          }
+
+                          const reader = new FileReader();
+                          reader.onload = function (evt) {
+                            document.getElementById('profilePreview').src = evt.target.result;
+                          };
+                          reader.readAsDataURL(selectedFile);
+                        } else {
+                          alert("Please select a valid image file");
+                          this.value = '';
+                        }
+                      });
+
+                      // Upload to backend (which uploads to Cloudinary)
+                      document.getElementById('uploadBtn').addEventListener('click', function () {
+                        // Get token using jQuery cookie (synchronous)
+                        const token = $.cookie('token');
+
+                        console.log('Token:', token ? 'Found' : 'Not found');
+
+                        if (!selectedFile) {
+                          alert("Please select an image first.");
+                          return;
+                        }
+
+                        if (!token) {
+                          alert("Authentication token not found. Please login again.");
+                          return;
+                        }
+
+                        let formData = new FormData();
+                        formData.append("profilePic", selectedFile);
+
+                        // AJAX request to your backend endpoint
+                        $.ajax({
+                          url: "http://localhost:8080/api/v1/image/upload",
+                          type: "POST",
+                          data: formData,
+                          processData: false,
+                          contentType: false,
+                          headers: {
+                            "Authorization": `Bearer ${token}`
+                          },
+                          beforeSend: function () {
+                            $("#uploadBtn").html('<span class="spinner-border spinner-border-sm"></span> Uploading...');
+                            $("#uploadBtn").prop('disabled', true);
+                          },
+                          success: function (response) {
+                            console.log('Upload success:', response);
+
+                            // Handle different response formats
+                            let imageUrl = response;
+                            if (typeof response === 'object') {
+                              imageUrl = response.data || response.url || response.imageUrl || response;
+                            }
+
+                            $("#profilePreview").attr("src", imageUrl);
+                            $("#uploadBtn").html('<i class="bi bi-check-circle"></i> Uploaded');
+                            $("#uploadBtn").removeClass("btn-dark").addClass("btn-success");
+                            $("#uploadBtn").prop('disabled', false);
+
+                            // Store the uploaded image URL for form submission
+                            $("#profilePicture").data('uploaded-url', imageUrl);
+                          },
+                          error: function (xhr, status, error) {
+                            console.error('Upload failed:', {
+                              status: xhr.status,
+                              statusText: xhr.statusText,
+                              responseText: xhr.responseText,
+                              error: error
+                            });
+
+                            let errorMessage = "Upload failed. Please try again.";
+
+                            if (xhr.status === 401) {
+                              errorMessage = "Authentication failed. Please login again.";
+                            } else if (xhr.status === 413) {
+                              errorMessage = "File too large. Please select a smaller image.";
+                            } else if (xhr.status === 415) {
+                              errorMessage = "Invalid file type. Please select an image file.";
+                            } else if (xhr.responseText) {
+                              try {
+                                const errorResponse = JSON.parse(xhr.responseText);
+                                errorMessage = errorResponse.message || errorResponse.error || errorMessage;
+                              } catch (e) {
+                                // Use default error message if response is not JSON
+                              }
+                            }
+
+                            alert(errorMessage);
+                            $("#uploadBtn").html('<i class="bi bi-cloud-upload"></i> Upload');
+                            $("#uploadBtn").removeClass("btn-success").addClass("btn-dark");
+                            $("#uploadBtn").prop('disabled', false);
+                          }
+                        });
+                      });
+                    </script>
                 </div>
+                </form>
               </div>
-              <small class="text-muted d-block mt-2">
-                Recommended: Clear headshot, square image, max 2MB.
-              </small>
+      </div>
+      </main>
+
+      <footer class="bg-dark text-light pt-5 pb-3">
+        <div class="container">
+          <div class="row gy-4">
+            <div class="col-md-4">
+              <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
+              <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted
+                platform for finding talent and opportunities.</p>
+              <div class="footer-social mb-2">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+              </div>
             </div>
-
-            <button type="button" class="btn btn-secondary prevBtn">Previous</button>
-            <button type="submit" class="btn btn-dark">Finish</button>
+            <div class="col-md-3">
+              <div class="footer-links-title">Quick Links</div>
+              <ul class="footer-links-list list-unstyled">
+                <li><a href="/pages/worker-profile.html" class="text-light text-decoration-none">Profile</a></li>
+                <li><a href="/pages/worker-dashboard.html" class="text-light text-decoration-none">Dashboard</a>
+                </li>
+                <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a>
+                </li>
+                <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-2">
+              <div class="footer-links-title">Support</div>
+              <ul class="footer-links-list list-unstyled">
+                <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support
+                    Center</a></li>
+                <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a></li>
+                <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-3">
+              <div class="footer-links-title">Contact</div>
+              <p class="small mb-1"><span class="footer-contact-icon"><i
+                    class="fas fa-envelope"></i></span>support@skillworker.com</p>
+              <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234)
+                567-890</p>
+              <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123
+                Main St, City, Country</p>
+            </div>
           </div>
-
-          <!-- Script -->
-          <script>
-            let selectedFile = null;
-
-            // Preview locally before upload
-            document.getElementById('profilePicture').addEventListener('change', function (e) {
-              selectedFile = e.target.files[0];
-              if (selectedFile && selectedFile.type.startsWith('image/')) {
-                // Validate file size (max 2MB)
-                if (selectedFile.size > 2 * 1024 * 1024) {
-                  alert("File size must be less than 2MB");
-                  this.value = '';
-                  return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function (evt) {
-                  document.getElementById('profilePreview').src = evt.target.result;
-                };
-                reader.readAsDataURL(selectedFile);
-              } else {
-                alert("Please select a valid image file");
-                this.value = '';
-              }
-            });
-
-            // Upload to backend (which uploads to Cloudinary)
-            document.getElementById('uploadBtn').addEventListener('click', function () {
-              // Get token using jQuery cookie (synchronous)
-              const token = $.cookie('token');
-
-              console.log('Token:', token ? 'Found' : 'Not found');
-
-              if (!selectedFile) {
-                alert("Please select an image first.");
-                return;
-              }
-
-              if (!token) {
-                alert("Authentication token not found. Please login again.");
-                return;
-              }
-
-              let formData = new FormData();
-              formData.append("profilePic", selectedFile);
-
-              // AJAX request to your backend endpoint
-              $.ajax({
-                url: "http://localhost:8080/api/v1/image/upload",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                headers: {
-                  "Authorization": `Bearer ${token}`
-                },
-                beforeSend: function () {
-                  $("#uploadBtn").html('<span class="spinner-border spinner-border-sm"></span> Uploading...');
-                  $("#uploadBtn").prop('disabled', true);
-                },
-                success: function (response) {
-                  console.log('Upload success:', response);
-
-                  // Handle different response formats
-                  let imageUrl = response;
-                  if (typeof response === 'object') {
-                    imageUrl = response.data || response.url || response.imageUrl || response;
-                  }
-
-                  $("#profilePreview").attr("src", imageUrl);
-                  $("#uploadBtn").html('<i class="bi bi-check-circle"></i> Uploaded');
-                  $("#uploadBtn").removeClass("btn-dark").addClass("btn-success");
-                  $("#uploadBtn").prop('disabled', false);
-
-                  // Store the uploaded image URL for form submission
-                  $("#profilePicture").data('uploaded-url', imageUrl);
-                },
-                error: function (xhr, status, error) {
-                  console.error('Upload failed:', {
-                    status: xhr.status,
-                    statusText: xhr.statusText,
-                    responseText: xhr.responseText,
-                    error: error
-                  });
-
-                  let errorMessage = "Upload failed. Please try again.";
-
-                  if (xhr.status === 401) {
-                    errorMessage = "Authentication failed. Please login again.";
-                  } else if (xhr.status === 413) {
-                    errorMessage = "File too large. Please select a smaller image.";
-                  } else if (xhr.status === 415) {
-                    errorMessage = "Invalid file type. Please select an image file.";
-                  } else if (xhr.responseText) {
-                    try {
-                      const errorResponse = JSON.parse(xhr.responseText);
-                      errorMessage = errorResponse.message || errorResponse.error || errorMessage;
-                    } catch (e) {
-                      // Use default error message if response is not JSON
-                    }
-                  }
-
-                  alert(errorMessage);
-                  $("#uploadBtn").html('<i class="bi bi-cloud-upload"></i> Upload');
-                  $("#uploadBtn").removeClass("btn-success").addClass("btn-dark");
-                  $("#uploadBtn").prop('disabled', false);
-                }
-              });
-            });
-          </script>
-      </div>
-      </form>
-    </div>
-    </div>
-  </main>
-
-  <footer class="bg-dark text-light pt-5 pb-3">
-    <div class="container">
-      <div class="row gy-4">
-        <div class="col-md-4">
-          <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
-          <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted
-            platform for finding talent and opportunities.</p>
-          <div class="footer-social mb-2">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
+          <hr class="border-light my-4">
+          <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
+            <div>
+              <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
+              <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
+            </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="footer-links-title">Quick Links</div>
-          <ul class="footer-links-list list-unstyled">
-            <li><a href="/pages/workerProfile.html" class="text-light text-decoration-none">Profile</a></li>
-            <li><a href="/pages/workerDashboard.html" class="text-light text-decoration-none">Dashboard</a>
-            </li>
-            <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a>
-            </li>
-            <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-md-2">
-          <div class="footer-links-title">Support</div>
-          <ul class="footer-links-list list-unstyled">
-            <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support
-                Center</a></li>
-            <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a></li>
-            <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a>
-            </li>
-          </ul>
-        </div>
-        <div class="col-md-3">
-          <div class="footer-links-title">Contact</div>
-          <p class="small mb-1"><span class="footer-contact-icon"><i
-                class="fas fa-envelope"></i></span>support@skillworker.com</p>
-          <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234)
-            567-890</p>
-          <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123
-            Main St, City, Country</p>
-        </div>
-      </div>
-      <hr class="border-light my-4">
-      <div class="d-flex justify-content-between align-items-center flex-wrap">
-        <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
-        <div>
-          <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
-          <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
-        </div>
-      </div>
-    </div>
-  </footer>
+      </footer>
 
-  <!-- Bootstrap JS + jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="../js/profileCompletion.js"></script>
+      <!-- Bootstrap JS + jQuery -->
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="../js/profileCompletion.js"></script>
 
 
 </body>

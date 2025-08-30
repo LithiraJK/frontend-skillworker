@@ -25,7 +25,7 @@ $(document).ready(function () {
                     title: 'Sign-up Successful',
                     text: response.message
                 });
-                window.location.href = '../pages/loginPage.html';
+                window.location.href = '../pages/login-page.html';
             },
             error: function(error) {
                 console.error("Sign-up failed:", error);
