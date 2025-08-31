@@ -1,20 +1,21 @@
-$(document).ready(function() {
+$(document).ready(function () {
   let currentStep = 1;
   const totalSteps = $(".step").length;
   let isPremiumUser = false; // This would be set based on user's subscription
   let activeCategories = []; // Store fetched categories
   let activeLocations = []; // Store fetched locations
 
+  
   // Fallback cookie utility if jQuery Cookie is not available
   const cookieUtil = {
-    get: function(name) {
+    get: function (name) {
       if (typeof $.cookie === 'function') {
         return $.cookie(name);
       }
       // Fallback to vanilla JavaScript
       const nameEQ = name + "=";
       const ca = document.cookie.split(';');
-      for(let i = 0; i < ca.length; i++) {
+      for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) === ' ') c = c.substring(1, c.length);
         if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
@@ -38,13 +39,13 @@ $(document).ready(function() {
   // Next button
   $(".nextBtn").click(function () {
     const stepDiv = $(".step[data-step='" + currentStep + "']");
-    
+
     // Basic validation
     let valid = true;
     stepDiv.find("input[required]").each(function () {
       if ($(this).val() === "") valid = false;
     });
-    
+
     // Additional validation for step 2 (Categories & Skills)
     if (currentStep === 2) {
       const categoryCount = $(".category-item").length;
@@ -57,7 +58,7 @@ $(document).ready(function() {
         });
         return;
       }
-      
+
       // Check if any category is selected
       let categorySelected = false;
       $(".category-item select").each(function () {
@@ -65,7 +66,7 @@ $(document).ready(function() {
           categorySelected = true;
         }
       });
-      
+
       if (!categorySelected) {
         Swal.fire({
           icon: 'warning',
@@ -76,12 +77,12 @@ $(document).ready(function() {
         return;
       }
     }
-    
+
     if (!valid) {
       alert("Please fill all required fields");
       return;
     }
-    
+
     stepDiv.removeClass("active");
     currentStep++;
     $(".step[data-step='" + currentStep + "']").addClass("active");
@@ -584,7 +585,7 @@ $(document).ready(function() {
       optionsHtml = '<option value="">No locations available</option>';
     } else {
       activeLocations.forEach(location => {
-  
+
         const locationId = location.location_id;
         const locationName = location.district;
 
@@ -639,13 +640,13 @@ $(document).ready(function() {
   }
 
   // Demo toggle for premium status (remove in production)
-  $("#togglePremiumDemo").click(function() {
+  $("#togglePremiumDemo").click(function () {
     const newPlan = isPremiumUser ? 'free' : 'premium';
     localStorage.setItem('userPlan', newPlan);
     isPremiumUser = !isPremiumUser;
     updateCategoryButton();
     updatePlanStatus();
-    
+
     Swal.fire({
       icon: 'info',
       title: 'Plan Changed',
@@ -660,7 +661,7 @@ $(document).ready(function() {
     const statusElement = $("#planStatusText");
     const categoryCount = $(".category-item").length;
     const maxCategories = isPremiumUser ? 5 : 1;
-    
+
     if (isPremiumUser) {
       statusElement.html(`
         <i class="fas fa-crown text-warning me-1"></i>
@@ -790,7 +791,7 @@ $(document).ready(function() {
 
   // Update category labels after removal
   function updateCategoryLabels() {
-    $(".category-item").each(function(index) {
+    $(".category-item").each(function (index) {
       const label = $(this).find('.form-label');
       label.text(`Category ${String(index + 1).padStart(2, '0')}`);
     });
@@ -804,8 +805,10 @@ $(document).ready(function() {
   window.simulatePremiumUpgrade = simulatePremiumUpgrade;
 
   // Submit form
-  $("#profileWizard").submit(function (e) {
+  $("#finishBtn").click(function (e) {
     e.preventDefault();
+
+    const userId = $.cookie('userId');
 
 
     // Collect form data
@@ -814,12 +817,13 @@ $(document).ready(function() {
       $("#phone1").val(),
       $("#phone2").val()
       ],
-      experience: $("#experience").val(),
+      userId: userId,
+      experienceYears: $("#experience").val(),
       bio: $("#about").val(),
       skills: $("#skills").val().split(",").map(skill => skill.trim()),
       categoryIds: [],
       locationIds: [],
-      profilePictureUrl: $("#profilePicture").val() || $("#profilePreview").attr("src"),
+      profilePictureUrl: $("#profilePicture").data("uploaded-url") || $("#profilePreview").attr("src"),
     };
 
     // Collect all category values
@@ -846,6 +850,37 @@ $(document).ready(function() {
     const categoryText = profileData.categoryIds.length === 1 ? 'category' : 'categories';
     const locationText = profileData.locationIds.length === 1 ? 'location' : 'locations';
 
+
+    // TODO: send `profileData` to backend via AJAX
+    $.ajax({
+      type: 'POST',
+      url: 'http://localhost:8080/api/v1/worker/register',
+      data: JSON.stringify(profileData),
+      contentType: 'application/json',
+      headers: {
+        'Authorization': 'Bearer ' + $.cookie('token')
+      },
+      success: function (response) {
+        console.log('Profile saved successfully:', response);
+        Swal.fire({
+          icon: 'success',
+          title: 'Profile Saved!',
+          text: 'Your profile has been completed successfully.'
+        }).then(() => {
+          $.cookie('profile_complete', 'true', { path: '/' });
+          window.location.href = '../pages/worker-dashboard.html';
+        });
+      },
+      error: function (xhr, status, error) {
+        console.error('Profile save failed:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Save Failed',
+          text: 'Failed to save profile. Please try again.'
+        });
+      }
+    });
+
     Swal.fire({
       icon: 'success',
       title: 'Profile Completed!',
@@ -862,39 +897,123 @@ $(document).ready(function() {
       confirmButtonText: 'Continue to Dashboard'
     }).then(() => {
       // Redirect to appropriate dashboard
-      window.location.href = '../pages/worker-dashboard.html';
+      alert('Profile Data Submitted !!');
+
+      // window.location.href = '../pages/worker-dashboard.html';
     });
 
 
+  });
+});
 
-    // TODO: send `profileData` to backend via AJAX
-    $.ajax({
-      type: 'POST',
-      url: 'http://localhost:8080/api/v1/worker/register',
-      data: JSON.stringify(profileData),
-      contentType: 'application/json',
-      headers: {
-        'Authorization': 'Bearer ' + $.cookie('token')
-      },
-      success: function(response) {
-        console.log('Profile saved successfully:', response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Profile Saved!',
-          text: 'Your profile has been completed successfully.'
-        }).then(() => {
-          window.location.href = '../pages/worker-dashboard.html';
-        });
-      },
-      error: function(xhr, status, error) {
-        console.error('Profile save failed:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Save Failed',
-          text: 'Failed to save profile. Please try again.'
-        });
+let selectedFile = null;
+
+// Preview locally before upload
+$('#profilePicture').on('change', function (e) {
+  selectedFile = e.target.files[0];
+  if (selectedFile && selectedFile.type.startsWith('image/')) {
+    // Validate file size (max 2MB)
+    if (selectedFile.size > 2 * 1024 * 1024) {
+      alert("File size must be less than 2MB");
+      this.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+      $('#profilePreview').attr('src', evt.target.result);
+    };
+    reader.readAsDataURL(selectedFile);
+  } else {
+    alert("Please select a valid image file");
+    this.value = '';
+  }
+});
+
+
+// Upload to backend (which uploads to Cloudinary)
+// Upload to backend (which uploads to Cloudinary) using jQuery
+$('#uploadBtn').on('click', function () {
+  // Get token using jQuery cookie (synchronous)
+  const token = $.cookie('token');
+
+  console.log('Token:', token ? 'Found' : 'Not found');
+
+  if (!selectedFile) {
+    alert("Please select an image first.");
+    return;
+  }
+
+  if (!token) {
+    alert("Authentication token not found. Please login again.");
+    return;
+  }
+
+  var formData = new FormData();
+  formData.append("profilePic", selectedFile);
+
+  // AJAX request to your backend endpoint
+  $.ajax({
+    url: "http://localhost:8080/api/v1/image/upload",
+    type: "POST",
+    data: formData,
+    processData: false,
+    contentType: false,
+    headers: {
+      "Authorization": "Bearer " + token
+    },
+    beforeSend: function () {
+      $("#uploadBtn").html('<span class="spinner-border spinner-border-sm"></span> Uploading...');
+      $("#uploadBtn").prop('disabled', true);
+    },
+    success: function (response) {
+      console.log('Upload success:', response);
+
+      // Handle different response formats
+      var imageUrl = response;
+      if (typeof response === 'object') {
+        imageUrl = response.data || response.url || response.imageUrl || response;
       }
-    });
-    
+
+      $("#profilePreview").attr("src", imageUrl);
+      $("#uploadBtn").html('<i class="bi bi-check-circle"></i> Uploaded');
+      $("#uploadBtn").removeClass("btn-dark").addClass("btn-success");
+      $("#uploadBtn").prop('disabled', false);
+
+      // Store the uploaded image URL for form submission
+      $("#profilePicture").data('uploaded-url', imageUrl);
+      $.localStorage.setItem('profile-picture-url', imageUrl);
+
+    },
+    error: function (xhr, status, error) {
+      console.error('Upload failed:', {
+        status: xhr.status,
+        statusText: xhr.statusText,
+        responseText: xhr.responseText,
+        error: error
+      });
+
+      var errorMessage = "Upload failed. Please try again.";
+
+      if (xhr.status === 401) {
+        errorMessage = "Authentication failed. Please login again.";
+      } else if (xhr.status === 413) {
+        errorMessage = "File too large. Please select a smaller image.";
+      } else if (xhr.status === 415) {
+        errorMessage = "Invalid file type. Please select an image file.";
+      } else if (xhr.responseText) {
+        try {
+          var errorResponse = JSON.parse(xhr.responseText);
+          errorMessage = errorResponse.message || errorResponse.error || errorMessage;
+        } catch (e) {
+          // Use default error message if response is not JSON
+        }
+      }
+
+      alert(errorMessage);
+      $("#uploadBtn").html('<i class="bi bi-cloud-upload"></i> Upload');
+      $("#uploadBtn").removeClass("btn-success").addClass("btn-dark");
+      $("#uploadBtn").prop('disabled', false);
+    }
   });
 });

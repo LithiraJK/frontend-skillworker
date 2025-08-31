@@ -20,6 +20,8 @@ $(document).ready(function () {
                 $.removeCookie('first_name', { path: '/' });
                 $.removeCookie('last_name', { path: '/' });
                 $.removeCookie('email', { path: '/' });
+                $.removeCookie('userId', { path: '/' });
+                $.removeCookie('profile_complete', { path: '/' });
 
                 Swal.fire({
                     icon: 'success',
@@ -84,6 +86,39 @@ $(document).ready(function () {
             }
         });
     });
+    
+    // Check if profile is complete and update card
+    const isProfileComplete = $.cookie('profile_complete') === 'true';
+    console.log('Profile complete cookie value:', $.cookie('profile_complete')); // Debug log
+    console.log('Is profile complete:', isProfileComplete); // Debug log
+    
+    if (isProfileComplete) {
+        // Find the card body that contains "Complete Profile" text
+        $('.card-body:contains("Complete Profile")').each(function () {
+            console.log('Found card body with Complete Profile text'); // Debug log
+            
+            // Update the link/button (it's an <a> tag, not <button>)
+            $(this).find('a:contains("Complete Profile")')
+                .prop('disabled', true)
+                .text('Profile Completed')
+                .off('click') // Remove click event
+                .css('pointer-events', 'none'); // Disable clicking
+                
+            // Update the card header title
+            $(this).closest('.card').find('.card-header h5').text('Professional Profile');
+            
+            // Update progress bar to 100%
+            $(this).find('.progress-bar')
+                .css('width', '100%')
+                .attr('aria-valuenow', '100')
+                .text('100%')
+                
+            // Update all checkmarks to green
+            $(this).find('.fas.fa-times.text-danger')
+                .removeClass('fa-times text-danger')
+                .addClass('fa-check text-success');
+        });
+    }
 
     // Profile completion functionality
     $('.card-body button:contains("Complete Profile")').click(function () {
