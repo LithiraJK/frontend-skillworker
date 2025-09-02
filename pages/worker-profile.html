@@ -52,7 +52,6 @@
     <main class="container my-4">
         <div class="row gx-4">
 
-            <!-- LEFT: PROFILE & SECTIONS (Large area to match your drawing) -->
             <div class="col-lg-8">
                 <!-- Profile Header -->
                 <div class="profile-header d-flex align-items-center gap-3 mb-3">
@@ -61,12 +60,14 @@
                         <div class="d-flex align-items-start justify-content-between">
                             <div>
                                 <h4 class="mb-1 fw-bold d-flex align-items-center gap-2">
-                                    <span id="displayName">Lithira</span>
+                                    <span id="displayFirstName" ></span> <span id="displayLastName"></span>
                                     <i class="fa-solid fa-pen-to-square edit-icon" data-bs-toggle="offcanvas"
                                         data-bs-target="#offcanvasProfile" title="Edit profile"></i>
                                 </h4>
                                 <p class="mb-1 text-muted"><i class="fa-regular fa-envelope me-2"></i><span
                                         id="displayEmail">lithira@gmail.com</span></p>
+                                <p class="mb-1"><i class="fa-regular fa-user me-2"></i><span
+                                        id="displayCategory"></span></p>
                                 <p class="mb-0 text-muted"><i class="fa-solid fa-location-dot me-2"></i><span
                                         id="displayLocation">Galle</span></p>
 
@@ -205,8 +206,16 @@
         <div class="offcanvas-body">
             <form id="formProfile">
                 <div class="mb-3">
+                    <label class="form-label">firstName</label>
+                    <input type="text" id="inputFirstName" class="form-control" value="">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">lastName</label>
+                    <input type="text" id="inputLastName" class="form-control" value="">
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Location</label>
-                    <input type="text" id="inputLocation" class="form-control" value="Galle">
+                    <input type="text" id="inputLocation" class="form-control" value="">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Experience</label>

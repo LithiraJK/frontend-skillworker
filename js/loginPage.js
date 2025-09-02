@@ -37,13 +37,8 @@ $(document).ready(function () {
             $.cookie('token', response.data.token, { path: '/' });
             $.cookie('refresh_token', response.data.refreshToken, { path: '/' });
             $.cookie('user_role', response.data.role, { path: '/' });
-            $.cookie('first_name', response.data.firstName, { path: '/' });
-            $.cookie('last_name', response.data.lastName, { path: '/' });
-            $.cookie('email', response.data.email, { path: '/' });
             $.cookie('userId', response.data.userId, { path: '/' });
-
-            localStorage.setItem("workerId", response.data.userId);
-
+            
             // Redirect based on role
             if (response.data.role === 'WORKER') {
                 window.location.href = '../pages/worker-dashboard.html';

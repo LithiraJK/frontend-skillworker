@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    
     // Initialize dashboard
     initializeDashboard();
 
@@ -17,9 +18,6 @@ $(document).ready(function () {
                 $.removeCookie('token', { path: '/' });
                 $.removeCookie('refresh_token', { path: '/' });
                 $.removeCookie('user_role', { path: '/' });
-                $.removeCookie('first_name', { path: '/' });
-                $.removeCookie('last_name', { path: '/' });
-                $.removeCookie('email', { path: '/' });
                 $.removeCookie('userId', { path: '/' });
                 $.removeCookie('profile_complete', { path: '/' });
 
@@ -143,25 +141,47 @@ $(document).ready(function () {
 
 // Initialize dashboard with user data
 function initializeDashboard() {
-    const firstName = $.cookie('first_name');
-    const lastName = $.cookie('last_name');
-    const email = $.cookie('email');
+    const workerId = $.cookie("userId");
+    const token = $.cookie("token");
+    let userData = {};
 
-    console.log('User Info:', { firstName, lastName, email });
+    $.ajax({
+        url: `http://localhost:8080/api/v1/user/getuser/${workerId}`,
+        method: "GET",
+        dataType: "json",
+        headers: { "Authorization": `Bearer ${token}` },
+        async: false,
+        success: function (response) {
+            if (response.status === 200 && response.data) {
+                userData = {
+                    firstName: response.data.firstName,
+                    lastName: response.data.lastName,
+                    email: response.data.email
+                };
+            } else {
+                console.warn("No user data found!");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching user data:", error);
+        }
+    });
 
-    if (firstName) {
-        $('#firstName').text(firstName);
-        $('#userName').text(firstName);
+    console.log('User Info:' , userData);
+
+
+    if (userData.firstName) {
+        $('#firstName').text(userData.firstName);
+        $('#userName').text(userData.firstName);
     }
-    if (lastName) {
-        $('#lastName').text(lastName);
+    if (userData.lastName) {
+        $('#lastName').text(userData.lastName);
     }
-    if (email) {
-        $('#email').text(email);
+    if (userData.email) {
+        $('#email').text(userData.email);
     }
 
     // Check authentication
-    const token = $.cookie('token');
     if (!token) {
         Swal.fire({
             icon: 'error',

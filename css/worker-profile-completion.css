@@ -14,6 +14,35 @@
   border: 2px solid #fff;
 }
 
+ .demo-controls {
+      background-color: #f8f9fa;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px dashed #dee2e6;
+    }
+
+    .category-item {
+      border-left: 3px solid #007bff;
+      padding-left: 15px;
+      margin-bottom: 20px !important;
+    }
+
+    .premium-badge {
+      background: linear-gradient(45deg, #ffc107, #ffeb3b);
+      color: #212529;
+      font-weight: bold;
+    }
+
+    .plan-status-premium {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      border-color: #c3e6cb;
+    }
+
+    .plan-status-free {
+      background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+      border-color: #ffeaa7;
+    }
+
 /* Wizard step style */
 .step {
   display: none;

@@ -1,20 +1,95 @@
 $(document).ready(function () {
-    let skills = []; // Will be loaded from backend
+    let skills = []; 
     let selectedFile = null;
-    const workerId = localStorage.getItem("workerId");
+    const workerId = $.cookie("userId");
     const token = $.cookie("token");
-    let userData = {
-        firstName: $.cookie('first_name') || "Unnamed",
-        lastName: $.cookie('last_name') || "Unnamed",
-        email: $.cookie('email') || "Unnamed",
-    };
+    let userData = {};
 
-    // Escape HTML
+    // Update user's first name and last name
+    function updateUserName(firstName, lastName, successCb) {
+        $.ajax({
+            url: `http://localhost:8080/api/v1/user/update/${workerId}`,
+            method: "PUT",
+            headers: { "Authorization": `Bearer ${token}` },
+            contentType: "application/json",
+            data: JSON.stringify({ firstName, lastName }),
+            success: function () {
+                if (successCb) successCb();
+                userData.firstName = firstName;
+                userData.lastName = lastName;
+                $("#displayName").text(firstName + ' ' + lastName);
+            },
+            error: function (xhr) {
+                console.error("Name update failed:", xhr.responseText);
+                showErrorMessage("Failed to update name: " + (xhr.responseJSON?.message || xhr.responseText || "Unknown error"));
+            }
+        });
+    }
+
+
+
+      $.ajax({
+        url: `http://localhost:8080/api/v1/user/getuser/${workerId}`,
+        method: "GET",
+        dataType: "json",
+        headers: { "Authorization": `Bearer ${token}` },
+        async: false,
+        success: function (response) {
+            if (response.status === 200 && response.data) {
+                userData = {
+                    firstName: response.data.firstName,
+                    lastName: response.data.lastName,
+                    email: response.data.email
+                };
+            } else {
+                console.warn("No user data found!");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching user data:", error);
+        }
+    });
+
     function escapeHtml(text) {
         return $('<div />').text(text).html();
     }
 
-    // Render skills
+    function showSuccessMessage(message) {
+        // Create a toast-like success message
+        const toast = $(`
+            <div class="alert alert-success alert-dismissible fade show position-fixed" 
+                 style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;" role="alert">
+                <i class="bi bi-check-circle me-2"></i>${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `);
+        
+        $('body').append(toast);
+        
+        // Auto-remove after 3 seconds
+        setTimeout(() => {
+            toast.alert('close');
+        }, 3000);
+    }
+
+    function showErrorMessage(message) {
+        // Create a toast-like error message
+        const toast = $(`
+            <div class="alert alert-danger alert-dismissible fade show position-fixed" 
+                 style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `);
+        
+        $('body').append(toast);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            toast.alert('close');
+        }, 5000);
+    }
+
     function renderSkills() {
         const cont = $('#skillsContainer').empty();
         const existing = $('#existingSkills').empty();
@@ -34,16 +109,15 @@ $(document).ready(function () {
         }
     }
 
-    // Close offcanvas
     function closeOffcanvas(id) {
         const el = $('#' + id)[0];
         const instance = bootstrap.Offcanvas.getInstance(el);
         if (instance) instance.hide();
     }
 
-    // Load worker profile from backend
     function loadWorker() {
-        $("#displayName").text(userData.firstName);
+        $("#displayFirstName").text(userData.firstName);
+        $("#displayLastName").text(userData.lastName);
         $("#displayEmail").text(userData.email);
         $.ajax({
             url: `http://localhost:8080/api/v1/worker/getworker/${workerId}`,
@@ -51,6 +125,10 @@ $(document).ready(function () {
             headers: { "Authorization": `Bearer ${token}` },
             success: function (res) {
                 const w = res.data;
+            
+                const categoryNames = w.categories.map(cat => cat.name);
+                $("#displayCategory").text(categoryNames.join(", "));
+
                 $("#displayExperience").text(w.experienceYears || 0);
                 $("#displayAbout").text(w.bio || "");
                 $("#profilePic").attr("src", w.profilePictureUrl || "/assets/images/workerDefualtPP.png");
@@ -67,7 +145,6 @@ $(document).ready(function () {
         });
     }
 
-    // Update worker profile in backend
     function updateWorker(data, successCb) {
         $.ajax({
             url: `http://localhost:8080/api/v1/worker/update/${workerId}`,
@@ -80,15 +157,14 @@ $(document).ready(function () {
                 loadWorker(); // refresh UI
             },
             error: function (xhr) {
-                alert("Update failed: " + xhr.responseText);
+                console.error("Worker update failed:", xhr.responseText);
+                showErrorMessage("Failed to update profile: " + (xhr.responseJSON?.message || xhr.responseText || "Unknown error"));
             }
         });
     }
 
-    // Initial load
     loadWorker();
 
-    // Remove skill
     $(document).on('click', '.remove-skill', function (e) {
         e.stopPropagation();
         const idx = $(this).closest('.skill-badge').data('index');
@@ -98,7 +174,6 @@ $(document).ready(function () {
         }
     });
 
-    // ABOUT save
     $('#formAbout').on('submit', function (e) {
         e.preventDefault();
         const text = $('#inputAbout').val().trim();
@@ -108,28 +183,74 @@ $(document).ready(function () {
         });
     });
 
-    // PROFILE save
     $('#formProfile').on('submit', function (e) {
         e.preventDefault();
 
+        const firstName = $('#inputFirstName').val().trim();
+        const lastName = $('#inputLastName').val().trim();
         const location = $('#inputLocation').val().trim();
         const experience = parseInt($('#inputExperience').val().trim()) || 0;
         const uploadedUrl = $('#profilePicture').data('uploaded-url');
 
-        updateWorker({
-            workerId: workerId,
-            experienceYears: experience,
-            profilePictureUrl: uploadedUrl,
-            locations: location ? [{ name: location }] : undefined
-        }, () => {
-            $("#displayLocation").text(location);
-            $("#displayExperience").text(experience);
-            if (uploadedUrl) $("#profilePic").attr("src", uploadedUrl);
-            closeOffcanvas('offcanvasProfile');
+        // Validate required fields
+        if (!firstName || !lastName) {
+            showErrorMessage("First Name and Last Name are required.");
+            $('#inputFirstName').focus();
+            return;
+        }
+
+        // Validate name lengths
+        if (firstName.length < 2 || lastName.length < 2) {
+            showErrorMessage("First Name and Last Name must be at least 2 characters long.");
+            return;
+        }
+
+        // Validate experience
+        if (experience < 0 || experience > 50) {
+            showErrorMessage("Experience must be between 0 and 50 years.");
+            $('#inputExperience').focus();
+            return;
+        }
+
+        // Update user name first, then worker profile
+        updateUserName(firstName, lastName, function() {
+            // After name update succeeds, update worker profile
+            const workerData = {
+                workerId: workerId,
+                experienceYears: experience
+            };
+
+            // Add profile picture URL if uploaded
+            if (uploadedUrl) {
+                workerData.profilePictureUrl = uploadedUrl;
+            }
+
+            // Add location if provided
+            if (location) {
+                workerData.locations = [{ district: location }];
+            }
+
+            updateWorker(workerData, () => {
+                // Update display elements
+                $("#displayName").text(firstName + ' ' + lastName);
+                $("#displayLocation").text(location);
+                $("#displayExperience").text(experience);
+                if (uploadedUrl) {
+                    $("#profilePic").attr("src", uploadedUrl);
+                }
+                
+                // Update cookies with new name
+                $.cookie('first_name', firstName, { path: '/' });
+                $.cookie('last_name', lastName, { path: '/' });
+                
+                closeOffcanvas('offcanvasProfile');
+                
+                // Show success message
+                showSuccessMessage("Profile updated successfully!");
+            });
         });
     });
 
-    // SKILLS save
     $('#formSkills').on('submit', function (e) {
         e.preventDefault();
         const raw = $('#inputSkills').val().trim();
@@ -144,7 +265,6 @@ $(document).ready(function () {
         });
     });
 
-    // CONTACT save
     $('#formContact').on('submit', function (e) {
         e.preventDefault();
         const mobile = $('#inputMobile').val().trim();
@@ -166,7 +286,13 @@ $(document).ready(function () {
         $('#inputHome').val($('#displayHome').text().trim());
     });
     $('#offcanvasProfile').on('shown.bs.offcanvas', function () {
+        // Populate form fields with current values
+        $('#inputFirstName').val(userData.firstName || '');
+        $('#inputLastName').val(userData.lastName || '');
+        $('#inputLocation').val($('#displayLocation').text().trim());
         $('#inputExperience').val($('#displayExperience').text().trim());
+        
+        // Reset upload button state
         $("#uploadBtn").html('<i class="bi bi-cloud-upload"></i> Upload')
             .removeClass("btn-success").addClass("btn-dark")
             .prop('disabled', false);
@@ -176,27 +302,56 @@ $(document).ready(function () {
         $('#profilePreview').attr('src', $('#profilePic').attr('src'));
     });
 
-    // File select + preview
+    // File select + preview with enhanced validation
     $('#profilePicture').on('change', function (e) {
         selectedFile = e.target.files[0];
-        if (selectedFile && selectedFile.type.startsWith('image/')) {
-            if (selectedFile.size > 2 * 1024 * 1024) {
-                alert("File size must be less than 2MB");
-                $(this).val(''); selectedFile = null; return;
-            }
-            const reader = new FileReader();
-            reader.onload = evt => $('#profilePreview').attr('src', evt.target.result);
-            reader.readAsDataURL(selectedFile);
-        } else {
-            alert("Please select a valid image file");
-            $(this).val(''); selectedFile = null;
+        
+        if (!selectedFile) {
+            $('#profilePreview').attr('src', $('#profilePic').attr('src'));
+            return;
         }
+
+        // Validate file type
+        if (!selectedFile.type.startsWith('image/')) {
+            showErrorMessage("Please select a valid image file (JPG, PNG, GIF, etc.)");
+            $(this).val('');
+            selectedFile = null;
+            $('#profilePreview').attr('src', $('#profilePic').attr('src'));
+            return;
+        }
+
+        // Validate file size (2MB limit)
+        if (selectedFile.size > 2 * 1024 * 1024) {
+            showErrorMessage("File size must be less than 2MB. Current size: " + (selectedFile.size / (1024 * 1024)).toFixed(2) + "MB");
+            $(this).val('');
+            selectedFile = null;
+            $('#profilePreview').attr('src', $('#profilePic').attr('src'));
+            return;
+        }
+
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            $('#profilePreview').attr('src', evt.target.result);
+        };
+        reader.onerror = function() {
+            showErrorMessage("Failed to read the selected file.");
+            $('#profilePreview').attr('src', $('#profilePic').attr('src'));
+        };
+        reader.readAsDataURL(selectedFile);
     });
 
-    // Upload image
+    // Upload image with enhanced error handling
     $('#uploadBtn').on('click', function () {
-        if (!selectedFile) { alert("Please select an image first."); return; }
-        if (!token) { alert("Authentication token not found."); return; }
+        if (!selectedFile) {
+            showErrorMessage("Please select an image first.");
+            return;
+        }
+        
+        if (!token) {
+            showErrorMessage("Authentication token not found. Please login again.");
+            return;
+        }
 
         let formData = new FormData();
         formData.append("profilePic", selectedFile);
@@ -213,18 +368,46 @@ $(document).ready(function () {
                 $("#uploadBtn").prop('disabled', true);
             },
             success: function (response) {
-                let imageUrl = response.data || response.url || response.imageUrl || response;
-                $("#profilePreview").attr("src", imageUrl);
-                $("#profilePic").attr("src", imageUrl);
-                $("#uploadBtn").html('<i class="bi bi-check-circle"></i> Uploaded')
-                    .removeClass("btn-dark").addClass("btn-success")
-                    .prop('disabled', false);
-                $("#profilePicture").data('uploaded-url', imageUrl);
-                selectedFile = null;
-                $("#profilePicture").val('');
+                try {
+                    let imageUrl = response.data || response.url || response.imageUrl || response;
+                    
+                    if (!imageUrl) {
+                        throw new Error("No image URL returned from server");
+                    }
+                    
+                    $("#profilePreview").attr("src", imageUrl);
+                    $("#profilePic").attr("src", imageUrl);
+                    $("#uploadBtn").html('<i class="bi bi-check-circle"></i> Uploaded')
+                        .removeClass("btn-dark").addClass("btn-success")
+                        .prop('disabled', false);
+                    $("#profilePicture").data('uploaded-url', imageUrl);
+                    selectedFile = null;
+                    $("#profilePicture").val('');
+                    
+                    showSuccessMessage("Profile picture uploaded successfully!");
+                } catch (error) {
+                    console.error("Upload success but error processing response:", error);
+                    showErrorMessage("Upload completed but failed to process response: " + error.message);
+                    $("#uploadBtn").html('<i class="bi bi-cloud-upload"></i> Upload')
+                        .removeClass("btn-success").addClass("btn-dark")
+                        .prop('disabled', false);
+                }
             },
             error: function (xhr) {
-                alert("Upload failed: " + xhr.responseText);
+                console.error("Upload failed:", xhr.responseText);
+                let errorMessage = "Upload failed: ";
+                
+                if (xhr.status === 413) {
+                    errorMessage += "File too large";
+                } else if (xhr.status === 415) {
+                    errorMessage += "Unsupported file type";
+                } else if (xhr.status === 401) {
+                    errorMessage += "Authentication failed. Please login again.";
+                } else {
+                    errorMessage += xhr.responseJSON?.message || xhr.responseText || "Unknown error";
+                }
+                
+                showErrorMessage(errorMessage);
                 $("#uploadBtn").html('<i class="bi bi-cloud-upload"></i> Upload')
                     .removeClass("btn-success").addClass("btn-dark")
                     .prop('disabled', false);
