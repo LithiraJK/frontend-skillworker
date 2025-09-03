@@ -1,18 +1,24 @@
+import tokenHandler from './util/tokenRefreshHandler.js'; 
+
+
 $(document).ready(function () {
   let currentStep = 1;
   const totalSteps = $(".step").length;
-  let isPremiumUser = false; // This would be set based on user's subscription
-  let activeCategories = []; // Store fetched categories
-  let activeLocations = []; // Store fetched locations
+  let isPremiumUser = false; 
+  let activeCategories = []; 
+  let activeLocations = []; 
+  const token = cookieUtil.get('token');
+     if (token) {
+          tokenHandler.scheduleSilentRefresh(token);
+      }
+
 
   
-  // Fallback cookie utility if jQuery Cookie is not available
   const cookieUtil = {
     get: function (name) {
       if (typeof $.cookie === 'function') {
         return $.cookie(name);
       }
-      // Fallback to vanilla JavaScript
       const nameEQ = name + "=";
       const ca = document.cookie.split(';');
       for (let i = 0; i < ca.length; i++) {
@@ -24,29 +30,22 @@ $(document).ready(function () {
     }
   };
 
-  // For demo purposes, let's simulate this
   checkPremiumStatus();
 
-  // Fetch active categories from API
   fetchActiveCategories();
 
-  // Fetch active locations from API
   fetchActiveLocations();
 
-  // Initialize existing bootstrap select dropdowns
   $('.selectpicker').selectpicker();
 
-  // Next button
   $(".nextBtn").click(function () {
     const stepDiv = $(".step[data-step='" + currentStep + "']");
 
-    // Basic validation
     let valid = true;
     stepDiv.find("input[required]").each(function () {
       if ($(this).val() === "") valid = false;
     });
 
-    // Additional validation for step 2 (Categories & Skills)
     if (currentStep === 2) {
       const categoryCount = $(".category-item").length;
       if (categoryCount === 0) {
@@ -59,7 +58,6 @@ $(document).ready(function () {
         return;
       }
 
-      // Check if any category is selected
       let categorySelected = false;
       $(".category-item select").each(function () {
         if ($(this).val() !== "" && $(this).val() !== null) {
@@ -90,7 +88,6 @@ $(document).ready(function () {
     updateStepIndicator();
   });
 
-  // Previous button
   $(".prevBtn").click(function () {
     $(".step[data-step='" + currentStep + "']").removeClass("active");
     currentStep--;
@@ -99,18 +96,15 @@ $(document).ready(function () {
     updateStepIndicator();
   });
 
-  // Add new category dynamically (Premium feature)
   $("#addCategoryBtn").click(function () {
     const categoryCount = $(".category-item").length;
     const maxCategories = isPremiumUser ? 5 : 1;
 
-    // For the first category, always allow it (both free and premium)
     if (categoryCount === 0) {
       addNewCategory();
       return;
     }
 
-    // Check if user is trying to add more than 1 category without premium
     if (!isPremiumUser && categoryCount >= 1) {
       Swal.fire({
         icon: 'info',
@@ -137,14 +131,12 @@ $(document).ready(function () {
         width: '500px'
       }).then((result) => {
         if (result.isConfirmed) {
-          // Redirect to premium upgrade page or show upgrade modal
           showPremiumUpgradeModal();
         }
       });
       return;
     }
 
-    // Check maximum categories for premium users
     if (categoryCount >= maxCategories) {
       Swal.fire({
         icon: 'warning',
@@ -155,11 +147,9 @@ $(document).ready(function () {
       return;
     }
 
-    // Add new category for premium users
     addNewCategory();
   });
 
-  // Function to add a new category
   function addNewCategory() {
     const categoryCount = $(".category-item").length;
     const newCategoryId = "category_" + (categoryCount + 1);
@@ -172,10 +162,8 @@ $(document).ready(function () {
       ${categoryCount > 0 ? '<button type="button" class="btn btn-sm btn-danger mt-2 removeCategoryBtn"><i class="fas fa-trash me-1"></i>Remove</button>' : ''}
     </div>`;
 
-    // Append the new category
     $("#categoryContainer").append(categoryHtml);
 
-    // Initialize bootstrap-select for the new dropdown
     $(`#${newCategoryId}`).selectpicker();
 
     console.log("New category dropdown added with ID:", newCategoryId);
@@ -183,13 +171,11 @@ $(document).ready(function () {
     updatePlanStatus();
   }
 
-  // Remove category
   $(document).on("click", ".removeCategoryBtn", function () {
     const categoryItem = $(this).closest(".category-item");
     const selectElement = categoryItem.find('.selectpicker');
     const totalCategories = $(".category-item").length;
 
-    // Don't allow removing if it's the last category
     if (totalCategories <= 1) {
       Swal.fire({
         icon: 'warning',
@@ -200,7 +186,6 @@ $(document).ready(function () {
       return;
     }
 
-    // Show confirmation dialog
     Swal.fire({
       icon: 'question',
       title: 'Remove Category?',
@@ -211,22 +196,18 @@ $(document).ready(function () {
       confirmButtonColor: '#dc3545'
     }).then((result) => {
       if (result.isConfirmed) {
-        // Destroy bootstrap-select instance before removing
         if (selectElement.length) {
           selectElement.selectpicker('destroy');
         }
 
-        // Remove the category item
         categoryItem.remove();
 
-        // Update labels for remaining categories
         updateCategoryLabels();
 
         console.log("Category removed. Remaining categories:", $(".category-item").length);
         updateCategoryButton();
         updatePlanStatus();
 
-        // Show success message
         Swal.fire({
           icon: 'success',
           title: 'Category Removed',
@@ -238,7 +219,6 @@ $(document).ready(function () {
     });
   });
 
-  // Add new location dynamically
   $("#addLocationBtn").click(function () {
     const locationCount = $(".location-item").length;
     const newLocationId = "workingArea_" + (locationCount + 1);
@@ -251,43 +231,35 @@ $(document).ready(function () {
       <button type="button" class="btn btn-sm btn-danger mt-2 removeLocationBtn">Remove</button>
     </div>`;
 
-    // Append the new location
     $("#locationContainer").append(locationHtml);
 
-    // Initialize bootstrap-select for the new dropdown
     $(`#${newLocationId}`).selectpicker();
 
     console.log("New location dropdown added with ID:", newLocationId);
   });
 
-  // Remove location
   $(document).on("click", ".removeLocationBtn", function () {
     const locationItem = $(this).closest(".location-item");
     const selectElement = locationItem.find('.selectpicker');
 
-    // Destroy bootstrap-select instance before removing
     if (selectElement.length) {
       selectElement.selectpicker('destroy');
     }
 
-    // Remove the location item
     locationItem.remove();
 
-    // Don't allow removing if it's the last location
     if ($(".location-item").length === 0) {
-      $("#addLocationBtn").click(); // Add one back
+      $("#addLocationBtn").click(); 
     }
 
     console.log("Location removed. Remaining locations:", $(".location-item").length);
   });
 
-  // Update progress bar
   function updateProgress() {
     const percent = (currentStep / totalSteps) * 100;
     $("#wizardProgress").css("width", percent + "%");
   }
 
-  // Update step indicator
   function updateStepIndicator() {
     $(".step-indicator .step-item").each(function () {
       const step = $(this).data("step");
@@ -295,10 +267,7 @@ $(document).ready(function () {
     });
   }
 
-  // Check premium status (simulate API call)
   function checkPremiumStatus() {
-    // In real application, this would be an AJAX call to your backend
-    // For demo, let's randomly assign premium status
     const userPlan = localStorage.getItem('userPlan') || 'free';
     isPremiumUser = userPlan === 'premium';
 
@@ -307,23 +276,17 @@ $(document).ready(function () {
     updatePlanStatus();
   }
 
-  // Fetch active categories from API
   async function fetchActiveCategories() {
     console.log('Fetching active categories from API...');
 
-    // Show loading state
     $('.categoryInput').html('<option value="">Loading categories...</option>').selectpicker('refresh');
 
-    // Get token from cookie if available (for authenticated requests)
-    const token = cookieUtil.get('token');
     console.log('Token available:', token ? 'Yes' : 'No');
 
-    // Prepare headers
     const headers = {
       'Content-Type': 'application/json'
     };
 
-    // Add Authorization header if token exists
     if (token && token !== 'undefined' && token !== 'null') {
       headers['Authorization'] = 'Bearer ' + token;
       console.log('Adding Authorization header');
@@ -335,18 +298,16 @@ $(document).ready(function () {
       type: 'GET',
       url: 'http://localhost:8080/api/v1/category/getactive',
       headers: headers,
-      timeout: 10000, // 10 second timeout
+      timeout: 10000,
       success: function (response) {
         console.log('Categories fetched successfully:', response);
         console.log('Response status:', response.status);
         console.log('Response message:', response.message);
 
-        // Handle your specific API response format
         if (response.status === 200 && response.data && Array.isArray(response.data)) {
           activeCategories = response.data;
           console.log('Categories extracted from response.data:', activeCategories);
         } else if (Array.isArray(response)) {
-          // Fallback for direct array response
           activeCategories = response;
           console.log('Categories extracted as direct array:', activeCategories);
         } else {
@@ -354,13 +315,10 @@ $(document).ready(function () {
           activeCategories = [];
         }
 
-        // Populate existing category dropdowns
         populateCategoryDropdowns();
 
-        // Remove retry button if it exists (data loaded successfully)
         $('.retry-categories-container').remove();
 
-        // Show success toast
         if (activeCategories.length > 0) {
           showToast(`${activeCategories.length} categories loaded successfully`, 'success');
         } else {
@@ -372,10 +330,8 @@ $(document).ready(function () {
         console.error('Status:', status);
         console.error('Response:', xhr.responseText);
 
-        // Show error toast
         showToast('Failed to load categories. Using default options.', 'warning');
 
-        // Fallback to default categories if API fails
         activeCategories = [
           { id: 1, name: 'No Active Categories', status: 'ACTIVE' }
         ];
@@ -383,7 +339,6 @@ $(document).ready(function () {
         console.log('Using fallback categories:', activeCategories);
         populateCategoryDropdowns();
 
-        // Add retry button in the first category dropdown only if it doesn't exist
         if ($('.category-item:first .retry-categories-btn').length === 0) {
           const retryHtml = `
             <div class="mt-2 retry-categories-container">
@@ -398,7 +353,6 @@ $(document).ready(function () {
     });
   }
 
-  // Show toast notifications
   function showToast(message, type = 'info') {
     const Toast = Swal.mixin({
       toast: true,
@@ -418,50 +372,41 @@ $(document).ready(function () {
     });
   }
 
-  // Populate category dropdowns with fetched data
   function populateCategoryDropdowns() {
     console.log('Populating category dropdowns with', activeCategories.length, 'categories');
     console.log('Category data:', activeCategories);
 
-    // Generate options HTML
     let optionsHtml = '<option value="">Select a Category</option>';
 
     if (activeCategories.length === 0) {
       optionsHtml = '<option value="">No categories available</option>';
     } else {
       activeCategories.forEach(category => {
-        // Your API returns: { id: 1, name: "Plumbing", description: "He is Good Plumbing" }
         const categoryId = category.id;
         const categoryName = category.name;
         const categoryDescription = category.description;
 
         if (categoryName) {
-          // Use ID as value and name as display text, description as title attribute for tooltip
           optionsHtml += `<option value="${categoryId}" title="${categoryDescription || ''}">${categoryName}</option>`;
           console.log(`Added category: ID=${categoryId}, Name=${categoryName}`);
         }
       });
     }
 
-    // Update all existing category dropdowns
     $('.categoryInput').each(function () {
-      const currentValue = $(this).val(); // Preserve selected value
+      const currentValue = $(this).val();
 
-      // Update options
       $(this).html(optionsHtml);
 
-      // Restore selected value if it still exists
       if (currentValue && currentValue !== "Loading categories...") {
         $(this).val(currentValue);
       }
 
-      // Refresh bootstrap-select
       $(this).selectpicker('refresh');
     });
 
     console.log('Category dropdowns populated successfully');
 
-    // Show success message if categories loaded
     if (activeCategories.length > 0) {
       console.log(`✅ ${activeCategories.length} active categories loaded successfully`);
     }
@@ -482,23 +427,18 @@ $(document).ready(function () {
     return optionsHtml;
   }
 
-  // Fetch active locations from API
   async function fetchActiveLocations() {
     console.log('Fetching active locations from API...');
 
-    // Show loading state
     $('.locationInput').html('<option value="">Loading locations...</option>').selectpicker('refresh');
 
-    // Get token from cookie if available (for authenticated requests)
     const token = cookieUtil.get('token');
     console.log('Token available for locations:', token ? 'Yes' : 'No');
 
-    // Prepare headers
     const headers = {
       'Content-Type': 'application/json'
     };
 
-    // Add Authorization header if token exists
     if (token && token !== 'undefined' && token !== 'null') {
       headers['Authorization'] = 'Bearer ' + token;
       console.log('Adding Authorization header for locations');
@@ -510,18 +450,16 @@ $(document).ready(function () {
       type: 'GET',
       url: 'http://localhost:8080/api/v1/location/getactive',
       headers: headers,
-      timeout: 10000, // 10 second timeout
+      timeout: 10000,
       success: function (response) {
         console.log('Locations fetched successfully:', response);
         console.log('Response status:', response.status);
         console.log('Response message:', response.message);
 
-        // Handle your specific API response format
         if (response.status === 200 && response.data && Array.isArray(response.data)) {
           activeLocations = response.data;
           console.log('Locations extracted from response.data:', activeLocations);
         } else if (Array.isArray(response)) {
-          // Fallback for direct array response
           activeLocations = response;
           console.log('Locations extracted as direct array:', activeLocations);
         } else {
@@ -529,13 +467,10 @@ $(document).ready(function () {
           activeLocations = [];
         }
 
-        // Populate existing location dropdowns
         populateLocationDropdowns();
 
-        // Remove retry button if it exists (data loaded successfully)
         $('.retry-locations-container').remove();
 
-        // Show success toast
         if (activeLocations.length > 0) {
           showToast(`${activeLocations.length} locations loaded successfully`, 'success');
         } else {
@@ -547,10 +482,8 @@ $(document).ready(function () {
         console.error('Status:', status);
         console.error('Response:', xhr.responseText);
 
-        // Show error toast
         showToast('Failed to load locations. Using default options.', 'warning');
 
-        // Fallback to default locations if API fails
         activeLocations = [
           { location_id: 1, district: 'No Active District', active: true }
         ];
@@ -558,7 +491,6 @@ $(document).ready(function () {
         console.log('Using fallback locations:', activeLocations);
         populateLocationDropdowns();
 
-        // Add retry button in the first location dropdown only if it doesn't exist
         if ($('.location-item:first .retry-locations-btn').length === 0) {
           const retryHtml = `
             <div class="mt-2 retry-locations-container">
@@ -573,12 +505,10 @@ $(document).ready(function () {
     });
   }
 
-  // Populate location dropdowns with fetched data
   function populateLocationDropdowns() {
     console.log('Populating location dropdowns with', activeLocations.length, 'locations');
     console.log('Location data:', activeLocations);
 
-    // Generate options HTML
     let optionsHtml = '<option value="">Select a District</option>';
 
     if (activeLocations.length === 0) {
@@ -590,48 +520,39 @@ $(document).ready(function () {
         const locationName = location.district;
 
         if (locationName) {
-          // Use location_id as value and district as display text
           optionsHtml += `<option value="${locationId}">${locationName}</option>`;
           console.log(`Added location: ID=${locationId}, Name=${locationName}`);
         }
       });
     }
 
-    // Update all existing location dropdowns
     $('.locationInput').each(function () {
-      const currentValue = $(this).val(); // Preserve selected value
+      const currentValue = $(this).val(); 
 
-      // Update options
       $(this).html(optionsHtml);
 
-      // Restore selected value if it still exists
       if (currentValue && currentValue !== "Loading locations...") {
         $(this).val(currentValue);
       }
 
-      // Refresh bootstrap-select
       $(this).selectpicker('refresh');
     });
 
     console.log('Location dropdowns populated successfully');
 
-    // Show success message if locations loaded
     if (activeLocations.length > 0) {
       console.log(`✅ ${activeLocations.length} active locations loaded successfully`);
     }
   }
 
-  // Generate location options HTML (for new dropdowns)
   function generateLocationOptions() {
     let optionsHtml = '<option value="">Select a District</option>';
 
     activeLocations.forEach(location => {
-      // Your API returns: { location_id: 1, district: "COLOMBO", active: true }
       const locationId = location.location_id;
       const locationName = location.district;
 
       if (locationName) {
-        // Use location_id as value and district as display text
         optionsHtml += `<option value="${locationId}">${locationName}</option>`;
       }
     });
@@ -639,7 +560,6 @@ $(document).ready(function () {
     return optionsHtml;
   }
 
-  // Demo toggle for premium status (remove in production)
   $("#togglePremiumDemo").click(function () {
     const newPlan = isPremiumUser ? 'free' : 'premium';
     localStorage.setItem('userPlan', newPlan);
@@ -656,7 +576,6 @@ $(document).ready(function () {
     });
   });
 
-  // Update plan status display
   function updatePlanStatus() {
     const statusElement = $("#planStatusText");
     const categoryCount = $(".category-item").length;
@@ -683,14 +602,12 @@ $(document).ready(function () {
 
     if (!isPremiumUser) {
       if (categoryCount >= 1) {
-        // Free user already has 1 category - show premium upgrade button
         $("#addCategoryBtn")
           .html('<i class="fas fa-crown me-1"></i>Add More Categories (Premium)')
           .removeClass('btn-success btn-outline-dark')
           .addClass('btn-warning')
           .prop('disabled', false);
       } else {
-        // Free user can still add their first category
         $("#addCategoryBtn")
           .html('<i class="fas fa-plus me-1"></i>Add Category')
           .removeClass('btn-warning')
@@ -698,7 +615,6 @@ $(document).ready(function () {
           .prop('disabled', false);
       }
     } else {
-      // Premium user
       if (categoryCount >= maxCategories) {
         $("#addCategoryBtn")
           .html(`<i class="fas fa-check me-1"></i>Maximum Categories (${maxCategories})`)
@@ -714,7 +630,6 @@ $(document).ready(function () {
       }
     }
 
-    // Update button text with current count
     const currentText = $("#addCategoryBtn").text();
     if (categoryCount > 0 && !$("#addCategoryBtn").prop('disabled')) {
       const countText = ` (${categoryCount}/${maxCategories})`;
@@ -761,13 +676,12 @@ $(document).ready(function () {
       width: '500px'
     }).then((result) => {
       if (result.isConfirmed) {
-        // Simulate premium upgrade for demo
+      
         simulatePremiumUpgrade();
       }
     });
   }
 
-  // Simulate premium upgrade for demo purposes
   function simulatePremiumUpgrade() {
     localStorage.setItem('userPlan', 'premium');
     isPremiumUser = true;
@@ -789,7 +703,6 @@ $(document).ready(function () {
     });
   }
 
-  // Update category labels after removal
   function updateCategoryLabels() {
     $(".category-item").each(function (index) {
       const label = $(this).find('.form-label');
@@ -797,21 +710,17 @@ $(document).ready(function () {
     });
   }
 
-  // Initialize with first category
-  // Make functions globally accessible
   window.fetchActiveCategories = fetchActiveCategories;
   window.fetchActiveLocations = fetchActiveLocations;
   window.showPremiumUpgradeModal = showPremiumUpgradeModal;
   window.simulatePremiumUpgrade = simulatePremiumUpgrade;
 
-  // Submit form
   $("#finishBtn").click(function (e) {
     e.preventDefault();
 
     const userId = $.cookie('userId');
 
 
-    // Collect form data
     const profileData = {
       phoneNumbers: [
       $("#phone1").val(),
@@ -826,7 +735,6 @@ $(document).ready(function () {
       profilePictureUrl: $("#profilePicture").data("uploaded-url") || $("#profilePreview").attr("src"),
     };
 
-    // Collect all category values
     $(".category-item select").each(function () {
       const categoryValue = $(this).val();
       if (categoryValue !== "" && categoryValue !== null) {
@@ -834,7 +742,6 @@ $(document).ready(function () {
       }
     });
 
-    // Collect all location values
     $(".location-item select").each(function () {
       const locationValue = $(this).val();
       if (locationValue !== "" && locationValue !== null) {
@@ -846,12 +753,10 @@ $(document).ready(function () {
     console.log("Selected categories:", profileData.categoryIds);
     console.log("Selected locations:", profileData.locationIds);
 
-    // Show success message with category and location count
     const categoryText = profileData.categoryIds.length === 1 ? 'category' : 'categories';
     const locationText = profileData.locationIds.length === 1 ? 'location' : 'locations';
 
 
-    // TODO: send `profileData` to backend via AJAX
     $.ajax({
       type: 'POST',
       url: 'http://localhost:8080/api/v1/worker/register',
@@ -896,7 +801,6 @@ $(document).ready(function () {
       `,
       confirmButtonText: 'Continue to Dashboard'
     }).then(() => {
-      // Redirect to appropriate dashboard
       alert('Profile Data Submitted !!');
 
       // window.location.href = '../pages/worker-dashboard.html';
@@ -908,11 +812,9 @@ $(document).ready(function () {
 
 let selectedFile = null;
 
-// Preview locally before upload
 $('#profilePicture').on('change', function (e) {
   selectedFile = e.target.files[0];
   if (selectedFile && selectedFile.type.startsWith('image/')) {
-    // Validate file size (max 2MB)
     if (selectedFile.size > 2 * 1024 * 1024) {
       alert("File size must be less than 2MB");
       this.value = '';
@@ -931,10 +833,7 @@ $('#profilePicture').on('change', function (e) {
 });
 
 
-// Upload to backend (which uploads to Cloudinary)
-// Upload to backend (which uploads to Cloudinary) using jQuery
 $('#uploadBtn').on('click', function () {
-  // Get token using jQuery cookie (synchronous)
   const token = $.cookie('token');
 
   console.log('Token:', token ? 'Found' : 'Not found');
@@ -952,7 +851,6 @@ $('#uploadBtn').on('click', function () {
   var formData = new FormData();
   formData.append("profilePic", selectedFile);
 
-  // AJAX request to your backend endpoint
   $.ajax({
     url: "http://localhost:8080/api/v1/image/upload",
     type: "POST",
@@ -969,7 +867,6 @@ $('#uploadBtn').on('click', function () {
     success: function (response) {
       console.log('Upload success:', response);
 
-      // Handle different response formats
       var imageUrl = response;
       if (typeof response === 'object') {
         imageUrl = response.data || response.url || response.imageUrl || response;
@@ -980,7 +877,6 @@ $('#uploadBtn').on('click', function () {
       $("#uploadBtn").removeClass("btn-dark").addClass("btn-success");
       $("#uploadBtn").prop('disabled', false);
 
-      // Store the uploaded image URL for form submission
       $("#profilePicture").data('uploaded-url', imageUrl);
       $.localStorage.setItem('profile-picture-url', imageUrl);
 
@@ -1006,7 +902,6 @@ $('#uploadBtn').on('click', function () {
           var errorResponse = JSON.parse(xhr.responseText);
           errorMessage = errorResponse.message || errorResponse.error || errorMessage;
         } catch (e) {
-          // Use default error message if response is not JSON
         }
       }
 

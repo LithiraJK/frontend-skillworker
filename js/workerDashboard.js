@@ -1,3 +1,6 @@
+import tokenHandler from './util/tokenRefreshHandler.js'; 
+
+
 $(document).ready(function () {
     
     // Initialize dashboard
@@ -143,6 +146,9 @@ $(document).ready(function () {
 function initializeDashboard() {
     const workerId = $.cookie("userId");
     const token = $.cookie("token");
+       if (token) {
+            tokenHandler.scheduleSilentRefresh(token);
+        }
     let userData = {};
 
     $.ajax({

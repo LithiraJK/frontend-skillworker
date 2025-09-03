@@ -1,9 +1,16 @@
+import tokenHandler from './util/tokenRefreshHandler.js'; 
+
+
 $(document).ready(function () {
     let skills = []; 
     let selectedFile = null;
     const workerId = $.cookie("userId");
     const token = $.cookie("token");
     let userData = {};
+
+    if (token) {
+         tokenHandler.scheduleSilentRefresh(token);
+    }
 
     // Update user's first name and last name
     function updateUserName(firstName, lastName, successCb) {

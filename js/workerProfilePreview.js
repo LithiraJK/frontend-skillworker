@@ -1,9 +1,14 @@
-// workerProfilePreview.js
+import tokenHandler from './util/tokenRefreshHandler.js'; 
+
 $(document).ready(function () {    
     const workerId = $.cookie('userId');
     const apiUrl = `http://localhost:8080/api/v1/worker/getworker/${workerId}`;
     const token = $.cookie("token");
     let userData = {};
+
+    if (token) {
+        tokenHandler.scheduleSilentRefresh(token);
+    }
 
     $.ajax({
         url: `http://localhost:8080/api/v1/user/getuser/${workerId}`,

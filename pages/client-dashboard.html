@@ -11,37 +11,38 @@
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary ">
-            <div class="container-fluid d-flex justify-content-between align-items-center">
-                <div class="logo">
-                    <img src="../assets/icons/SkillWorker_logo.png" alt="SkillWorker Logo">
-                </div>
-                <ul>
-                    <li><a href="#dashboard">DashBoard</a></li>
-                    <li><a href="#job-postings">All Ads</a></li>
-                    <li><a href="#applications">Applications</a></li>
-                    <li>
-                        <div class="dropdown">
-                            <!-- <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Profile
-                            </button> -->
-                            <button class="btn btn-outline-warning" id="logoutBtn">
-                                <i class="fas fa-sign-out-alt me-2"></i>
-                                Logout
-                            </button>
-                            <!-- <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">View Profile</a></li>
-                                <li><a class="dropdown-item" href="#">Settings</a></li>
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
-                            </ul> -->
-                        </div>
-                    </li>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+        <a class="navbar-brand fw-bold text-white" href="#">Skill<span class="text-warning">W</span>orker.</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="../pages/worker-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#">Ads</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
+            </ul>
+
+
+            <a href="#" class="me-3 text-white fs-5"><i class="fas fa-envelope"></i></a>
+            <a href="#" class="me-3 text-white fs-5"><i class="fas fa-bell"></i></a>
+            <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
+
+
+            <div class="dropdown">
+                <button class="profile-btn" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="/assets/images/workerDefualtPP.png" alt="Profile">
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                    <li><a class="dropdown-item" href="#">Account Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="/pages/login-page.html">Logout</a></li>
                 </ul>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
     <main class="container my-5">
 
@@ -85,30 +86,277 @@
 
         <section>
             <div class="card-container">
-                <div class="card">
-                    <h5>Job Title 1</h5>
-                    <p>Company: Company A</p>
-                    <p>Location: City A</p>
-                    <button class="apply-btn">Apply Now</button>
+
+                <!-- Card 1 -->
+                <div class="card service-card modern-service-card border-0 shadow-sm h-100">
+
+                    <div class="card-body p-4">
+                        <!-- Service Provider Info -->
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="/assets/images/workerDefualtPP.png" class="rounded-circle me-3" width="50"
+                                height="50" alt="Profile Picture" style="object-fit: cover; border: 2px solid #f8f9fa;">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 fw-semibold text-dark">Lithira</h6>
+                                <p class="mb-0 text-muted small">Professional Plumber</p>
+                                <p class="mb-0 text-muted small">
+                                    <i class="fas fa-map-marker-alt text-warning me-1"></i>
+                                    Galle & Colombo
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Service Details -->
+                        <div class="service-details">
+                            <h5 class="card-title mb-2 fw-bold text-dark">Pipe Installation Service</h5>
+
+                            <!-- Rating -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rating-stars me-2">
+                                    <i class="fas fa-star text-warning"></i>
+                                    <span class="fw-semibold text-dark ms-1">4.8</span>
+                                </div>
+                                <span class="text-muted small">(16 reviews)</span>
+                            </div>
+
+                            <!-- Price and Contact -->
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="pricing">
+                                    <span class="text-muted small">Starting from</span>
+                                    <div class="fw-bold text-black fs-5">Rs. 2,000</div>
+                                </div>
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                    <i class="fas fa-phone me-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="card">
-                    <h5>Job Title 2</h5>
-                    <p>Company: Company B</p>
-                    <p>Location: City B</p>
-                    <button class="apply-btn">Apply Now</button>
+
+                <!-- Card 2 -->
+                <div class="card service-card modern-service-card border-0 shadow-sm h-100">
+
+                    <div class="card-body p-4">
+                        <!-- Service Provider Info -->
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="/assets/images/workerDefualtPP.png" class="rounded-circle me-3" width="50"
+                                height="50" alt="Profile Picture" style="object-fit: cover; border: 2px solid #f8f9fa;">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 fw-semibold text-dark">Lithira</h6>
+                                <p class="mb-0 text-muted small">Professional Plumber</p>
+                                <p class="mb-0 text-muted small">
+                                    <i class="fas fa-map-marker-alt text-warning me-1"></i>
+                                    Galle & Colombo
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Service Details -->
+                        <div class="service-details">
+                            <h5 class="card-title mb-2 fw-bold text-dark">Pipe Installation Service</h5>
+
+                            <!-- Rating -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rating-stars me-2">
+                                    <i class="fas fa-star text-warning"></i>
+                                    <span class="fw-semibold text-dark ms-1">4.8</span>
+                                </div>
+                                <span class="text-muted small">(16 reviews)</span>
+                            </div>
+
+                            <!-- Price and Contact -->
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="pricing">
+                                    <span class="text-muted small">Starting from</span>
+                                    <div class="fw-bold text-black fs-5">Rs. 2,000</div>
+                                </div>
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                    <i class="fas fa-phone me-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="card">
-                    <h5>Job Title 3</h5>
-                    <p>Company: Company C</p>
-                    <p>Location: City C</p>
-                    <button class="apply-btn">Apply Now</button>
+
+                <!-- Card 3 -->
+                <div class="card service-card modern-service-card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <!-- Service Provider Info -->
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="/assets/images/workerDefualtPP.png" class="rounded-circle me-3" width="50"
+                                height="50" alt="Profile Picture" style="object-fit: cover; border: 2px solid #f8f9fa;">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 fw-semibold text-dark">Lithira</h6>
+                                <p class="mb-0 text-muted small">Professional Plumber</p>
+                                <p class="mb-0 text-muted small">
+                                    <i class="fas fa-map-marker-alt text-warning me-1"></i>
+                                    Galle & Colombo
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Service Details -->
+                        <div class="service-details">
+                            <h5 class="card-title mb-2 fw-bold text-dark">Pipe Installation Service</h5>
+
+                            <!-- Rating -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rating-stars me-2">
+                                    <i class="fas fa-star text-warning"></i>
+                                    <span class="fw-semibold text-dark ms-1">4.8</span>
+                                </div>
+                                <span class="text-muted small">(16 reviews)</span>
+                            </div>
+
+                            <!-- Price and Contact -->
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="pricing">
+                                    <span class="text-muted small">Starting from</span>
+                                    <div class="fw-bold text-black fs-5">Rs. 2,000</div>
+                                </div>
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                    <i class="fas fa-phone me-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card">
-                    <h5>Job Title 4</h5>
-                    <p>Company: Company D</p>
-                    <p>Location: City D</p>
-                    <button class="apply-btn">Apply Now</button>
+
+                 <!-- Card 3 -->
+                <div class="card service-card modern-service-card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <!-- Service Provider Info -->
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="/assets/images/workerDefualtPP.png" class="rounded-circle me-3" width="50"
+                                height="50" alt="Profile Picture" style="object-fit: cover; border: 2px solid #f8f9fa;">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 fw-semibold text-dark">Lithira</h6>
+                                <p class="mb-0 text-muted small">Professional Plumber</p>
+                                <p class="mb-0 text-muted small">
+                                    <i class="fas fa-map-marker-alt text-warning me-1"></i>
+                                    Galle & Colombo
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Service Details -->
+                        <div class="service-details">
+                            <h5 class="card-title mb-2 fw-bold text-dark">Pipe Installation Service</h5>
+
+                            <!-- Rating -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rating-stars me-2">
+                                    <i class="fas fa-star text-warning"></i>
+                                    <span class="fw-semibold text-dark ms-1">4.8</span>
+                                </div>
+                                <span class="text-muted small">(16 reviews)</span>
+                            </div>
+
+                            <!-- Price and Contact -->
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="pricing">
+                                    <span class="text-muted small">Starting from</span>
+                                    <div class="fw-bold text-black fs-5">Rs. 2,000</div>
+                                </div>
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                    <i class="fas fa-phone me-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                 <!-- Card 4 -->
+                <div class="card service-card modern-service-card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <!-- Service Provider Info -->
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="/assets/images/workerDefualtPP.png" class="rounded-circle me-3" width="50"
+                                height="50" alt="Profile Picture" style="object-fit: cover; border: 2px solid #f8f9fa;">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 fw-semibold text-dark">Lithira</h6>
+                                <p class="mb-0 text-muted small">Professional Plumber</p>
+                                <p class="mb-0 text-muted small">
+                                    <i class="fas fa-map-marker-alt text-warning me-1"></i>
+                                    Galle & Colombo
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Service Details -->
+                        <div class="service-details">
+                            <h5 class="card-title mb-2 fw-bold text-dark">Pipe Installation Service</h5>
+
+                            <!-- Rating -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rating-stars me-2">
+                                    <i class="fas fa-star text-warning"></i>
+                                    <span class="fw-semibold text-dark ms-1">4.8</span>
+                                </div>
+                                <span class="text-muted small">(16 reviews)</span>
+                            </div>
+
+                            <!-- Price and Contact -->
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="pricing">
+                                    <span class="text-muted small">Starting from</span>
+                                    <div class="fw-bold text-black fs-5">Rs. 2,000</div>
+                                </div>
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                    <i class="fas fa-phone me-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Card 6 -->
+                <div class="card service-card modern-service-card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <!-- Service Provider Info -->
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="/assets/images/workerDefualtPP.png" class="rounded-circle me-3" width="50"
+                                height="50" alt="Profile Picture" style="object-fit: cover; border: 2px solid #f8f9fa;">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 fw-semibold text-dark">Lithira</h6>
+                                <p class="mb-0 text-muted small">Professional Plumber</p>
+                                <p class="mb-0 text-muted small">
+                                    <i class="fas fa-map-marker-alt text-warning me-1"></i>
+                                    Galle & Colombo
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Service Details -->
+                        <div class="service-details">
+                            <h5 class="card-title mb-2 fw-bold text-dark">Pipe Installation Service</h5>
+
+                            <!-- Rating -->
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rating-stars me-2">
+                                    <i class="fas fa-star text-warning"></i>
+                                    <span class="fw-semibold text-dark ms-1">4.8</span>
+                                </div>
+                                <span class="text-muted small">(16 reviews)</span>
+                            </div>
+
+                            <!-- Price and Contact -->
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="pricing">
+                                    <span class="text-muted small">Starting from</span>
+                                    <div class="fw-bold text-black fs-5">Rs. 2,000</div>
+                                </div>
+                                <button class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                                    <i class="fas fa-phone me-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
         </section>
 
@@ -129,8 +377,64 @@
         </nav>
     </main>
 
-    <footer>
-        <p>&copy; 2023 SkillWorker. All rights reserved.</p>
+    <footer class="bg-dark text-light pt-5 pb-3">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
+                    <p class="footer-description mb-3">Connecting skilled workers with clients worldwide.
+                        Your trusted
+                        platform for finding talent and opportunities.</p>
+                    <div class="footer-social mb-2">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Quick Links</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/workerProfile.html" class="text-light text-decoration-none">Profile</a></li>
+                        <li><a href="/pages/workerDashboard.html" class="text-light text-decoration-none">Dashboard</a>
+                        </li>
+                        <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a>
+                        </li>
+                        <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <div class="footer-links-title">Support</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support
+                                Center</a></li>
+                        <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a>
+                        </li>
+                        <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact
+                                Us</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Contact</div>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i
+                                class="fas fa-envelope"></i></span>support@skillworker.com</p>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234)
+                        567-890</p>
+                    <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123
+                        Main St, City, Country</p>
+                </div>
+            </div>
+            <hr class="border-light my-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
+                <div>
+                    <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
+                    <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
