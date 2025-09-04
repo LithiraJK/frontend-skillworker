@@ -1,19 +1,20 @@
-import tokenHandler from './util/tokenRefreshHandler.js'; 
+import tokenHandler from './util/tokenRefreshHandler.js';
 
 let adsData = [];
 
 const token = $.cookie("token");
 
-$(document).ready(function() {
-    
+$(document).ready(function () {
+
 
     if (token) {
         tokenHandler.scheduleSilentRefresh(token);
     }
 
+    fetchCategories();
     fetchAds();
 
-    $('#logoutBtn').click(function() {
+    $('#logoutBtn').click(function () {
         $.removeCookie('token', { path: '/' });
         $.removeCookie('refresh_token', { path: '/' });
         $.removeCookie('user_role', { path: '/' });
@@ -25,20 +26,87 @@ $(document).ready(function() {
     });
 
     // Search functionality
-    $('#search-form').on('submit', function(e) {
+    $('#search-form').on('submit', function (e) {
         e.preventDefault();
         const searchTerm = $('#search-input').val().toLowerCase();
         filterAndRenderAds(searchTerm);
     });
 
-    $('#search-input').on('input', function() {
+    $('#search-input').on('input', function () {
         const searchTerm = $(this).val().toLowerCase();
         filterAndRenderAds(searchTerm);
     });
 });
 
+
+
+function fetchCategories() {
+    $.ajax({
+        url: `http://localhost:8080/api/v1/category/getactive`,
+        method: "GET",
+        dataType: "json",
+        headers: { "Authorization": `Bearer ${token}` },
+        success: function (response) {
+            if (response.status === 200 && response.data) {
+                renderCategories(response.data);
+            } else {
+                console.warn("No categories found!");
+                $('#category-ul').html('<li class="text-muted">No categories available.</li>');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching categories:", error);
+            $('#category-ul').html('<li class="text-danger">Error loading categories.</li>');
+        }
+    });
+}
+
+function renderCategories(categories) {
+    const categoryList = $('#category-ul');
+    categoryList.empty();
+
+    if (!categories || categories.length === 0) {
+        categoryList.html('<li class="text-muted">No categories available.</li>');
+        return;
+    }
+
+    categoryList.append(`
+        <li>
+            <a href="#" class="category-link" data-category="all">All Categories</a>
+        </li>
+    `);
+
+    categories.forEach(category => {
+        categoryList.append(`
+            <li>
+                <a href="#" class="category-link" data-category="${category.categoryId}" data-category-name="${category.name}">
+                    ${category.name}
+                </a>
+            </li>
+        `);
+    });
+
+    $('.category-link').on('click', function(e) {
+        e.preventDefault();
+        const categoryId = $(this).data('category');
+        const categoryName = $(this).data('category-name');
+        
+        $('.category-link').removeClass('active');
+        $(this).addClass('active');
+        
+        if (categoryId === 'all') {
+            renderAdsWithWorkerDetails(adsData);
+        } else {
+            filterAdsByCategory(categoryName);
+        }
+    });
+}
+
+
+
+
 function fetchAds() {
-    
+
     $.ajax({
         url: `http://localhost:8080/api/v1/ad/getall`,
         method: "GET",
@@ -76,7 +144,7 @@ function renderAdsWithWorkerDetails(ads) {
 }
 
 function fetchWorkerDetails(workerId, ad) {
-    
+
     $.ajax({
         url: `http://localhost:8080/api/v1/worker/getworker/${workerId}`,
         method: "GET",
@@ -86,7 +154,7 @@ function fetchWorkerDetails(workerId, ad) {
             if (response.status === 200 && response.data) {
                 const worker = response.data;
 
-                // Fetch user data and wait for completion before creating card
+
                 $.ajax({
                     url: `http://localhost:8080/api/v1/user/getuser/${workerId}`,
                     method: 'GET',
@@ -118,7 +186,7 @@ function fetchWorkerDetails(workerId, ad) {
 
 
 function createAdCard(ad, worker, workerUser) {
-    
+
     const workerName = workerUser ? `${workerUser.firstName} ${workerUser.lastName}` : 'Unknown Worker';
     const workerTitle = worker ? (worker.categories && worker.categories.length > 0 ? worker.categories[0].name : 'Professional') : 'Service Provider';
     const workerLocation = worker ? (worker.locations && worker.locations.length > 0 && worker.locations[1].district ? worker.locations[0].district : 'Location not specified') : 'Location not specified';
@@ -163,14 +231,14 @@ function createAdCard(ad, worker, workerUser) {
                             <span class="text-muted small">Starting from</span>
                             <div class="fw-bold text-black fs-5">Rs. ${ad.startingPrice ? ad.startingPrice.toLocaleString() : 'N/A'}</div>
                         </div>
-                        ${contactNumber ? 
-                            `<button class="btn btn-outline-dark btn-sm rounded-pill px-3" onclick="contactWorker('${contactNumber}')">
+                        ${contactNumber ?
+            `<button class="btn btn-outline-dark btn-sm rounded-pill px-3" onclick="contactWorker('${contactNumber}')">
                                 <i class="fas fa-phone me-1"></i>
                             </button>` :
-                            `<button class="btn btn-outline-secondary btn-sm rounded-pill px-3" disabled>
+            `<button class="btn btn-outline-secondary btn-sm rounded-pill px-3" disabled>
                                 <i class="fas fa-phone me-1"></i>
                             </button>`
-                        }
+        }
                     </div>
                 </div>
             </div>
@@ -186,10 +254,23 @@ function filterAndRenderAds(searchTerm) {
         return;
     }
 
-    const filteredAds = adsData.filter(ad => 
+    const filteredAds = adsData.filter(ad =>
         ad.title.toLowerCase().includes(searchTerm) ||
         ad.description.toLowerCase().includes(searchTerm) ||
         (ad.categoryName && ad.categoryName.toLowerCase().includes(searchTerm))
+    );
+
+    renderAdsWithWorkerDetails(filteredAds);
+}
+
+function filterAdsByCategory(categoryName) {
+    if (!categoryName) {
+        renderAdsWithWorkerDetails(adsData);
+        return;
+    }
+
+    const filteredAds = adsData.filter(ad =>
+        ad.categoryName && ad.categoryName.toLowerCase() === categoryName.toLowerCase()
     );
 
     renderAdsWithWorkerDetails(filteredAds);

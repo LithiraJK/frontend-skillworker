@@ -12,7 +12,6 @@ $(document).ready(function () {
          tokenHandler.scheduleSilentRefresh(token);
     }
 
-    // Update user's first name and last name
     function updateUserName(firstName, lastName, successCb) {
         $.ajax({
             url: `http://localhost:8080/api/v1/user/update/${workerId}`,
@@ -62,7 +61,6 @@ $(document).ready(function () {
     }
 
     function showSuccessMessage(message) {
-        // Create a toast-like success message
         const toast = $(`
             <div class="alert alert-success alert-dismissible fade show position-fixed" 
                  style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;" role="alert">
@@ -73,14 +71,12 @@ $(document).ready(function () {
         
         $('body').append(toast);
         
-        // Auto-remove after 3 seconds
         setTimeout(() => {
             toast.alert('close');
         }, 3000);
     }
 
     function showErrorMessage(message) {
-        // Create a toast-like error message
         const toast = $(`
             <div class="alert alert-danger alert-dismissible fade show position-fixed" 
                  style="top: 20px; right: 20px; z-index: 9999; min-width: 300px;" role="alert">
@@ -91,7 +87,6 @@ $(document).ready(function () {
         
         $('body').append(toast);
         
-        // Auto-remove after 5 seconds
         setTimeout(() => {
             toast.alert('close');
         }, 5000);
@@ -161,7 +156,7 @@ $(document).ready(function () {
             data: JSON.stringify(data),
             success: function () {
                 if (successCb) successCb();
-                loadWorker(); // refresh UI
+                loadWorker(); 
             },
             error: function (xhr) {
                 console.error("Worker update failed:", xhr.responseText);
@@ -199,46 +194,38 @@ $(document).ready(function () {
         const experience = parseInt($('#inputExperience').val().trim()) || 0;
         const uploadedUrl = $('#profilePicture').data('uploaded-url');
 
-        // Validate required fields
         if (!firstName || !lastName) {
             showErrorMessage("First Name and Last Name are required.");
             $('#inputFirstName').focus();
             return;
         }
 
-        // Validate name lengths
         if (firstName.length < 2 || lastName.length < 2) {
             showErrorMessage("First Name and Last Name must be at least 2 characters long.");
             return;
         }
 
-        // Validate experience
         if (experience < 0 || experience > 50) {
             showErrorMessage("Experience must be between 0 and 50 years.");
             $('#inputExperience').focus();
             return;
         }
 
-        // Update user name first, then worker profile
         updateUserName(firstName, lastName, function() {
-            // After name update succeeds, update worker profile
             const workerData = {
                 workerId: workerId,
                 experienceYears: experience
             };
 
-            // Add profile picture URL if uploaded
             if (uploadedUrl) {
                 workerData.profilePictureUrl = uploadedUrl;
             }
 
-            // Add location if provided
             if (location) {
                 workerData.locations = [{ district: location }];
             }
 
             updateWorker(workerData, () => {
-                // Update display elements
                 $("#displayName").text(firstName + ' ' + lastName);
                 $("#displayLocation").text(location);
                 $("#displayExperience").text(experience);
@@ -246,13 +233,11 @@ $(document).ready(function () {
                     $("#profilePic").attr("src", uploadedUrl);
                 }
                 
-                // Update cookies with new name
                 $.cookie('first_name', firstName, { path: '/' });
                 $.cookie('last_name', lastName, { path: '/' });
                 
                 closeOffcanvas('offcanvasProfile');
                 
-                // Show success message
                 showSuccessMessage("Profile updated successfully!");
             });
         });
@@ -284,7 +269,6 @@ $(document).ready(function () {
         });
     });
 
-    // Offcanvas input sync
     $('#offcanvasAbout').on('shown.bs.offcanvas', function () {
         $('#inputAbout').val($('#displayAbout').text().trim());
     });
@@ -293,13 +277,11 @@ $(document).ready(function () {
         $('#inputHome').val($('#displayHome').text().trim());
     });
     $('#offcanvasProfile').on('shown.bs.offcanvas', function () {
-        // Populate form fields with current values
         $('#inputFirstName').val(userData.firstName || '');
         $('#inputLastName').val(userData.lastName || '');
         $('#inputLocation').val($('#displayLocation').text().trim());
         $('#inputExperience').val($('#displayExperience').text().trim());
         
-        // Reset upload button state
         $("#uploadBtn").html('<i class="bi bi-cloud-upload"></i> Upload')
             .removeClass("btn-success").addClass("btn-dark")
             .prop('disabled', false);
@@ -309,7 +291,6 @@ $(document).ready(function () {
         $('#profilePreview').attr('src', $('#profilePic').attr('src'));
     });
 
-    // File select + preview with enhanced validation
     $('#profilePicture').on('change', function (e) {
         selectedFile = e.target.files[0];
         
@@ -318,7 +299,6 @@ $(document).ready(function () {
             return;
         }
 
-        // Validate file type
         if (!selectedFile.type.startsWith('image/')) {
             showErrorMessage("Please select a valid image file (JPG, PNG, GIF, etc.)");
             $(this).val('');
@@ -327,7 +307,6 @@ $(document).ready(function () {
             return;
         }
 
-        // Validate file size (2MB limit)
         if (selectedFile.size > 2 * 1024 * 1024) {
             showErrorMessage("File size must be less than 2MB. Current size: " + (selectedFile.size / (1024 * 1024)).toFixed(2) + "MB");
             $(this).val('');
@@ -336,7 +315,6 @@ $(document).ready(function () {
             return;
         }
 
-        // Show preview
         const reader = new FileReader();
         reader.onload = function(evt) {
             $('#profilePreview').attr('src', evt.target.result);
@@ -348,7 +326,6 @@ $(document).ready(function () {
         reader.readAsDataURL(selectedFile);
     });
 
-    // Upload image with enhanced error handling
     $('#uploadBtn').on('click', function () {
         if (!selectedFile) {
             showErrorMessage("Please select an image first.");

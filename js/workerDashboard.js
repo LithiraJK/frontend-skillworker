@@ -3,10 +3,8 @@ import tokenHandler from './util/tokenRefreshHandler.js';
 
 $(document).ready(function () {
     
-    // Initialize dashboard
     initializeDashboard();
 
-    // Logout functionality
     $('#logoutBtn').click(function () {
         Swal.fire({
             title: 'Are you sure?',
@@ -36,26 +34,20 @@ $(document).ready(function () {
         });
     });
 
-    // Navigation functionality
     $('.nav-link').click(function (e) {
         e.preventDefault();
 
-        // Remove active class from all nav links
         $('.nav-link').removeClass('active');
         $(this).addClass('active');
 
-        // Hide all sections
         $('.dashboard-content').hide();
 
-        // Show selected section
         const targetSection = $(this).data('section');
         $('#' + targetSection).show();
 
-        // Update URL hash
         window.location.hash = $(this).attr('href');
     });
 
-    // Job application functionality
     $('.job-item button').click(function () {
         const jobTitle = $(this).closest('.job-item').find('h6').text();
 
@@ -70,7 +62,6 @@ $(document).ready(function () {
             cancelButtonText: 'Cancel'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Here you would typically send an API request
                 Swal.fire({
                     icon: 'success',
                     title: 'Application Submitted!',
@@ -79,7 +70,6 @@ $(document).ready(function () {
                     showConfirmButton: false
                 });
 
-                // Update button state
                 $(this).removeClass('btn-outline-primary')
                     .addClass('btn-success')
                     .text('Applied')
@@ -88,40 +78,33 @@ $(document).ready(function () {
         });
     });
     
-    // Check if profile is complete and update card
     const isProfileComplete = $.cookie('profile_complete') === 'true';
-    console.log('Profile complete cookie value:', $.cookie('profile_complete')); // Debug log
-    console.log('Is profile complete:', isProfileComplete); // Debug log
+    console.log('Profile complete cookie value:', $.cookie('profile_complete'));
+    console.log('Is profile complete:', isProfileComplete); 
     
     if (isProfileComplete) {
-        // Find the card body that contains "Complete Profile" text
         $('.card-body:contains("Complete Profile")').each(function () {
-            console.log('Found card body with Complete Profile text'); // Debug log
+            console.log('Found card body with Complete Profile text'); 
             
-            // Update the link/button (it's an <a> tag, not <button>)
             $(this).find('a:contains("Complete Profile")')
                 .prop('disabled', true)
                 .text('Profile Completed')
-                .off('click') // Remove click event
-                .css('pointer-events', 'none'); // Disable clicking
+                .off('click') 
+                .css('pointer-events', 'none');
                 
-            // Update the card header title
             $(this).closest('.card').find('.card-header h5').text('Professional Profile');
             
-            // Update progress bar to 100%
             $(this).find('.progress-bar')
                 .css('width', '100%')
                 .attr('aria-valuenow', '100')
                 .text('100%')
                 
-            // Update all checkmarks to green
             $(this).find('.fas.fa-times.text-danger')
                 .removeClass('fa-times text-danger')
                 .addClass('fa-check text-success');
         });
     }
 
-    // Profile completion functionality
     $('.card-body button:contains("Complete Profile")').click(function () {
         Swal.fire({
             icon: 'info',
@@ -131,10 +114,8 @@ $(document).ready(function () {
             showConfirmButton: false
         });
         window.location.href = '../pages/profileCompletion.html';
-        // Here you would redirect to profile completion page
     });
 
-    // Message notification (simulate new messages)
     setTimeout(() => {
         if ($('#messages-section').is(':visible')) {
             showNotification('You have 2 new messages!', 'info');
@@ -142,7 +123,6 @@ $(document).ready(function () {
     }, 3000);
 });
 
-// Initialize dashboard with user data
 function initializeDashboard() {
     const workerId = $.cookie("userId");
     const token = $.cookie("token");
@@ -187,7 +167,6 @@ function initializeDashboard() {
         $('#email').text(userData.email);
     }
 
-    // Check authentication
     if (!token) {
         Swal.fire({
             icon: 'error',
@@ -199,12 +178,10 @@ function initializeDashboard() {
         return;
     }
 
-    // Set default active section
     $('.nav-link[data-section="dashboard-section"]').addClass('active');
     $('#dashboard-section').show();
 }
 
-// Utility function to show notifications
 function showNotification(message, type = 'info') {
     const Toast = Swal.mixin({
         toast: true,
@@ -224,9 +201,7 @@ function showNotification(message, type = 'info') {
     });
 }
 
-// Simulate real-time updates
 setInterval(() => {
-    // Update statistics occasionally
     const earnings = Math.floor(Math.random() * 100) + 2450;
     $('.card-body h3:contains("$")').text('$' + earnings.toLocaleString());
 }, 30000);
