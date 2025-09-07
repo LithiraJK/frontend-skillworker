@@ -1,55 +1,381 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillWorker | Sign Up</title>
+    <title>SkillWorker | Choose Your Role</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/signup-first-page.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #155e75;
+            --primary-light: #0891b2;
+            --accent-color: #059669;
+            --accent-light: #10b981;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
+            --gradient-primary: linear-gradient(135deg, #155e75 0%, #0891b2 100%);
+            --shadow: 0 10px 25px rgba(21, 94, 117, 0.1);
+            --shadow-hover: 0 20px 40px rgba(21, 94, 117, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            pointer-events: none;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        .role-selection-card {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 3rem 2rem;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo-section {
+            margin-bottom: 2rem;
+        }
+
+        .logo-section h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .description {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        .role-cards-container {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .role-card {
+            background: var(--white);
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            width: 280px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(21, 94, 117, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .role-card:hover::before {
+            left: 100%;
+        }
+
+        .role-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-light);
+        }
+
+        .role-card.active {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--white);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .role-card.active .role-title {
+            color: var(--white);
+        }
+
+        .role-card.active .role-description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .role-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--bg-light), var(--white));
+            transition: all 0.3s ease;
+        }
+
+        .role-card.active .role-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .role-icon img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .role-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .role-description {
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .continue-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            border: none;
+            border-radius: 12px;
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 1rem 3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 200px;
+        }
+
+        .continue-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .continue-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(21, 94, 117, 0.3);
+        }
+
+        .continue-btn .btn-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        .continue-btn .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .login-link {
+            margin-top: 2rem;
+            color: var(--text-light);
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .role-selection-card {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .logo-section h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1.3rem;
+            }
+
+            .role-cards-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+
+            .role-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
 
-    <div class="container text-center position-absolute top-50 start-50 translate-middle">
-        <h2 class="mb-4">Join as a Client or Worker</h2>
-        <div class="d-flex justify-content-center gap-4">
-            <div class="user-type-toggle card p-4 shadow" style="width: 300px; cursor: pointer;" data-type="worker">
-                <div class="d-flex flex-column align-items-center">
-                    <img src="../assets/images/icons8-repair.gif" class="img mb-3" alt="Worker Icon">
-                    <div>
-                        <h5 class="text-dark">I'm a Worker</h5>
-                        <p class="text-muted">looking for work</p>
+    <div class="main-container">
+        <div class="role-selection-card">
+            <div class="logo-section">
+                <h1>SkillWorker</h1>
+                <h2 class="subtitle">Choose Your Path</h2>
+                <p class="description">Join our community as a skilled professional or find the perfect worker for your project</p>
+            </div>
+
+            <div class="role-cards-container">
+                <div class="role-card user-type-toggle" data-type="worker">
+                    <div class="role-icon">
+                        <img src="../assets/images/icons8-repair.gif" alt="Worker Icon">
                     </div>
+                    <h3 class="role-title">I'm a Worker</h3>
+                    <p class="role-description">Looking for work opportunities and ready to showcase my skills</p>
+                </div>
+
+                <div class="role-card user-type-toggle" data-type="client">
+                    <div class="role-icon">
+                        <img src="../assets/images/icons8-businessman.gif" alt="Client Icon">
+                    </div>
+                    <h3 class="role-title">I'm a Client</h3>
+                    <p class="role-description">Hiring skilled professionals for my projects and tasks</p>
                 </div>
             </div>
 
-            <div class="user-type-toggle card p-4 shadow" style="width: 300px; cursor: pointer;" data-type="client">
-                <div class="d-flex flex-column align-items-center">
-                    <img src="../assets/images/icons8-businessman.gif" class="img mb-3" alt="Client Icon">
-                    <div>
-                        <h5 class="text-dark">I'm a Client</h5>
-                        <p class="text-muted">Hiring for a project</p>
-                    </div>
-                </div>
+            <div class="continue-section">
+                <button id="continueBtn" class="continue-btn" disabled>
+                    <div class="loading-spinner"></div>
+                    <span class="btn-text">Select Your Role</span>
+                </button>
+            </div>
+
+            <div class="login-link">
+                <p>Already have an account? <a href="/pages/login-page.html">Sign In</a></p>
             </div>
         </div>
-
-        <div class="mt-5">
-            <button id="continueBtn" class="btn btn-warning mb-3" disabled>Continue</button>
-        </div>
-
-        <div class="form-footer">
-            <p>Already have an account? <a href="../pages/login-page.html">Login</a></p>
-        </div>
     </div>
-    </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script  src="../js/signupFirstPage.js"></script>
-
+    <script src="../js/signup-role-selection.js"></script>
 </body>
-
 </html>

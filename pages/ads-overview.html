@@ -11,14 +11,14 @@
         rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/ads-overview.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body class="bg-light">
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-        <a class="navbar-brand fw-bold text-white" href="#">Skill<span class="text-warning">W</span>orker.</a>
+    
+   <nav class="navbar navbar-expand-lg navbar-dark px-3">
+        <a class="navbar-brand fw-bold text-white" href="#">Skill<span>W</span>orker.</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,16 +26,15 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="../pages/worker-dashboard.html">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link active" href="#">Ads</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
+                <li class="nav-item"><a class="nav-link active" href="../pages/worker-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="../pages/ads-overview.html">Ads</a></li>
+                <li class="nav-item"><a class="nav-link" href="">Contacts</a></li>
             </ul>
-           
 
-            <a href="#" class="me-3 text-white fs-5"><i class="fas fa-envelope"></i></a>
-            <a href="#" class="me-3 text-white fs-5"><i class="fas fa-bell"></i></a>
+            
+            <a href="#" class="me-3 text-white fs-5 notification-icon"><i class="fas fa-envelope"></i></a>
+            <a href="#" class="me-3 text-white fs-5 notification-icon"><i class="fas fa-bell"></i></a>
             <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
-
 
             <div class="dropdown">
                 <button class="profile-btn" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
@@ -43,8 +42,8 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                     <li><a class="dropdown-item" href="#">Account Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><a class="dropdown-item" href="/pages/login-page.html">Logout</a></li>
+                    <li><a class="dropdown-item" href="/pages/worker-profile.html">Profile</a></li>
+                    <li><a class="dropdown-item" id="logoutBtn" href="/pages/login-page.html">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -83,7 +82,7 @@
     </main>
 
 
-    <!-- Create Ad Offcanvas-->
+    
     <div class="offcanvas offcanvas-end" tabindex="-1" id="createAdOffcanvas" aria-labelledby="createAdOffcanvasLabel"
         data-bs-backdrop="true" aria-modal="true" role="dialog">
         <div class="offcanvas-header ">
@@ -95,7 +94,7 @@
         <div class="offcanvas-body">
             <form id="createAdForm">
                 <div class="row">
-                    <!-- Ad Title -->
+                    
                     <div class="col-12 mb-3">
                         <label for="adTitle" class="form-label fw-bold">Ad Title *
                         </label>
@@ -104,7 +103,7 @@
                         <div class="form-text">Make it clear and descriptive to attract the right clients</div>
                     </div>
 
-                    <!-- Description -->
+                    
                     <div class="col-12 mb-3">
                         <label for="adDescription" class="form-label fw-bold">Description *
                         </label>
@@ -113,7 +112,7 @@
                         <div class="form-text">Provide detailed information about your services</div>
                     </div>
 
-                    <!-- Starting Price and Category -->
+                    
                     <div class="col-12 mb-3">
                         <label for="startingPrice" class="form-label fw-bold">Starting Price (LKR) *
                         </label>
@@ -125,11 +124,11 @@
                         <div class="form-text">Set your minimum service rate</div>
                     </div>
 
-                    <!-- Ad category -->
+                    
                     <div class="col-12 mb-3">
                         <label for="categoryId" class="form-label fw-bold">Category *
                         </label>
-                        <select class="form-select selectpicker" id="categoryId" name="categoryId" data-live-search="true" required> <!-- Dynamically adding --> </select>
+                        <select class="form-select selectpicker" id="categoryId" name="categoryId" data-live-search="true" required> 
                     </div>
 
                 </div>
@@ -154,7 +153,7 @@
             <form id="editAdForm">
                 <input type="hidden" id="editAdId" name="adId">
                 <div class="row">
-                    <!-- Ad Title -->
+                    
                     <div class="col-12 mb-3">
                         <label for="editAdTitle" class="form-label fw-bold">Ad Title *
                         </label>
@@ -163,7 +162,7 @@
                         <div class="form-text">Make it clear and descriptive to attract the right clients</div>
                     </div>
 
-                    <!-- Description -->
+                    
                     <div class="col-12 mb-3">
                         <label for="editAdDescription" class="form-label fw-bold">Description *
                         </label>
@@ -172,7 +171,7 @@
                         <div class="form-text">Provide detailed information about your services</div>
                     </div>
 
-                    <!-- Starting Price and Category -->
+                    
                     <div class="col-12 mb-3">
                         <label for="editStartingPrice" class="form-label fw-bold">Starting Price (LKR) *
                         </label>
@@ -184,16 +183,16 @@
                         <div class="form-text">Set your minimum service rate</div>
                     </div>
 
-                    <!-- Ad category -->
+                    
                     <div class="col-12 mb-3">
                         <label for="editCategoryId" class="form-label fw-bold">Category *
                         </label>
                         <select class="form-select selectpicker" id="editCategoryId" name="categoryId" data-live-search="true" required> 
-                            <!-- Dynamically adding --> 
+                            
                         </select>
                     </div>
 
-                    <!-- Status -->
+                    
                     <div class="col-12 mb-3">
                         <label for="editStatus" class="form-label fw-bold">Status *
                         </label>
@@ -218,9 +217,8 @@
         <div class="container">
             <div class="row gy-4">
                 <div class="col-md-4">
-                    <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
-                    <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted
-                        platform for finding talent and opportunities.</p>
+                    <div class="footer-brand mb-3">Skill<span style="color: #7dcbfd;">W</span>orker.</div>
+                    <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted platform for finding talent and opportunities.</p>
                     <div class="footer-social mb-2">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -232,32 +230,24 @@
                     <div class="footer-links-title">Quick Links</div>
                     <ul class="footer-links-list list-unstyled">
                         <li><a href="/pages/worker-profile.html" class="text-light text-decoration-none">Profile</a></li>
-                        <li><a href="/pages/worker-dashboard.html" class="text-light text-decoration-none">Dashboard</a>
-                        </li>
-                        <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a>
-                        </li>
-                        <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a>
-                        </li>
+                        <li><a href="/pages/worker-dashboard.html" class="text-light text-decoration-none">Dashboard</a></li>
+                        <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a></li>
+                        <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2">
                     <div class="footer-links-title">Support</div>
                     <ul class="footer-links-list list-unstyled">
-                        <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support
-                                Center</a></li>
+                        <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support Center</a></li>
                         <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a></li>
-                        <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a>
-                        </li>
+                        <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3">
                     <div class="footer-links-title">Contact</div>
-                    <p class="small mb-1"><span class="footer-contact-icon"><i
-                                class="fas fa-envelope"></i></span>support@skillworker.com</p>
-                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234)
-                        567-890</p>
-                    <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123
-                        Main St, City, Country</p>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-envelope"></i></span> support@skillworker.com</p>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span> +94 769270053</p>
+                    <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span> No 2/10 Main St, Galle, Sri Lanka</p>
                 </div>
             </div>
             <hr class="border-light my-4">

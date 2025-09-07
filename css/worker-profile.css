@@ -4,17 +4,13 @@ body {
 }
 
 .profile-header {
-  background: #fff;
-  border-radius: 14px;
+  border-radius: 10px;
   padding: 18px;
   box-shadow: 0 6px 18px rgba(20, 20, 40, 0.06);
 }
 
 .section-card {
-  background: #fff;
-  border-radius: 12px;
   padding: 18px;
-  box-shadow: 0 6px 18px rgba(20, 20, 40, 0.04);
   margin-bottom: 20px;
 }
 

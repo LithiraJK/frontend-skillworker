@@ -18,6 +18,8 @@ body {
   border: 2px solid #fff;
 }
 
+
+
 /* footer style> */
 footer {
   background: #000;
@@ -60,3 +62,37 @@ footer {
   font-size: 0.95rem;
   color: #ccc;
 }
+
+  /* :root {
+            --primary-color: #023047;
+            --primary-hover: #0c4a6e;
+            --accent-color: #274c77;
+            --accent-hover: #457b9d;
+            --gradient-primary: linear-gradient(135deg, #155e75 0%, #0891b2 100%);
+            --gradient-accent: linear-gradient(135deg, #274c77 0%, #457b9d 100%);
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --bg-light: #f8fafc;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        } */

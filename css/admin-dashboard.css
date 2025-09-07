@@ -1,0 +1,218 @@
+/* Custom CSS for admin dashboard using specified color palette */
+:root {
+  --primary-color: #023047;
+  --primary-hover: #0c4a6e;
+  --accent-color: #274c77;
+  --accent-hover: #457b9d;
+  --gradient-primary: linear-gradient(135deg, #155e75 0%, #0891b2 100%);
+  --gradient-accent: linear-gradient(135deg, #274c77 0%, #457b9d 100%);
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --bg-light: #f8fafc;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --primary-light: #0c4a6e;
+  --accent-light: #457b9d;
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  background-color: var(--bg-light);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#wrapper {
+  min-height: 100vh;
+}
+
+.sidebar-wrapper {
+  min-height: 100vh;
+  width: 250px;
+  background: var(--gradient-primary) !important;
+  transition: all 0.3s;
+}
+
+.sidebar-heading {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 1.1rem;
+}
+
+.sidebar-item {
+  background: transparent !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  padding: 12px 20px;
+  transition: all 0.3s;
+}
+
+.sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  transform: translateX(5px);
+}
+
+.sidebar-item.active {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border-left: 4px solid white !important;
+}
+
+.sidebar-item i {
+  width: 20px;
+}
+
+#page-content-wrapper {
+  background-color: var(--bg-light);
+}
+
+.navbar {
+  box-shadow: var(--shadow);
+}
+
+.stat-card {
+  border: none;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.border-left-primary {
+  border-left: 4px solid var(--primary-color) !important;
+}
+
+.border-left-success {
+  border-left: 4px solid var(--success-color) !important;
+}
+
+.border-left-info {
+  border-left: 4px solid var(--accent-color) !important;
+}
+
+.border-left-warning {
+  border-left: 4px solid var(--warning-color) !important;
+}
+
+.card {
+  border: none;
+  box-shadow: var(--shadow);
+  border-radius: 10px;
+}
+
+.card-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background: var(--gradient-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.table th {
+  background-color: var(--bg-light);
+  color: var(--text-primary);
+  font-weight: 600;
+  border: none;
+  padding: 12px;
+}
+
+.table td {
+  padding: 12px;
+  vertical-align: middle;
+  border-top: 1px solid var(--border-color);
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(2, 48, 71, 0.05);
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
+}
+
+.text-gray-800 {
+  color: var(--text-primary) !important;
+}
+
+.text-gray-300 {
+  color: var(--text-secondary) !important;
+}
+
+.content-section {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar-wrapper {
+    margin-left: -250px;
+  }
+
+  .sidebar-wrapper.active {
+    margin-left: 0;
+  }
+
+  #page-content-wrapper {
+    width: 100%;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
+}

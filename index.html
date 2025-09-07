@@ -3,219 +3,718 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillWorker</title>
+    <title>SkillWorker - Find Skilled Workers Near You</title>
+    
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --primary: #155e75;
+            --primary-foreground: #ffffff;
+            --secondary: #f1f5f9;
+            --secondary-foreground: #0f172a;
+            --accent: #059669;
+            --accent-foreground: #ffffff;
+            --background: #ffffff;
+            --foreground: #0f172a;
+            --muted: #f8fafc;
+            --muted-foreground: #64748b;
+            --border: #e2e8f0;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .navbar {
-            background-color: #000;
-        }
-        .navbar-brand, .nav-link {
-            color: white !important;
-        }
-        .hero-section {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f') center/cover no-repeat;
-            color: white;
-            padding: 100px 20px;
-            text-align: center;
-        }
-        .hero-section h1 {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #FFD700;
-        }
-        .btn-warning {
-            background-color: #FFD700;
-            border: none;
-            color: black;
-            font-weight: bold;
-        }
-        .features {
-            padding: 60px 20px;
-        }
-        .feature-card {
-            transition: transform 0.3s ease;
-        }
-        .feature-card:hover {
-            transform: translateY(-10px);
+            font-family: 'Open Sans', sans-serif;
+            color: var(--foreground);
+            background-color: var(--background);
         }
 
-        
-/* footer style> */
-footer {
-  background: #000;
-  color: #fff;
-}
+        .font-serif {
+            font-family: 'Montserrat', serif;
+        }
 
-.footer-links-title {
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
+        .text-primary { color: var(--primary) !important; }
+        .bg-primary { background-color: var(--primary) !important; }
+        .text-primary-foreground { color: var(--primary-foreground) !important; }
+        .bg-accent { background-color: var(--accent) !important; }
+        .text-accent-foreground { color: var(--accent-foreground) !important; }
+        .text-muted-foreground { color: var(--muted-foreground) !important; }
+        .bg-muted { background-color: var(--muted) !important; }
+        .border-custom { border-color: var(--border) !important; }
 
-.footer-links-list li {
-  margin-bottom: 0.5rem;
-}
+        .navbar-custom {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
 
-.footer-contact-icon {
-  width: 22px;
-  text-align: center;
-  margin-right: 8px;
-}
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--background) 0%, var(--muted) 50%, rgba(5, 150, 105, 0.1) 100%);
+        }
 
-.footer-social a {
-  font-size: 1.2rem;
-  margin-right: 10px;
-  color: #fff;
-  transition: color 0.2s;
-}
+        .service-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
 
-.footer-social a:hover {
-  color: #ffc107;
-}
+        .worker-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
 
-.footer-brand {
-  font-size: 1.5rem;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
+        .btn-primary-custom {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: var(--primary-foreground);
+        }
 
-.footer-description {
-  font-size: 0.95rem;
-  color: #ccc;
-}
+        .btn-primary-custom:hover {
+            background-color: #0c4a6e;
+            border-color: #0c4a6e;
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        .btn-accent:hover {
+            background-color: #047857;
+            border-color: #047857;
+        }
+
+        .icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .star-rating {
+            color: #fbbf24;
+        }
+
+        .verified-badge {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+        }
+
+        .floating-card {
+            position: absolute;
+            bottom: -24px;
+            left: -24px;
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 768px) {
+            .floating-card {
+                position: static;
+                margin-top: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
-
-   <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-        <a class="navbar-brand fw-bold" href="#">Skill<span class="text-warning">W</span>orker.</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navMain">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="/pages/worker-dashboard.html">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">All Ads</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
-            </ul>
-
-            <div class="d-flex align-items-center">
-                <a class="me-3 text-white fs-5" href="#"><i class="fas fa-envelope"></i></a>
-                <a class="me-3 text-white fs-5" href="#"><i class="fas fa-bell"></i></a>
-                <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
-                <a class="btn btn-outline-warning m-2" href="/pages/login-page.html"><i class="fas fa-user"></i> Login</a>
-                <a class="btn btn-outline-warning m-2" href="/pages/signup-first-page.html">Sign Up</a>
-
+    
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top navbar-custom">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <div class="bg-primary rounded-3 d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                    <span class="text-primary-foreground fw-bold small">SW</span>
+                </div>
+                <span class="fs-4 font-serif fw-bold">SkillWorker</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-muted-foreground" href="#browse">Find Workers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted-foreground" href="#how-it-works">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-muted-foreground" href="#become-worker">Become a Worker</a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex gap-2">
+                    <a href="pages/login-page.html" class="btn btn-outline-secondary">Sign In</a>
+                    <a href="pages/signup-first-page.html" class="btn btn-primary-custom">Get Started</a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
+    
+    <section class="hero-gradient py-5" style="margin-top: 76px; padding-top: 5rem; padding-bottom: 8rem;">
         <div class="container">
-            <h1>Find the Right Talent, Fast</h1>
-            <p class="lead mt-3">SkillWorker connects skilled workers with clients across Sri Lanka. Get your job done with confidence.</p>
-            <a href="/pages/login-page.html" class="btn btn-warning btn-lg mt-4" id="getStartedBtn">Get Started</a>
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6">
+                    <div class="mb-5">
+                        <h1 class="display-3 font-serif fw-bold lh-1 mb-4">
+                            Find Skilled
+                            <span class="text-primary">Workers</span><br>
+                            Near You
+                        </h1>
+                        <p class="fs-5 text-muted-foreground lh-base">
+                            Connect with verified professionals for home repairs, maintenance, and specialized services. Get quality work done by trusted experts in your area.
+                        </p>
+                    </div>
+
+                    
+                    <div class="card shadow-lg border-custom mb-5">
+                        <div class="card-body p-4">
+                            <form id="searchForm">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <div class="position-relative">
+                                            <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted-foreground"></i>
+                                            <input type="text" class="form-control ps-5" style="height: 48px;" placeholder="What service do you need?" id="searchQuery">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="position-relative">
+                                            <i class="fas fa-map-marker-alt position-absolute top-50 start-0 translate-middle-y ms-3 text-muted-foreground"></i>
+                                            <input type="text" class="form-control ps-5" style="height: 48px;" placeholder="Enter your location" id="location">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary-custom w-100" style="height: 48px;">
+                                    Find Workers
+                                    <i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    
+                    <div class="row text-center g-4">
+                        <div class="col-4">
+                            <div class="fs-3 fw-bold">5,000+</div>
+                            <div class="small text-muted-foreground">Verified Workers</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="fs-3 fw-bold">50,000+</div>
+                            <div class="small text-muted-foreground">Jobs Completed</div>
+                        </div>
+                        <div class="col-4">
+                            <div class="fs-3 fw-bold">4.9★</div>
+                            <div class="small text-muted-foreground">Average Rating</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="position-relative">
+                        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/attachments/gen-images/public/professional-workers-construction-team-YtfHsYbsVOSRUFIFPceQ0O7b3PCjxI.jpg" alt="Professional workers" class="img-fluid rounded-4 shadow-lg">
+                        <div class="floating-card d-none d-lg-block">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-accent rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
+                                    <i class="fas fa-check-circle text-accent-foreground"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Verified Professionals</div>
+                                    <div class="small text-muted-foreground">Background checked & insured</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features text-center">
+    
+    <section class="py-5 bg-muted">
         <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 font-serif fw-bold mb-3">Popular Services</h2>
+                <p class="fs-5 text-muted-foreground mx-auto" style="max-width: 600px;">
+                    Browse our most requested services and find the right professional for your needs
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 service-card border-custom">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="service-icon bg-primary bg-opacity-10 text-white me-3">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Home Repair</h5>
+                                    <p class="small text-muted-foreground mb-0">1,200+ workers</p>
+                                </div>
+                                <i class="fas fa-arrow-right text-muted-foreground"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 service-card border-custom">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="service-icon bg-warning bg-opacity-10 text-warning me-3">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Electrical</h5>
+                                    <p class="small text-muted-foreground mb-0">800+ workers</p>
+                                </div>
+                                <i class="fas fa-arrow-right text-muted-foreground"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 service-card border-custom">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="service-icon bg-info bg-opacity-10 text-info me-3">
+                                    <i class="fas fa-wrench"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Plumbing</h5>
+                                    <p class="small text-muted-foreground mb-0">950+ workers</p>
+                                </div>
+                                <i class="fas fa-arrow-right text-muted-foreground"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 service-card border-custom">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="service-icon bg-secondary bg-opacity-10 text-secondary me-3">
+                                    <i class="fas fa-paint-brush"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Painting</h5>
+                                    <p class="small text-muted-foreground mb-0">600+ workers</p>
+                                </div>
+                                <i class="fas fa-arrow-right text-muted-foreground"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 service-card border-custom">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="service-icon bg-danger bg-opacity-10 text-danger me-3">
+                                    <i class="fas fa-car"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Automotive</h5>
+                                    <p class="small text-muted-foreground mb-0">400+ workers</p>
+                                </div>
+                                <i class="fas fa-arrow-right text-muted-foreground"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 service-card border-custom">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="service-icon bg-success bg-opacity-10 text-success me-3">
+                                    <i class="fas fa-laptop"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h5 class="card-title mb-1">Tech Support</h5>
+                                    <p class="small text-muted-foreground mb-0">300+ workers</p>
+                                </div>
+                                <i class="fas fa-arrow-right text-muted-foreground"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 font-serif fw-bold mb-3">Top-Rated Professionals</h2>
+                <p class="fs-5 text-muted-foreground mx-auto" style="max-width: 600px;">
+                    Meet some of our highest-rated workers who deliver exceptional service
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 worker-card border-custom">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="/professional-woman-electrician.jpg" alt="Sarah Johnson" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <h5 class="card-title mb-0">Sarah Johnson</h5>
+                                        <span class="verified-badge">
+                                            <i class="fas fa-shield-alt me-1"></i>Verified
+                                        </span>
+                                    </div>
+                                    <p class="small text-muted-foreground mb-0">Electrical Contractor</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-star star-rating me-1"></i>
+                                    <span class="fw-medium">4.9</span>
+                                    <span class="small text-muted-foreground ms-1">(127 reviews)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center text-muted-foreground small mb-3">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                San Francisco, CA
+                            </div>
+                            
+                            <button class="btn btn-outline-primary w-100">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 worker-card border-custom">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="/professional-plumber.png" alt="Mike Rodriguez" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <h5 class="card-title mb-0">Mike Rodriguez</h5>
+                                        <span class="verified-badge">
+                                            <i class="fas fa-shield-alt me-1"></i>Verified
+                                        </span>
+                                    </div>
+                                    <p class="small text-muted-foreground mb-0">Plumbing Expert</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-star star-rating me-1"></i>
+                                    <span class="fw-medium">4.8</span>
+                                    <span class="small text-muted-foreground ms-1">(89 reviews)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center text-muted-foreground small mb-3">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                Austin, TX
+                            </div>
+                            
+                            <button class="btn btn-outline-primary w-100">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 worker-card border-custom">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="/professional-woman-contractor.png" alt="Emily Chen" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <h5 class="card-title mb-0">Emily Chen</h5>
+                                        <span class="verified-badge">
+                                            <i class="fas fa-shield-alt me-1"></i>Verified
+                                        </span>
+                                    </div>
+                                    <p class="small text-muted-foreground mb-0">Home Renovation</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-star star-rating me-1"></i>
+                                    <span class="fw-medium">5.0</span>
+                                    <span class="small text-muted-foreground ms-1">(156 reviews)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center text-muted-foreground small mb-3">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                Seattle, WA
+                            </div>
+                            
+                            <button class="btn btn-outline-primary w-100">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="py-5 bg-muted">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 font-serif fw-bold mb-3">How SkillWorker Works</h2>
+                <p class="fs-5 text-muted-foreground mx-auto" style="max-width: 600px;">
+                    Getting quality work done has never been easier
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4 text-center">
+                    <div class="icon-circle bg-primary mb-4">
+                        <i class="fas fa-search fa-2x text-primary-foreground"></i>
+                    </div>
+                    <h3 class="h4 fw-semibold mb-3">1. Search & Browse</h3>
+                    <p class="text-muted-foreground">
+                        Find skilled professionals in your area by service type, ratings, and availability
+                    </p>
+                </div>
+                
+                <div class="col-md-4 text-center">
+                    <div class="icon-circle bg-secondary mb-4">
+                        <i class="fas fa-users fa-2x text-white"></i>
+                    </div>
+                    <h3 class="h4 fw-semibold mb-3">2. Connect & Hire</h3>
+                    <p class="text-muted-foreground">
+                        Review profiles, read reviews, and connect with the right professional for your project
+                    </p>
+                </div>
+                
+                <div class="col-md-4 text-center">
+                    <div class="icon-circle bg-accent mb-4">
+                        <i class="fas fa-check-circle fa-2x text-accent-foreground"></i>
+                    </div>
+                    <h3 class="h4 fw-semibold mb-3">3. Get It Done</h3>
+                    <p class="text-muted-foreground">
+                        Enjoy quality work completed by verified professionals with our satisfaction guarantee
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 font-serif fw-bold mb-3">What Our Users Say</h2>
+                <p class="fs-5 text-muted-foreground mx-auto" style="max-width: 600px;">
+                    Trusted by thousands of homeowners and professionals
+                </p>
+            </div>
+
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="card feature-card p-4 shadow-sm border-0">
-                        <img src="https://img.icons8.com/color/96/briefcase.png" class="mx-auto" alt="Jobs">
-                        <h5 class="mt-3">Post Jobs</h5>
-                        <p>Easily post your work requirements and connect with the right talent.</p>
+                    <div class="card h-100 border-custom">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                            </div>
+                            <p class="text-muted-foreground fst-italic mb-3">
+                                "Found an amazing electrician through SkillWorker. Professional, punctual, and reasonably priced. Highly recommend!"
+                            </p>
+                            <div>
+                                <div class="fw-semibold">David Thompson</div>
+                                <div class="small text-muted-foreground">Homeowner</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
                 <div class="col-md-4">
-                    <div class="card feature-card p-4 shadow-sm border-0">
-                        <img src="https://img.icons8.com/color/96/people-working-together.png" class="mx-auto" alt="Workers">
-                        <h5 class="mt-3">Hire Skilled Workers</h5>
-                        <p>Browse verified profiles and hire professionals in minutes.</p>
+                    <div class="card h-100 border-custom">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                            </div>
+                            <p class="text-muted-foreground fst-italic mb-3">
+                                "As a contractor, SkillWorker has helped me connect with quality clients. The platform is easy to use and trustworthy."
+                            </p>
+                            <div>
+                                <div class="fw-semibold">Lisa Martinez</div>
+                                <div class="small text-muted-foreground">Business Owner</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
                 <div class="col-md-4">
-                    <div class="card feature-card p-4 shadow-sm border-0">
-                        <img src="https://img.icons8.com/color/96/star.png" class="mx-auto" alt="Reviews">
-                        <h5 class="mt-3">Review & Rate</h5>
-                        <p>Leave feedback to help others find the best workers for their projects.</p>
+                    <div class="card h-100 border-custom">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                                <i class="fas fa-star star-rating"></i>
+                            </div>
+                            <p class="text-muted-foreground fst-italic mb-3">
+                                "SkillWorker is my go-to for finding reliable maintenance workers. The verification system gives me peace of mind."
+                            </p>
+                            <div>
+                                <div class="fw-semibold">Robert Kim</div>
+                                <div class="small text-muted-foreground">Property Manager</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-   
-    <footer class="bg-dark text-light pt-5 pb-3">
+    
+    <section class="py-5 bg-primary">
         <div class="container">
-            <div class="row gy-4">
-                <div class="col-md-4">
-                    <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
-                    <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted
-                        platform for finding talent and opportunities.</p>
-                    <div class="footer-social mb-2">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="display-5 font-serif fw-bold text-primary-foreground mb-4">Ready to Get Started?</h2>
+                    <p class="fs-5 text-primary-foreground opacity-75 mb-5">
+                        Join thousands of satisfied customers and skilled professionals on SkillWorker
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                        <a href="pages/login-page.html" class="btn btn-light btn-lg">
+                            Find Workers
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                        <a href="pages/signup-first-page.html" class="btn btn-outline-light btn-lg">
+                            Become a Worker
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="bg-muted border-top py-5">
+        <div class="container">
+            <div class="row g-4">
                 <div class="col-md-3">
-                    <div class="footer-links-title">Quick Links</div>
-                    <ul class="footer-links-list list-unstyled">
-                        <li><a href="/pages/worker-profile.html" class="text-light text-decoration-none">Profile</a></li>
-                        <li><a href="/pages/workerDashboard.html" class="text-light text-decoration-none">Dashboard</a>
-                        </li>
-                        <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a>
-                        </li>
-                        <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a>
-                        </li>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary rounded-3 d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                            <span class="text-primary-foreground fw-bold small">SW</span>
+                        </div>
+                        <span class="fs-4 font-serif fw-bold">SkillWorker</span>
+                    </div>
+                    <p class="text-muted-foreground">
+                        Connecting skilled professionals with clients who need quality work done.
+                    </p>
+                </div>
+                
+                <div class="col-md-3">
+                    <h5 class="fw-semibold mb-3">For Clients</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#browse" class="text-muted-foreground text-decoration-none">Find Workers</a></li>
+                        <li class="mb-2"><a href="#how-it-works" class="text-muted-foreground text-decoration-none">How It Works</a></li>
+                        <li class="mb-2"><a href="#safety" class="text-muted-foreground text-decoration-none">Safety & Trust</a></li>
                     </ul>
                 </div>
-                <div class="col-md-2">
-                    <div class="footer-links-title">Support</div>
-                    <ul class="footer-links-list list-unstyled">
-                        <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support
-                                Center</a></li>
-                        <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a></li>
-                        <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a>
-                        </li>
+                
+                <div class="col-md-3">
+                    <h5 class="fw-semibold mb-3">For Workers</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#become-worker" class="text-muted-foreground text-decoration-none">Become a Worker</a></li>
+                        <li class="mb-2"><a href="#resources" class="text-muted-foreground text-decoration-none">Resources</a></li>
+                        <li class="mb-2"><a href="#success" class="text-muted-foreground text-decoration-none">Success Stories</a></li>
                     </ul>
                 </div>
+                
                 <div class="col-md-3">
-                    <div class="footer-links-title">Contact</div>
-                    <p class="small mb-1"><span class="footer-contact-icon"><i
-                                class="fas fa-envelope"></i></span>support@skillworker.com</p>
-                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234)
-                        567-890</p>
-                    <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123
-                        Main St, City, Country</p>
+                    <h5 class="fw-semibold mb-3">Support</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#help" class="text-muted-foreground text-decoration-none">Help Center</a></li>
+                        <li class="mb-2"><a href="#contact" class="text-muted-foreground text-decoration-none">Contact Us</a></li>
+                        <li class="mb-2"><a href="#terms" class="text-muted-foreground text-decoration-none">Terms of Service</a></li>
+                        <li class="mb-2"><a href="#privacy" class="text-muted-foreground text-decoration-none">Privacy Policy</a></li>
+                    </ul>
                 </div>
             </div>
-            <hr class="border-light my-4">
-            <div class="d-flex justify-content-between align-items-center flex-wrap">
-                <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
-                <div>
-                    <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
-                    <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
-                </div>
+            
+            <hr class="my-4">
+            <div class="text-center text-muted-foreground">
+                <p class="mb-0">&copy; 2024 SkillWorker. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/main.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Search form functionality
+            $('#searchForm').on('submit', function(e) {
+                e.preventDefault();
+                const searchQuery = $('#searchQuery').val();
+                const location = $('#location').val();
+                console.log('Searching for:', searchQuery, 'in', location);
+                // Add your search logic here
+            });
+
+            // Smooth scrolling for navigation links
+            $('a[href^="#"]').on('click', function(e) {
+                e.preventDefault();
+                const target = $(this.getAttribute('href'));
+                if (target.length) {
+                    $('html, body').animate({
+                        scrollTop: target.offset().top - 80
+                    }, 1000);
+                }
+            });
+
+            // Add scroll effect to navbar
+            $(window).scroll(function() {
+                if ($(window).scrollTop() > 50) {
+                    $('.navbar-custom').addClass('shadow-sm');
+                } else {
+                    $('.navbar-custom').removeClass('shadow-sm');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

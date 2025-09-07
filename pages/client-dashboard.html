@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client | SkillWorker</title>
+    <title>SkillWorker - Client Dashboard</title>
+    
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/clientDashboard.css">
+    
+    <link href="../css/clientDashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-        <a class="navbar-brand fw-bold text-white" href="#">Skill<span class="text-warning">W</span>orker.</a>
+    
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark px-3">
+        <a class="navbar-brand fw-bold text-white" href="#">Skill<span>W</span>orker.</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -20,16 +25,15 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="../pages/worker-dashboard.html">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link active" href="#">Ads</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
+                <li class="nav-item"><a class="nav-link active" href="../pages/worker-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="../pages/ads-overview.html">Ads</a></li>
+                <li class="nav-item"><a class="nav-link" href="">Contacts</a></li>
             </ul>
 
-
-            <a href="#" class="me-3 text-white fs-5"><i class="fas fa-envelope"></i></a>
-            <a href="#" class="me-3 text-white fs-5"><i class="fas fa-bell"></i></a>
+            
+            <a href="#" class="me-3 text-white fs-5 notification-icon"><i class="fas fa-envelope"></i></a>
+            <a href="#" class="me-3 text-white fs-5 notification-icon"><i class="fas fa-bell"></i></a>
             <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
-
 
             <div class="dropdown">
                 <button class="profile-btn" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
@@ -37,138 +41,202 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                     <li><a class="dropdown-item" href="#">Account Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><a class="dropdown-item" href="/pages/login-page.html">Logout</a></li>
+                    <li><a class="dropdown-item" href="/pages/worker-profile.html">Profile</a></li>
+                    <li><a class="dropdown-item" id="logoutBtn" href="/pages/login-page.html">Logout</a></li>
                 </ul>
             </div>
         </div>
     </nav>
+    </header>
 
-    <main class="container my-5">
-
-        <div class="container-fluid mb-4">
-            <h2>What are you looking for?</h2>
-            <form id="search-form">
-                <input type="text" id="search-input" class="form-control"
-                    placeholder="Search for jobs, skills, or locations...">
-                <button type="submit" class="btn btn-warning">Search</button>
-            </form>
+    
+    <div class="mobile-menu-overlay d-lg-none" id="mobileMenuOverlay">
+        <div class="mobile-menu">
+            <nav class="nav flex-column">
+                <a class="nav-link" href="#">Dashboard</a>
+                <a class="nav-link" href="#">Browse Ads</a>
+                <a class="nav-link" href="#">Contacts</a>
+            </nav>
         </div>
-        <div class="row mb-5">
-            <div class="col-lg-6 col-md-12 mb-4">
-                <section class="search-section h-100"> 
-                <div class="mt-4 category-list" id="dynamic-category-list">
-                    <h4>All Categories</h4>
-                    <ul id="category-ul">
-                        <!-- Categories will be loaded here dynamically -->
-                    </ul>
-                </div>
+    </div>
+
+    <main class="container-fluid py-4">
+        
+        <div class="mb-4">
+            <div class="card-body text-center py-5">
+                <h1 class="display-4 fw-bold text-primary mb-3">Find Your Perfect Service Provider</h1>
+                <p class="lead text-secondary">Connect with skilled professionals across Sri Lanka</p>
+            </div>
+        </div>
+
+        
+        <div class="skillworker-card mb-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-4">
                 
-                    
-                </section>
-            </div>
-
-            <div class="col-lg-6 col-md-12 mb-4">
-                <section class="map-container h-100">
-                    <h4>Select by District (Sri Lanka Map)</h4>
-                    <p class="map-instruction">Click on any district to filter jobs by location</p>
-                    <div class="map-wrapper">
-                        <div id="map"></div>
+                    <h3 class="h4 mb-0 text-primary mt-3">What service do you need?</h3>
+                </div>
+                <div class="row g-3">
+                    <div class="col-lg-9">
+                        <input type="text" class="form-control form-control mb-3" id="searchInput" 
+                               placeholder="Search for services, skills, or locations...">
                     </div>
-                </section>
+                    <div class="col-lg-3">
+                        <button class="btn skillworker-btn-primary btn-lg w-75" id="searchBtn">
+                            <i class="fas fa-search me-2"></i>Search
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <section>
-            <div class="card-container">
+        <hr>
 
+        <div class="row g-4">
+            
+            <div class="col-lg-6">
+                <div class="skillworker-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-filter text-accent me-2"></i>
+                                <h4 class="h5 mb-0 text-primary">Service Categories</h4>
+                            </div>
+                            <span class="badge bg-secondary">20,000+ services</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="position-relative">
+                                <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                                <input type="text" class="form-control ps-5" id="categorySearch" 
+                                       placeholder="Search categories...">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <button class="btn btn-sm btn-primary category-btn active" data-category="all">
+                                All Services
+                            </button>
+                        </div>
+
+                        <div class="categories-container" id="categoriesContainer">
+                            
+                        </div>
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <!-- <nav aria-label="...">
-            <ul class="pagination">
-                <li class="page-item disabled">
-                    <a class="page-link">Previous</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active">
-                    <a class="page-link" href="#" aria-current="page">2</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
-            </ul>
-        </nav> -->
+            
+            <div class="col-lg-6">
+                <div class="skillworker-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="fas fa-map-marker-alt text-accent me-2"></i>
+                            <h4 class="h5 mb-0 text-primary">Select by District</h4>
+                        </div>
+                        <p class="text-secondary mb-3">Choose your district to find nearby service providers</p>
+                        
+                        <select class="form-select mb-4" id="districtSelect">
+                            <option value="all">All Districts</option>
+                        </select>
+
+                        <div class="map-container">
+                                <div id="map"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="mt-4">
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between mb-4">
+                <div class="d-flex align-items-center mb-3 mb-lg-0">
+                    <i class="fas fa-users text-accent me-2"></i>
+                    <h3 class="h5 mb-0 text-primary me-3">Available Services</h3>
+                    <span class="badge bg-success" id="resultsCount">0 services found</span>
+                </div>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-outline-primary active" id="gridViewBtn">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="btn btn-outline-primary" id="listViewBtn">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row g-4" id="workersContainer">
+                
+            </div>
+
+            
+            <nav aria-label="Workers pagination" class="mt-4">
+                <ul class="pagination justify-content-center" id="pagination">
+                    
+                </ul>
+            </nav>
+        </div>
     </main>
 
-    <footer class="bg-dark text-light pt-5 pb-3">
+    
+    <footer class="skillworker-footer mt-5">
         <div class="container">
-            <div class="row gy-4">
-                <div class="col-md-4">
-                    <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
-                    <p class="footer-description mb-3">Connecting skilled workers with clients worldwide.
-                        Your trusted
-                        platform for finding talent and opportunities.</p>
-                    <div class="footer-social mb-2">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="d-flex align-items-center mb-3">
+                        <h3 class="h5 mb-0 ms-2 text-white">
+                            Skill<span class="text-accent">W</span>orker
+                        </h3>
+                    </div>
+                    <p class="text-light-gray">
+                        Connecting skilled workers with clients across Sri Lanka. Your trusted platform for finding talent and opportunities.
+                    </p>
+                </div>
+                <div class="col-md-3">
+                    <h4 class="h6 text-white mb-3">Quick Links</h4>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="#" class="text-light-gray">Dashboard</a>
+                        <a href="#" class="text-light-gray">Browse Services</a>
+                        <a href="#" class="text-light-gray">Messages</a>
+                        <a href="#" class="text-light-gray">Settings</a>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="footer-links-title">Quick Links</div>
-                    <ul class="footer-links-list list-unstyled">
-                        <li><a href="/pages/workerProfile.html" class="text-light text-decoration-none">Profile</a></li>
-                        <li><a href="/pages/workerDashboard.html" class="text-light text-decoration-none">Dashboard</a>
-                        </li>
-                        <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a>
-                        </li>
-                        <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-md-2">
-                    <div class="footer-links-title">Support</div>
-                    <ul class="footer-links-list list-unstyled">
-                        <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support
-                                Center</a></li>
-                        <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a>
-                        </li>
-                        <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact
-                                Us</a>
-                        </li>
-                    </ul>
+                    <h4 class="h6 text-white mb-3">Support</h4>
+                    <div class="d-flex flex-column gap-2">
+                        <a href="#" class="text-light-gray">Help Center</a>
+                        <a href="#" class="text-light-gray">FAQ</a>
+                        <a href="#" class="text-light-gray">Contact Us</a>
+                    </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="footer-links-title">Contact</div>
-                    <p class="small mb-1"><span class="footer-contact-icon"><i
-                                class="fas fa-envelope"></i></span>support@skillworker.com</p>
-                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234)
-                        567-890</p>
-                    <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123
-                        Main St, City, Country</p>
+                    <h4 class="h6 text-white mb-3">Contact</h4>
+                    <div class="text-light-gray">
+                        <p class="mb-1">support@skillworker.com</p>
+                        <p class="mb-1">+94 769270053</p>
+                        <p class="mb-0">No 2/10 Main St, Galle, Sri Lanka</p>
+                    </div>
                 </div>
             </div>
-            <hr class="border-light my-4">
-            <div class="d-flex justify-content-between align-items-center flex-wrap">
-                <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
-                <div>
-                    <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
-                    <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
+            <hr class="border-secondary my-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <p class="text-light-gray mb-0">&copy; 2025 SkillWorker. All Rights Reserved.</p>
+                <div class="d-flex gap-3 mt-3 mt-md-0">
+                    <a href="#" class="text-light-gray">Terms of Service</a>
+                    <a href="#" class="text-light-gray">Privacy Policy</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="../js/util/mapdata.js"></script>
     <script src="../js/util/countrymap.js"></script>
-    <script type="module" src="../js/clientDashboard.js"></script>
+    
+    <script src="../js/clientDashboard.js"></script>
 </body>
-
 </html>

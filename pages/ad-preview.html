@@ -8,345 +8,394 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/ad-preview.css">
+    <link rel="stylesheet" href="../css/ad-preview.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body>
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-        <a class="navbar-brand fw-bold" href="#">Skill<span class="text-warning">W</span>orker.</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<body class="bg-light">
+    
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="#">
+                Skill<span style="color: var(--warning-color);">W</span>orker
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navMain">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="/pages/worker-dashboard.html">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Ads</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
-            </ul>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link px-3 rounded-pill" href="/pages/worker-dashboard.html">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 rounded-pill" href="#">
+                            <i class="fas fa-bullhorn me-2"></i>Ads
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 rounded-pill" href="#">
+                            <i class="fas fa-envelope me-2"></i>Contacts
+                        </a>
+                    </li>
+                </ul>
 
-            <div class="d-flex align-items-center">
-                <a class="me-3 text-white fs-5" href="#"><i class="fas fa-envelope"></i></a>
-                <a class="me-3 text-white fs-5" href="#"><i class="fas fa-bell"></i></a>
-                <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
+                <div class="d-flex align-items-center">
+                    <a class="nav-icon me-3" href="#"><i class="fas fa-envelope"></i></a>
+                    <a class="nav-icon me-3" href="#"><i class="fas fa-bell"></i></a>
+                    <a class="nav-icon me-3" href="#"><i class="fa-regular fa-circle-question"></i></a>
 
-                <div class="dropdown">
-                    <button class="btn p-0 border-0 bg-transparent" id="userMenu" data-bs-toggle="dropdown">
-                        <img src="/assets/images/workerDefualtPP.png" class="rounded-circle" width="40" height="40"
-                            alt="pp">
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="/pages/worker-profile.html">Profile</a></li>
-                        <li><a class="dropdown-item" href="/pages/login-page.html"">Logout</a></li>
-                    </ul>
+                    <div class="dropdown">
+                        <button class="btn p-0 border-0 bg-transparent" id="userMenu" data-bs-toggle="dropdown">
+                            <img src="/assets/images/workerDefualtPP.png" class="profile-avatar" alt="Profile">
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                            <li><a class="dropdown-item" href="/pages/worker-profile.html">
+                                <i class="fas fa-user me-2"></i>Profile
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="/pages/login-page.html">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </nav>
 
-    <div class=" container py-5">
-                                <div class="row">
-                                    <!-- LEFT SIDE -->
-                                    <div class="col-lg-8">
+    
+    <div id="loadingSpinner" class="loading-container">
+        <div class="loading-content">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3 text-muted">Loading service details...</p>
+        </div>
+    </div>
 
-                                        <div class="mb-4">
-                                            <h3 class="mb-4">Pipe Initializing Service</h3>
-                                        </div>
-
-                                        <div class="profile-header d-flex align-items-center">
-
-                                            <img src="/assets/images/workerDefualtPP.png" class="profile-pic"
-                                                alt="Profile Picture">
-
-                                            <div class="d-flex flex-column text-start ms-4 ">
-                                                <h3 class="mt-3"><span id="displayFirstName"></span></h3>
-                                                <p class="mb-1" id="displayCategory"><strong>Plumber</strong></p>
-
-                                                <p class="mb-1"><span class="star"><i
-                                                            class="fa-sharp fa-solid fa-star"></i><i
-                                                            class="fa-sharp fa-solid fa-star"></i><i
-                                                            class="fa-sharp fa-solid fa-star"></i><i
-                                                            class="fa-sharp fa-solid fa-star"></i></i><i
-                                                            class="fa-sharp fa-solid fa-star-half-stroke"></i></span>
-                                                    4.8</p>
-                                            </div>
-
-                                        </div>
-
-                                        <hr>
-
-                                        <!-- Description -->
-                                        <div class="mb-4">
-                                            <h5 class="mb-4">Service Description</h5>
-                                            <p id="displayDescription">Lorem ipsum dolor sit amet, consectetur
-                                                adipiscing elit. I provide reliable plumbing services
-                                                with 11 years of hands-on experience.
-
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem itaque
-                                                facilis optio perspiciatis deserunt eum at quia temporibus debitis.
-                                                Blanditiis tempore nemo iusto voluptatem ut in maxime, repellat
-                                                perferendis labore.
-
-                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium
-                                                nemo odit aperiam, voluptates ducimus dolorum consectetur sed, possimus
-                                                dicta ipsum laboriosam repellat nulla tempore, eum reiciendis veniam
-                                                minus inventore assumenda?</p>
-                                        </div>
-
-                                        <hr>
-
-                                        <div class="mb-4">
-                                            <h5 class="mb-4">Experience</h5>
-                                            <p class="text-muted"><span id="displayExperience">11</span> Years
-                                                Experience</p>
-                                        </div>
-
-                                        <hr>
-
-                                        <div class="mb-4">
-                                            <h5 class="mb-4">Working Areas</h5>
-                                            <p id="displayWorkingAreas">Colombo, Galle, Kandy</p>
-                                        </div>
-
-
-                                        <hr>
-
-                                        <!-- Skills -->
-                                        <div class="mb-4">
-                                            <h5 class="mb-4" id="skillsContainer">Skills</h5>
-                                            <span> </span>
-                                        </div>
-
-                                        <hr>
-
-                                        <div class="mb-4">
-                                            <h5 class="mb-4">Day Price Starting From</h5>
-                                            <p id="displayDayPrice"> Rs.1000</p>
-                                        </div>
-
-                                        <hr>
-
-                                        <!-- Contact Information -->
-                                        <div class="mb-4">
-                                            <h5 class="mb-4">Contact Information</h5>
-
-                                            <div class="d-flex">
-
-                                                <div class="col-md-6">
-                                                    <div
-                                                        class="contact-card h-100 p-4 bg-light rounded-3 border-0 shadow-sm position-relative overflow-hidden me-3">
-                                                        <div class="d-flex align-items-start position-relative">
-                                                            <div
-                                                                class="contact-icon-wrapper me-3 p-2 bg-warning bg-gradient rounded-circle d-flex align-items-center justify-content-center">
-                                                                <i class="bi bi-phone-fill text-white fs-5"></i>
-                                                            </div>
-                                                            <div
-                                                                class="d-flex justify-content-between align-items-center w-100">
-                                                                <div>
-                                                                    <h6 class="mb-2 fw-semibold text-dark">Mobile Phone
-                                                                    </h6>
-                                                                    <p class="contact-number fs-5 fw-medium text-dark mb-2"
-                                                                        id="displayMobile">0776961274</p>
-                                                                </div>
-                                                                <div class="ms-auto">
-                                                                    <a href="tel:0776961274"
-                                                                        class="btn btn-dark btn-sm">
-                                                                        <i class="bi bi-telephone me-1"></i>Call
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div
-                                                        class="contact-card h-100 p-4 bg-light rounded-3 border-0 shadow-sm position-relative overflow-hidden me-3">
-                                                        <div class="d-flex align-items-start position-relative">
-                                                            <div
-                                                                class="contact-icon-wrapper me-3 p-2 bg-warning bg-gradient rounded-circle d-flex align-items-center justify-content-center">
-                                                                <i class="bi bi-house-door-fill text-white fs-5"></i>
-                                                            </div>
-                                                            <div
-                                                                class="d-flex justify-content-between align-items-center w-100">
-                                                                <div>
-                                                                    <h6 class="mb-2 fw-semibold text-dark">Home/Work
-                                                                    </h6>
-                                                                    <p class="contact-number fs-5 fw-medium text-dark mb-2"
-                                                                        id="displayHomeWork">0776961274</p>
-                                                                </div>
-                                                                <div class="ms-auto">
-                                                                    <a href="tel:0776961274"
-                                                                        class="btn btn-dark btn-sm">
-                                                                        <i class="bi bi-telephone me-1"></i>Call
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
+    <div class="container py-5">
+        <div class="row g-4">
+            
+            <div class="col-lg-8">
+                
+                <div class="service-card mb-4">
+                    <div class="service-header">
+                        <h1 class="service-title mb-4">Pipe Initializing Service</h1>
+                        
+                        <div class="worker-profile-section">
+                            <div class="worker-avatar-container">
+                                <img src="/assets/images/workerDefualtPP.png" class="worker-avatar" alt="Worker Profile">
+                                <div class="worker-status-badge"></div>
+                            </div>
+                            
+                            <div class="worker-info">
+                                <h3 class="worker-name" id="displayFirstName">Loading...</h3>
+                                <p class="worker-category" id="displayCategory"><strong>Plumber</strong></p>
+                                <div class="worker-rating">
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
                                     </div>
-
-
-
-                                    <!-- RIGHT SIDE -->
-                                    <div class="col-lg-4">
-
-
-                                        <!-- Contact Card -->
-                                        <div class="card mb-4 p-3 shadow-sm">
-                                            <div class="d-flex align-items-center mb-3 p-3">
-                                                <img src="/assets/images/workerDefualtPP.png"
-                                                    class="rounded-circle me-3" width="40" height="40" alt="pp">
-                                                <div>
-                                                    <h6 class="mb-0">Lithira</h6>
-                                                    <small>Plumber</small>
-                                                </div>
-                                            </div>
-                                            <a href="#" class="btn btn-dark w-100"><i
-                                                    class="fa-regular fa-paper-plane"></i>
-                                                Contact Me</a>
-                                        </div>
-                                    </div>
+                                    <span class="rating-score">4.8</span>
+                                    <span class="rating-count">(24 reviews)</span>
                                 </div>
-
-                                <div class="row d-flex">
-
-                                    <hr class="mb-3">
-                                    <!-- Reviews Summary -->
-                                    <div class="col-md-8 mb-4">
-                                        <h5 class="mb-4">(5) Reviews</h5>
-                                        <div class="d-flex align-items-center mb-3 w-75">
-                                            <span class="me-2">5 Stars</span>
-                                            <div class="flex-grow-1 review-bar">
-                                                <div class="review-bar-fill" style="width:100%"></div>
-                                            </div>
-                                            <span class="ms-2">(4)</span>
-                                        </div>
-                                        <div class="d-flex align-items-center mb-3 w-75">
-                                            <span class="me-2">4 Stars</span>
-                                            <div class="flex-grow-1 review-bar">
-                                                <div class="review-bar-fill" style="width:80%"></div>
-                                            </div>
-                                            <span class="ms-2">(1)</span>
-                                        </div>
-                                        <div class="d-flex align-items-center mb-3 w-75">
-                                            <span class="me-2">3 Stars</span>
-                                            <div class="flex-grow-1 review-bar"></div>
-                                            <span class="ms-2">(0)</span>
-                                        </div>
-                                        <div class="d-flex align-items-center mb-3 w-75">
-                                            <span class="me-2">2 Stars</span>
-                                            <div class="flex-grow-1 review-bar"></div>
-                                            <span class="ms-2">(0)</span>
-                                        </div>
-                                        <div class="d-flex align-items-center mb-3 w-75">
-                                            <span class="me-2">1 Stars</span>
-                                            <div class="flex-grow-1 review-bar"></div>
-                                            <span class="ms-2">(0)</span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Write Review -->
-                                    <div class="card p-3 col-md-4 mb-4">
-                                        <h6>Write a Review</h6>
-                                        <input type="text" class="form-control mb-2" placeholder="Name">
-                                        <input type="email" class="form-control mb-2" placeholder="Email">
-                                        <textarea class="form-control mb-2" placeholder="Review"></textarea>
-                                        <p class="mb-1">Rating:</p>
-                                        <div class="mb-2">
-                                            <span class="star"><i class="fa-etch fa-solid fa-star"></i></span>
-                                            <span class="star"><i class="fa-etch fa-solid fa-star"></i></span>
-                                            <span class="star"><i class="fa-etch fa-solid fa-star"></i></span>
-                                            <span class="star"><i class="fa-etch fa-solid fa-star"></i></span>
-                                            <span class="star"><i
-                                                    class="fa-sharp-duotone fa-solid fa-star-half-stroke"></i></span>
-
-                                        </div>
-                                        <button class="btn btn-dark w-100">Submit</button>
-                                    </div>
-
-                                </div>
-                </div>
-
-                <footer class="bg-dark text-light pt-5 pb-3">
-                    <div class="container">
-                        <div class="row gy-4">
-                            <div class="col-md-4">
-                                <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
-                                <p class="footer-description mb-3">Connecting skilled workers with clients worldwide.
-                                    Your trusted
-                                    platform for finding talent and opportunities.</p>
-                                <div class="footer-social mb-2">
-                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="#"><i class="fab fa-twitter"></i></a>
-                                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="#"><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="footer-links-title">Quick Links</div>
-                                <ul class="footer-links-list list-unstyled">
-                                    <li><a href="/pages/workerProfile.html"
-                                            class="text-light text-decoration-none">Profile</a></li>
-                                    <li><a href="/pages/workerDashboard.html"
-                                            class="text-light text-decoration-none">Dashboard</a>
-                                    </li>
-                                    <li><a href="/pages/workerMessages.html"
-                                            class="text-light text-decoration-none">Messages</a>
-                                    </li>
-                                    <li><a href="/pages/workerSettings.html"
-                                            class="text-light text-decoration-none">Settings</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="footer-links-title">Support</div>
-                                <ul class="footer-links-list list-unstyled">
-                                    <li><a href="/pages/workerSupport.html"
-                                            class="text-light text-decoration-none">Support
-                                            Center</a></li>
-                                    <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a>
-                                    </li>
-                                    <li><a href="/pages/workerContact.html"
-                                            class="text-light text-decoration-none">Contact
-                                            Us</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="footer-links-title">Contact</div>
-                                <p class="small mb-1"><span class="footer-contact-icon"><i
-                                            class="fas fa-envelope"></i></span>support@skillworker.com</p>
-                                <p class="small mb-1"><span class="footer-contact-icon"><i
-                                            class="fas fa-phone"></i></span>+1 (234)
-                                    567-890</p>
-                                <p class="small"><span class="footer-contact-icon"><i
-                                            class="fas fa-map-marker-alt"></i></span>123
-                                    Main St, City, Country</p>
-                            </div>
-                        </div>
-                        <hr class="border-light my-4">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap">
-                            <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
-                            <div>
-                                <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
-                                <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
                             </div>
                         </div>
                     </div>
-                </footer>
+                </div>
 
-                <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-                <script type="module" src="../js/adPreview.js"></script>
+                
+                <div class="details-grid">
+                    
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <i class="fas fa-file-alt detail-icon"></i>
+                            <h5>Service Description</h5>
+                        </div>
+                        <div class="detail-content">
+                            <p id="displayDescription">Loading service description...</p>
+                        </div>
+                    </div>
+
+                    
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <i class="fas fa-medal detail-icon"></i>
+                            <h5>Experience</h5>
+                        </div>
+                        <div class="detail-content">
+                            <div class="experience-badge">
+                                <span class="experience-number" id="displayExperience">11</span>
+                                <span class="experience-text">Years Experience</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <i class="fas fa-map-marker-alt detail-icon"></i>
+                            <h5>Working Areas</h5>
+                        </div>
+                        <div class="detail-content">
+                            <div class="location-tags" id="displayWorkingAreas">
+                                Colombo, Galle, Kandy
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="detail-card">
+                        <div class="detail-header">
+                            <i class="fas fa-tools detail-icon"></i>
+                            <h5 id="skillsContainer">Skills</h5>
+                        </div>
+                        <div class="detail-content">
+                            <div class="skills-container">
+                                <span class="skill-tag">Pipe Installation</span>
+                                <span class="skill-tag">Leak Repair</span>
+                                <span class="skill-tag">Drain Cleaning</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="detail-card pricing-card">
+                        <div class="detail-header">
+                            <i class="fas fa-tag detail-icon"></i>
+                            <h5>Rate</h5>
+                        </div>
+                        <div class="detail-content">
+                            <div class="price-display">
+                                <span class="price-amount" id="displayDayPrice">Rs.1000</span>
+                                <span class="price-period">per day</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="detail-card contact-card">
+                        <div class="detail-header">
+                            <i class="fas fa-phone detail-icon"></i>
+                            <h5>Contact Information</h5>
+                        </div>
+                        <div class="detail-content">
+                            <div class="contact-methods">
+                                <div class="contact-method">
+                                    <div class="contact-info">
+                                        <div class="contact-icon-wrapper mobile">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <h6>Mobile Phone</h6>
+                                            <p class="contact-number" id="displayMobile">0776961274</p>
+                                        </div>
+                                    </div>
+                                    <a href="tel:0776961274" class="contact-btn">
+                                        <i class="fas fa-phone me-2"></i>Call
+                                    </a>
+                                </div>
+
+                                <div class="contact-method">
+                                    <div class="contact-info">
+                                        <div class="contact-icon-wrapper home">
+                                            <i class="fas fa-home"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <h6>Home/Work</h6>
+                                            <p class="contact-number" id="displayHomeWork">0776961274</p>
+                                        </div>
+                                    </div>
+                                    <a href="tel:0776961274" class="contact-btn">
+                                        <i class="fas fa-phone me-2"></i>Call
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="col-lg-4">
+                
+                <div class="quick-contact-card">
+                    <div class="quick-contact-header">
+                        <img src="/assets/images/workerDefualtPP.png" class="quick-contact-avatar" alt="Worker">
+                        <div class="quick-contact-info">
+                            <h6 class="worker-name">Lithira</h6>
+                            <small class="worker-category">Plumber</small>
+                            <div class="online-status">
+                                <span class="status-dot"></span>
+                                <span class="status-text">Available</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="contact-primary-btn">
+                        <i class="fas fa-comments me-2"></i>
+                        Contact Me
+                    </button>
+                </div>
+
+                
+                <div class="quick-actions-card">
+                    <h6 class="card-title">Quick Actions</h6>
+                    <div class="action-buttons">
+                        <button class="action-btn">
+                            <i class="fas fa-heart me-2"></i>
+                            Save Service
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-share-alt me-2"></i>
+                            Share
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-flag me-2"></i>
+                            Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="reviews-section">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="reviews-summary-card">
+                        <h5 class="reviews-title">Customer Reviews (5)</h5>
+                        <div class="reviews-breakdown">
+                            <div class="rating-bar-item">
+                                <span class="rating-label">5 Stars</span>
+                                <div class="rating-bar">
+                                    <div class="rating-fill" style="width: 100%"></div>
+                                </div>
+                                <span class="rating-count">(4)</span>
+                            </div>
+                            <div class="rating-bar-item">
+                                <span class="rating-label">4 Stars</span>
+                                <div class="rating-bar">
+                                    <div class="rating-fill" style="width: 80%"></div>
+                                </div>
+                                <span class="rating-count">(1)</span>
+                            </div>
+                            <div class="rating-bar-item">
+                                <span class="rating-label">3 Stars</span>
+                                <div class="rating-bar">
+                                    <div class="rating-fill" style="width: 0%"></div>
+                                </div>
+                                <span class="rating-count">(0)</span>
+                            </div>
+                            <div class="rating-bar-item">
+                                <span class="rating-label">2 Stars</span>
+                                <div class="rating-bar">
+                                    <div class="rating-fill" style="width: 0%"></div>
+                                </div>
+                                <span class="rating-count">(0)</span>
+                            </div>
+                            <div class="rating-bar-item">
+                                <span class="rating-label">1 Star</span>
+                                <div class="rating-bar">
+                                    <div class="rating-fill" style="width: 0%"></div>
+                                </div>
+                                <span class="rating-count">(0)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="write-review-card">
+                        <h6 class="card-title">Write a Review</h6>
+                        <form class="review-form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" placeholder="Email Address" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="4" placeholder="Share your experience..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Rating:</label>
+                                <div class="star-rating">
+                                    <i class="fas fa-star" data-rating="1"></i>
+                                    <i class="fas fa-star" data-rating="2"></i>
+                                    <i class="fas fa-star" data-rating="3"></i>
+                                    <i class="fas fa-star" data-rating="4"></i>
+                                    <i class="fas fa-star" data-rating="5"></i>
+                                </div>
+                            </div>
+                            <button type="submit" class="submit-review-btn">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Submit Review
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light pt-5 pb-3">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <div class="footer-brand mb-3">Skill<span style="color: #7dcbfd;">W</span>orker.</div>
+                    <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted platform for finding talent and opportunities.</p>
+                    <div class="footer-social mb-2">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Quick Links</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/worker-profile.html" class="text-light text-decoration-none">Profile</a></li>
+                        <li><a href="/pages/worker-dashboard.html" class="text-light text-decoration-none">Dashboard</a></li>
+                        <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a></li>
+                        <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <div class="footer-links-title">Support</div>
+                    <ul class="footer-links-list list-unstyled">
+                        <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support Center</a></li>
+                        <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a></li>
+                        <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <div class="footer-links-title">Contact</div>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-envelope"></i></span> support@skillworker.com</p>
+                    <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span> +94 769270053</p>
+                    <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span> No 2/10 Main St, Galle, Sri Lanka</p>
+                </div>
+            </div>
+            <hr class="border-light my-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
+                <div>
+                    <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
+                    <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script type="module" src="../js/adPreview.js"></script>
 
 </body>
 

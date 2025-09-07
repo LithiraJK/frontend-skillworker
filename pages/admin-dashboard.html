@@ -3,24 +3,487 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>SkillWorker Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <!-- <link rel="stylesheet" href="../css/adminDashboard.css"> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../css/admin-dashboard.css">
 </head>
 <body>
-    <div class="container">
-        <h1 class="mt-4">Admin Dashboard</h1>
-        <p>Welcome to the admin dashboard!</p>
+    
+    <div class="d-flex" id="wrapper">
+        
+        <div class="bg-primary sidebar-wrapper" id="sidebar-wrapper">
+            <div class="sidebar-heading text-white p-3">
+                <i class="fas fa-tools me-2"></i>
+                <strong>SkillWorker Admin</strong>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="#dashboard" class="list-group-item list-group-item-action sidebar-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                </a>
+                <a href="#users" class="list-group-item list-group-item-action sidebar-item" data-section="users">
+                    <i class="fas fa-users me-2"></i>Users Management
+                </a>
+                <a href="#workers" class="list-group-item list-group-item-action sidebar-item" data-section="workers">
+                    <i class="fas fa-hard-hat me-2"></i>Workers Management
+                </a>
+                <a href="#categories" class="list-group-item list-group-item-action sidebar-item" data-section="categories">
+                    <i class="fas fa-tags me-2"></i>Categories
+                </a>
+                <a href="#bookings" class="list-group-item list-group-item-action sidebar-item" data-section="bookings">
+                    <i class="fas fa-calendar-check me-2"></i>Bookings
+                </a>
+                <a href="#reports" class="list-group-item list-group-item-action sidebar-item" data-section="reports">
+                    <i class="fas fa-chart-bar me-2"></i>Reports
+                </a>
+                <a href="#settings" class="list-group-item list-group-item-action sidebar-item" data-section="settings">
+                    <i class="fas fa-cog me-2"></i>Settings
+                </a>
+            </div>
+        </div>
 
-        <h2 id="text">HI</h2>
-        <button id="changeTextBtn">Change Text</button>
+        
+        <div id="page-content-wrapper" class="flex-fill">
+            
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <div class="container-fluid">
+                    <button class="btn btn-primary" id="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <div class="navbar-nav ms-auto">
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-1"></i>Admin
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            
+            <div class="container-fluid p-4">
+                
+                <div id="dashboard-section" class="content-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-tachometer-alt me-2"></i>Dashboard Overview</h2>
+                        <button class="btn btn-primary" onclick="refreshDashboard()">
+                            <i class="fas fa-sync-alt me-1"></i>Refresh
+                        </button>
+                    </div>
+
+                    
+                    <div class="row mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card border-left-primary">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Users</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalUsers">1,234</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card border-left-success">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active Workers</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="activeWorkers">856</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-hard-hat fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card border-left-info">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Bookings</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalBookings">2,456</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card stat-card border-left-warning">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Revenue (LKR)</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalRevenue">1,250,000</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="m-0 font-weight-bold text-primary">Recent Bookings</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="recentBookingsTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Client</th>
+                                                    <th>Worker</th>
+                                                    <th>Service</th>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>#001</td>
+                                                    <td>John Silva</td>
+                                                    <td>Kamal Perera</td>
+                                                    <td>Plumbing</td>
+                                                    <td><span class="badge bg-success">Completed</span></td>
+                                                    <td>2024-01-15</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#002</td>
+                                                    <td>Mary Fernando</td>
+                                                    <td>Sunil Jayawardena</td>
+                                                    <td>Electrical</td>
+                                                    <td><span class="badge bg-warning">In Progress</span></td>
+                                                    <td>2024-01-14</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-primary" onclick="addNewUser()">
+                                            <i class="fas fa-user-plus me-2"></i>Add New User
+                                        </button>
+                                        <button class="btn btn-success" onclick="addNewWorker()">
+                                            <i class="fas fa-hard-hat me-2"></i>Add New Worker
+                                        </button>
+                                        <button class="btn btn-info" onclick="addNewCategory()">
+                                            <i class="fas fa-tags me-2"></i>Add Category
+                                        </button>
+                                        <button class="btn btn-warning" onclick="generateReport()">
+                                            <i class="fas fa-file-alt me-2"></i>Generate Report
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="users-section" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-users me-2"></i>Users Management</h2>
+                        <button class="btn btn-primary" onclick="addNewUser()">
+                            <i class="fas fa-plus me-1"></i>Add New User
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h6 class="m-0">All Users</h6>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="text" class="form-control" placeholder="Search users..." id="userSearch">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="usersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>District</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="workers-section" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-hard-hat me-2"></i>Workers Management</h2>
+                        <button class="btn btn-primary" onclick="addNewWorker()">
+                            <i class="fas fa-plus me-1"></i>Add New Worker
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h6 class="m-0">All Workers</h6>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="text" class="form-control" placeholder="Search workers..." id="workerSearch">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="workersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Category</th>
+                                            <th>District</th>
+                                            <th>Rating</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="categories-section" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-tags me-2"></i>Categories Management</h2>
+                        <button class="btn btn-primary" onclick="addNewCategory()">
+                            <i class="fas fa-plus me-1"></i>Add New Category
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="m-0">Service Categories</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="categoriesTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Category Name</th>
+                                            <th>Description</th>
+                                            <th>Workers Count</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="bookings-section" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-calendar-check me-2"></i>Bookings Management</h2>
+                        <div>
+                            <select class="form-select d-inline-block w-auto me-2" id="bookingStatusFilter">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="bookingsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Booking ID</th>
+                                            <th>Client</th>
+                                            <th>Worker</th>
+                                            <th>Service</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="reports-section" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-chart-bar me-2"></i>Reports & Analytics</h2>
+                        <button class="btn btn-primary" onclick="generateReport()">
+                            <i class="fas fa-download me-1"></i>Export Report
+                        </button>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5>Monthly Revenue</h5>
+                                    <h3 class="text-success">LKR 450,000</h3>
+                                    <small class="text-muted">+12% from last month</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5>New Registrations</h5>
+                                    <h3 class="text-info">156</h3>
+                                    <small class="text-muted">+8% from last month</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5>Completion Rate</h5>
+                                    <h3 class="text-warning">94.5%</h3>
+                                    <small class="text-muted">+2% from last month</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="settings-section" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-cog me-2"></i>System Settings</h2>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="m-0">General Settings</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form id="generalSettingsForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Platform Name</label>
+                                            <input type="text" class="form-control" value="SkillWorker">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Contact Email</label>
+                                            <input type="email" class="form-control" value="admin@skillworker.lk">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Commission Rate (%)</label>
+                                            <input type="number" class="form-control" value="10">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="m-0">System Status</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span>Database Status</span>
+                                        <span class="badge bg-success">Online</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span>API Status</span>
+                                        <span class="badge bg-success">Online</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span>Payment Gateway</span>
+                                        <span class="badge bg-success">Online</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>SMS Service</span>
+                                        <span class="badge bg-warning">Maintenance</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="../js/adminDashboard.js"></script>
-
+    <script src="../js/adminDashboard.js"></script>
 </body>
 </html>

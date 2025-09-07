@@ -34,7 +34,7 @@ function scheduleSilentRefresh(token) {
                 title: 'Session Expired',
                 text: 'Please log in again.'
             });
-            window.location.href = '../pages/loginPage.html';
+            window.location.href = '../pages/login-page.html';
          });
         return;
     }
@@ -49,7 +49,7 @@ function scheduleSilentRefresh(token) {
                 title: 'Session Expired',
                 text: 'Please log in again.'
             });
-            window.location.href = '../pages/loginPage.html';
+            window.location.href = '../pages/login-page.html';
         });
     }, delay);
 }
@@ -105,7 +105,7 @@ async function refreshAccessToken() {
             title: 'Session Expired',
             text: 'Please log in again.'
         });
-        window.location.href = '../pages/loginPage.html';
+        window.location.href = '../pages/login-page.html';
         throw error;
     }
 }
@@ -133,13 +133,14 @@ $(document).ajaxError(async (event, jqxhr, settings) => {
                 title: 'Session Expired',
                 text: 'Please log in again.'
             }).then(() => {
-                window.location.href = '../pages/loginPage.html';
+                window.location.href = '../pages/login-page.html';
             });
         }
     }
 });
 
-export default {
+// Make tokenHandler globally available
+window.tokenHandler = {
     refreshAccessToken,
     scheduleSilentRefresh
 };
