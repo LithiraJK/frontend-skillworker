@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="../css/admin-dashboard.css">
 </head>
 <body>
-    
+
     <div class="d-flex" id="wrapper">
-        
-        <div class="bg-primary sidebar-wrapper" id="sidebar-wrapper">
+
+        <nav class="bg-primary sidebar-wrapper" id="sidebar-wrapper">
             <div class="sidebar-heading text-white p-3">
                 <i class="fas fa-tools me-2"></i>
                 <strong>SkillWorker Admin</strong>
@@ -22,25 +22,32 @@
                     <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                 </a>
                 <a href="#users" class="list-group-item list-group-item-action sidebar-item" data-section="users">
-                    <i class="fas fa-users me-2"></i>Users Management
+                    <i class="fas fa-users me-2"></i>Manage Users
                 </a>
-                <a href="#workers" class="list-group-item list-group-item-action sidebar-item" data-section="workers">
-                    <i class="fas fa-hard-hat me-2"></i>Workers Management
+                
+                <a href="#ads" class="list-group-item list-group-item-action sidebar-item" data-section="ads">
+                    <i class="fas fa-bullhorn me-2"></i>Manage Ads
+                </a>
+                <a href="#reviews" class="list-group-item list-group-item-action sidebar-item" data-section="reviews">
+                    <i class="fas fa-star me-2"></i>Manage Reviews
+                </a>
+                <a href="#subscriptions" class="list-group-item list-group-item-action sidebar-item" data-section="subscriptions">
+                    <i class="fas fa-crown me-2"></i>Manage Subscriptions
+                </a>
+                <a href="#complaints" class="list-group-item list-group-item-action sidebar-item" data-section="complaints">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Reports/Complaints
+                </a>
+                <a href="#broadcast" class="list-group-item list-group-item-action sidebar-item" data-section="broadcast">
+                    <i class="fas fa-envelope me-2"></i>Broadcast Mail
                 </a>
                 <a href="#categories" class="list-group-item list-group-item-action sidebar-item" data-section="categories">
                     <i class="fas fa-tags me-2"></i>Categories
-                </a>
-                <a href="#bookings" class="list-group-item list-group-item-action sidebar-item" data-section="bookings">
-                    <i class="fas fa-calendar-check me-2"></i>Bookings
-                </a>
-                <a href="#reports" class="list-group-item list-group-item-action sidebar-item" data-section="reports">
-                    <i class="fas fa-chart-bar me-2"></i>Reports
                 </a>
                 <a href="#settings" class="list-group-item list-group-item-action sidebar-item" data-section="settings">
                     <i class="fas fa-cog me-2"></i>Settings
                 </a>
             </div>
-        </div>
+        </nav>
 
         
         <div id="page-content-wrapper" class="flex-fill">
@@ -52,15 +59,7 @@
                     </button>
                     
                     <div class="navbar-nav ms-auto">
-                        <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle me-1"></i>Admin
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                            </ul>
-                        </div>
+                        <a class="btn btn-outline-dark" id="logoutBtn" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
                     </div>
                 </div>
             </nav>
@@ -110,16 +109,17 @@
                             </div>
                         </div>
 
+                        
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card stat-card border-left-info">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Bookings</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalBookings">2,456</div>
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Ads</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalAds">2,456</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+                                            <i class="fas fa-bullhorn fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -131,11 +131,11 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Revenue (LKR)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalRevenue">1,250,000</div>
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Subscriptions</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalSubscriptions">342</div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                            <i class="fas fa-crown fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -148,17 +148,18 @@
                         <div class="col-lg-8">
                             <div class="card">
                                 <div class="card-header">
-                                    <h6 class="m-0 font-weight-bold text-primary">Recent Bookings</h6>
+                                    
+                                    <h6 class="m-0 font-weight-bold text-primary">Recent Ads</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-hover" id="recentBookingsTable">
+                                        <table class="table table-hover" id="recentAdsTable">
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>Client</th>
                                                     <th>Worker</th>
                                                     <th>Service</th>
+                                                    <th>District</th>
                                                     <th>Status</th>
                                                     <th>Date</th>
                                                 </tr>
@@ -166,18 +167,18 @@
                                             <tbody>
                                                 <tr>
                                                     <td>#001</td>
-                                                    <td>John Silva</td>
                                                     <td>Kamal Perera</td>
                                                     <td>Plumbing</td>
-                                                    <td><span class="badge bg-success">Completed</span></td>
+                                                    <td>Colombo</td>
+                                                    <td><span class="badge bg-success">Active</span></td>
                                                     <td>2024-01-15</td>
                                                 </tr>
                                                 <tr>
                                                     <td>#002</td>
-                                                    <td>Mary Fernando</td>
                                                     <td>Sunil Jayawardena</td>
                                                     <td>Electrical</td>
-                                                    <td><span class="badge bg-warning">In Progress</span></td>
+                                                    <td>Kandy</td>
+                                                    <td><span class="badge bg-warning">Pending</span></td>
                                                     <td>2024-01-14</td>
                                                 </tr>
                                             </tbody>
@@ -197,11 +198,12 @@
                                         <button class="btn btn-primary" onclick="addNewUser()">
                                             <i class="fas fa-user-plus me-2"></i>Add New User
                                         </button>
-                                        <button class="btn btn-success" onclick="addNewWorker()">
-                                            <i class="fas fa-hard-hat me-2"></i>Add New Worker
+                                        
+                                        <button class="btn btn-success" onclick="manageAds()">
+                                            <i class="fas fa-bullhorn me-2"></i>Manage Ads
                                         </button>
-                                        <button class="btn btn-info" onclick="addNewCategory()">
-                                            <i class="fas fa-tags me-2"></i>Add Category
+                                        <button class="btn btn-info" onclick="sendBroadcast()">
+                                            <i class="fas fa-envelope me-2"></i>Send Broadcast
                                         </button>
                                         <button class="btn btn-warning" onclick="generateReport()">
                                             <i class="fas fa-file-alt me-2"></i>Generate Report
@@ -241,8 +243,7 @@
                                             <th>ID</th>
                                             <th>Name</th>
                                             <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>District</th>
+                                            <th>Role</th>
                                             <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
@@ -337,17 +338,65 @@
                 </div>
 
                 
-                <div id="bookings-section" class="content-section" style="display: none;">
+                <div id="ads-section" class="content-section" style="display: none;">
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2><i class="fas fa-calendar-check me-2"></i>Bookings Management</h2>
+                        <h2><i class="fas fa-bullhorn me-2"></i>Manage Ads</h2>
                         <div>
-                            <select class="form-select d-inline-block w-auto me-2" id="bookingStatusFilter">
+                            <select class="form-select d-inline-block w-auto me-2" id="adStatusFilter">
                                 <option value="">All Status</option>
+                                <option value="active">Active</option>
                                 <option value="pending">Pending</option>
-                                <option value="confirmed">Confirmed</option>
-                                <option value="in-progress">In Progress</option>
-                                <option value="completed">Completed</option>
-                                <option value="cancelled">Cancelled</option>
+                                <option value="expired">Expired</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h6 class="m-0">All Ads</h6>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="text" class="form-control" placeholder="Search ads..." id="adSearch">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="adsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Worker</th>
+                                            <th>Service</th>
+                                            <th>District</th>
+                                            <th>Price Range</th>
+                                            <th>Status</th>
+                                            <th>Created</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="reviews-section" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-star me-2"></i>Manage Reviews</h2>
+                        <div>
+                            <select class="form-select d-inline-block w-auto me-2" id="reviewStatusFilter">
+                                <option value="">All Reviews</option>
+                                <option value="approved">Approved</option>
+                                <option value="pending">Pending</option>
+                                <option value="flagged">Flagged</option>
                             </select>
                         </div>
                     </div>
@@ -355,14 +404,84 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover" id="bookingsTable">
+                                <table class="table table-hover" id="reviewsTable">
                                     <thead>
                                         <tr>
-                                            <th>Booking ID</th>
+                                            <th>ID</th>
                                             <th>Client</th>
                                             <th>Worker</th>
-                                            <th>Service</th>
+                                            <th>Rating</th>
+                                            <th>Review</th>
                                             <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="subscriptions-section" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-crown me-2"></i>Manage Subscriptions</h2>
+                        <button class="btn btn-primary" onclick="addSubscriptionPlan()">
+                            <i class="fas fa-plus me-1"></i>Add Plan
+                        </button>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5>Basic Plan</h5>
+                                    <h3 class="text-primary">LKR 2,500/month</h3>
+                                    <p class="text-muted">Up to 5 ads</p>
+                                    <small>156 subscribers</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5>Premium Plan</h5>
+                                    <h3 class="text-success">LKR 5,000/month</h3>
+                                    <p class="text-muted">Up to 15 ads</p>
+                                    <small>89 subscribers</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5>Pro Plan</h5>
+                                    <h3 class="text-warning">LKR 8,500/month</h3>
+                                    <p class="text-muted">Unlimited ads</p>
+                                    <small>34 subscribers</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="m-0">Active Subscriptions</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="subscriptionsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Worker</th>
+                                            <th>Plan</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
                                             <th>Amount</th>
                                             <th>Status</th>
                                             <th>Actions</th>
@@ -376,6 +495,156 @@
                         </div>
                     </div>
                 </div>
+
+                
+                <div id="complaints-section" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-exclamation-triangle me-2"></i>Reports & Complaints</h2>
+                        <div>
+                            <select class="form-select d-inline-block w-auto me-2" id="complaintStatusFilter">
+                                <option value="">All Status</option>
+                                <option value="open">Open</option>
+                                <option value="investigating">Investigating</option>
+                                <option value="resolved">Resolved</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="complaintsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Reporter</th>
+                                            <th>Against</th>
+                                            <th>Type</th>
+                                            <th>Subject</th>
+                                            <th>Priority</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="broadcast-section" class="content-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fas fa-envelope me-2"></i>Broadcast Mail</h2>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="m-0">Compose Broadcast Message</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form id="broadcastForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Recipients</label>
+                                            <select class="form-select" id="broadcastRecipients">
+                                                <option value="all">All Users</option>
+                                                <option value="clients">All Clients</option>
+                                                <option value="workers">All Workers</option>
+                                                <option value="subscribers">Subscribers Only</option>
+                                                <option value="custom">Custom List</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Subject</label>
+                                            <input type="text" class="form-control" id="broadcastSubject" placeholder="Enter email subject">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Message</label>
+                                            <textarea class="form-control" id="broadcastMessage" rows="8" placeholder="Enter your message here..."></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="scheduleEmail">
+                                                <label class="form-check-label" for="scheduleEmail">
+                                                    Schedule for later
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3" id="scheduleDateTime" style="display: none;">
+                                            <label class="form-label">Schedule Date & Time</label>
+                                            <input type="datetime-local" class="form-control" id="scheduleTime">
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button type="button" class="btn btn-outline-primary" onclick="previewBroadcast()">
+                                                <i class="fas fa-eye me-1"></i>Preview
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-paper-plane me-1"></i>Send Broadcast
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="m-0">Broadcast History</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">New Year Promotion</h6>
+                                                <small>2 days ago</small>
+                                            </div>
+                                            <p class="mb-1">Sent to all users</p>
+                                            <small class="text-success">Delivered: 1,234</small>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">System Maintenance</h6>
+                                                <small>1 week ago</small>
+                                            </div>
+                                            <p class="mb-1">Sent to all workers</p>
+                                            <small class="text-success">Delivered: 856</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h6 class="m-0">Quick Stats</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Total Users:</span>
+                                        <strong>1,234</strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Active Workers:</span>
+                                        <strong>856</strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Subscribers:</span>
+                                        <strong>342</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
 
                 
                 <div id="reports-section" class="content-section" style="display: none;">

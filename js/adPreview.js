@@ -271,4 +271,14 @@ $(document).ready(() => {
     // Add review submission logic here
     alert("Review submitted successfully!")
   })
+
+  // Handle View Profile button click
+  $("#viewProfileBtn").click((e) => {
+    e.preventDefault()
+    if (adData.workerId) {
+      window.location.href = `../pages/worker-profile-preview.html?workerId=${adData.workerId}`
+    } else {
+      alert("Worker profile not available")
+    }
+  })
 })

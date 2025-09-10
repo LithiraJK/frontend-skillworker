@@ -9,8 +9,8 @@ var simplemaps_countrymap_mapdata={
     
 		//State defaults
 		state_description: "State description",
-    state_color: "#212121",
-    state_hover_color: "#ffc107",
+    state_color: "#88A4BC",
+    state_hover_color: "#023047",
     state_url: "",
     border_size: 1.5,
     all_states_inactive: "no",
@@ -56,7 +56,7 @@ var simplemaps_countrymap_mapdata={
     
 		//Popup settings
 		popup_color: "white",
-    popup_opacity: 0.9,
+    popup_opacity: 0.8,
     popup_shadow: 1,
     popup_corners: 5,
     popup_font: "12px/1.5 Verdana, Arial, Helvetica, sans-serif",
@@ -68,183 +68,183 @@ var simplemaps_countrymap_mapdata={
     url_new_tab: "no",
     images_directory: "default",
     fade_time: 0.1,
-    link_text: "View Website"
+    link_text: "View Services"
   },
   state_specific: {
     LK11: {
       name: "Colombo",
       description: "Colombo District - Capital region with many job opportunities",
       color: "default",
-      hover_color: "#ffc107",
+      hover_color: "#023047",
       url: "javascript:district_click('LK11', 'Colombo');"
     },
     LK12: {
       name: "Gampaha",
       description: "Gampaha District - Industrial and residential area",
       color: "default",
-      hover_color: "#ffc107",
+      hover_color: "#023047",
       url: "javascript:district_click('LK12', 'Gampaha');"
     },
     LK13: {
       name: "Kalutara",
       description: "Kalutara District - Coastal area with tourism opportunities",
       color: "default",
-      hover_color: "#ffc107",
+      hover_color: "#023047",
       url: "javascript:district_click('LK13', 'Kalutara');"
     },
     LK21: {
       name: "Kandy",
       description: "Kandy District - Central province with cultural heritage jobs",
       color: "default",
-      hover_color: "#ffc107",
+      hover_color: "#023047",
       url: "javascript:district_click('LK21', 'Kandy');"
     },
     LK22: {
-      name: "Mātale",
-      description: "default",
+      name: "Matale",
+      description: "Matale District - Central highlands region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK22', 'Matale');"
     },
     LK23: {
-      name: "Nuvara Ĕliya",
-      description: "default",
+      name: "Nuwara Eliya",
+      description: "Nuwara Eliya District - Hill country with tea plantations",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK23', 'Nuwara Eliya');"
     },
     LK31: {
-      name: "Gālla",
-      description: "default",
+      name: "Galle",
+      description: "Galle District - Southern coastal area with tourism and services",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK31', 'Galle');"
     },
     LK32: {
-      name: "Mātara",
-      description: "default",
+      name: "Matara",
+      description: "Matara District - Southern coastal region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK32', 'Matara');"
     },
     LK33: {
-      name: "Hambantŏṭa",
-      description: "default",
+      name: "Hambantota",
+      description: "Hambantota District - Southern development zone",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK33', 'Hambantota');"
     },
     LK41: {
-      name: "Yāpanaya",
-      description: "default",
+      name: "Jaffna",
+      description: "Jaffna District - Northern peninsula region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK41', 'Jaffna');"
     },
     LK42: {
-      name: "Kilinŏchchi",
-      description: "default",
+      name: "Kilinochchi",
+      description: "Kilinochchi District - Northern mainland region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK42', 'Kilinochchi');"
     },
     LK43: {
-      name: "Mannārama",
-      description: "default",
+      name: "Mannar",
+      description: "Mannar District - Northwestern coastal area",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK43', 'Mannar');"
     },
     LK44: {
-      name: "Vavuniyāva",
-      description: "default",
+      name: "Vavuniya",
+      description: "Vavuniya District - North central region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK44', 'Vavuniya');"
     },
     LK45: {
-      name: "Mulativ",
-      description: "default",
+      name: "Mullaitivu",
+      description: "Mullaitivu District - Northeastern coastal region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK45', 'Mullaitivu');"
     },
     LK51: {
-      name: "Maḍakalapuva",
-      description: "default",
+      name: "Batticaloa",
+      description: "Batticaloa District - Eastern coastal region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK51', 'Batticaloa');"
     },
     LK52: {
-      name: "Ampāra",
-      description: "default",
+      name: "Ampara",
+      description: "Ampara District - Southeastern region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK52', 'Ampara');"
     },
     LK53: {
-      name: "Trikuṇāmalaya",
-      description: "default",
+      name: "Trincomalee",
+      description: "Trincomalee District - Eastern port city",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK53', 'Trincomalee');"
     },
     LK61: {
-      name: "Kuruṇægala",
-      description: "default",
+      name: "Kurunegala",
+      description: "Kurunegala District - North western province",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK61', 'Kurunegala');"
     },
     LK62: {
-      name: "Puttalama",
-      description: "default",
+      name: "Puttalam",
+      description: "Puttalam District - Western coastal region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK62', 'Puttalam');"
     },
     LK71: {
-      name: "Anurādhapura",
-      description: "default",
+      name: "Anuradhapura",
+      description: "Anuradhapura District - Ancient capital region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK71', 'Anuradhapura');"
     },
     LK72: {
-      name: "Pŏḷŏnnaruva",
-      description: "default",
+      name: "Polonnaruwa",
+      description: "Polonnaruwa District - Ancient kingdom region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK72', 'Polonnaruwa');"
     },
     LK81: {
       name: "Badulla",
-      description: "default",
+      description: "Badulla District - Uva province hill country",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK81', 'Badulla');"
     },
     LK82: {
-      name: "Mŏṇarāgala",
-      description: "default",
+      name: "Moneragala",
+      description: "Moneragala District - Uva province lowlands",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK82', 'Moneragala');"
     },
     LK91: {
       name: "Ratnapura",
-      description: "default",
+      description: "Ratnapura District - Gem mining region",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK91', 'Ratnapura');"
     },
     LK92: {
-      name: "Kægalla",
-      description: "default",
+      name: "Kegalle",
+      description: "Kegalle District - Sabaragamuwa province",
       color: "default",
-      hover_color: "default",
-      url: "default"
+      hover_color: "#023047",
+      url: "javascript:district_click('LK92', 'Kegalle');"
     }
   },
   locations: {
@@ -256,7 +256,7 @@ var simplemaps_countrymap_mapdata={
   },
   labels: {
     LK11: {
-      name: "Kŏḷamba",
+      name: "Colombo",
       parent_id: "LK11"
     },
     LK12: {
@@ -264,79 +264,79 @@ var simplemaps_countrymap_mapdata={
       parent_id: "LK12"
     },
     LK13: {
-      name: "Kaḷutara",
+      name: "Kaluthara",
       parent_id: "LK13"
     },
     LK21: {
-      name: "Mahanuvara",
+      name: "Kandy",
       parent_id: "LK21"
     },
     LK22: {
-      name: "Mātale",
+      name: "Matale",
       parent_id: "LK22"
     },
     LK23: {
-      name: "Nuvara Ĕliya",
+      name: "Nuwara Eliya",
       parent_id: "LK23"
     },
     LK31: {
-      name: "Gālla",
+      name: "Galle",
       parent_id: "LK31"
     },
     LK32: {
-      name: "Mātara",
+      name: "Matara",
       parent_id: "LK32"
     },
     LK33: {
-      name: "Hambantŏṭa",
+      name: "Hambantota",
       parent_id: "LK33"
     },
     LK41: {
-      name: "Yāpanaya",
+      name: "Jaffna",
       parent_id: "LK41"
     },
     LK42: {
-      name: "Kilinŏchchi",
+      name: "Kilinochchi",
       parent_id: "LK42"
     },
     LK43: {
-      name: "Mannārama",
+      name: "Mannarr",
       parent_id: "LK43"
     },
     LK44: {
-      name: "Vavuniyāva",
+      name: "Vavuniya",
       parent_id: "LK44"
     },
     LK45: {
-      name: "Mulativ",
+      name: "Mulathiv",
       parent_id: "LK45"
     },
     LK51: {
-      name: "Maḍakalapuva",
+      name: "Madakalapuwa",
       parent_id: "LK51"
     },
     LK52: {
-      name: "Ampāra",
+      name: "Ampara",
       parent_id: "LK52"
     },
     LK53: {
-      name: "Trikuṇāmalaya",
+      name: "Trincomallee",
       parent_id: "LK53"
     },
     LK61: {
-      name: "Kuruṇægala",
+      name: "Kurunagala",
       parent_id: "LK61"
     },
     LK62: {
-      name: "Puttalama",
+      name: "Puttalam",
       parent_id: "LK62"
     },
     LK71: {
-      name: "Anurādhapura",
+      name: "Anuradhapura",
       parent_id: "LK71"
     },
     LK72: {
-      name: "Pŏḷŏnnaruva",
+      name: "Polonnaruwa",
       parent_id: "LK72"
     },
     LK81: {
@@ -344,15 +344,15 @@ var simplemaps_countrymap_mapdata={
       parent_id: "LK81"
     },
     LK82: {
-      name: "Mŏṇarāgala",
+      name: "Monaragala",
       parent_id: "LK82"
     },
     LK91: {
-      name: "Ratnapura",
+      name: "Rathnapura",
       parent_id: "LK91"
     },
     LK92: {
-      name: "Kægalla",
+      name: "Kegalle",
       parent_id: "LK92"
     }
   }

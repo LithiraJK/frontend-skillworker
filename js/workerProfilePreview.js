@@ -101,10 +101,28 @@ $(document).ready(() => {
   
   console.log('Worker profile preview page initialized successfully')
   
-  const workerId = $.cookie("userId")
+  // Get workerId from URL parameters, fallback to user's own ID if not provided
+  const urlParams = new URLSearchParams(window.location.search)
+  const workerId = urlParams.get('workerId') || $.cookie("userId")
   const apiUrl = `http://localhost:8080/api/v1/worker/getworker/${workerId}`
   const token = $.cookie("token")
   let userData = {}
+
+  // Check if we have the required parameters
+  if (!workerId) {
+    console.error('No worker ID provided')
+    showError('Invalid worker ID. Please return to the previous page.')
+    return
+  }
+
+  if (!token) {
+    console.error('No token found')
+    showError('Authentication required. Redirecting to login...')
+    setTimeout(() => {
+      window.location.href = '../pages/login-page.html'
+    }, 2000)
+    return
+  }
 
   // Check if tokenHandler is available (loaded via script tag)
   if (typeof window.tokenHandler !== 'undefined' && token) {

@@ -4,9 +4,9 @@
 //         console.error('jQuery is not loaded!')
 //         return
 //     }
-    
+
 //     console.log('Admin dashboard initialized successfully')
-    
+
 //     $('#changeTextBtn').click(async function() {
 //         const token = await $.cookie('token');
 
@@ -68,6 +68,20 @@
 const $ = window.$
 const Swal = window.Swal
 
+// Utility function to get token from cookies
+function getAuthToken() {
+  return $.cookie('token')
+}
+
+// Function to create headers with authorization
+function createAuthHeaders() {
+  const token = getAuthToken()
+  return {
+    'Authorization': 'Bearer ' + token,
+    'Content-Type': 'application/json'
+  }
+}
+
 $(document).ready(() => {
   // Initialize dashboard
   initializeDashboard()
@@ -117,68 +131,81 @@ $(document).ready(() => {
     e.preventDefault()
     saveGeneralSettings()
   })
+
+    $("#logoutBtn").click(() => {
+    $.removeCookie("token", { path: "/" })
+    $.removeCookie("refresh_token", { path: "/" })
+    $.removeCookie("user_role", { path: "/" })
+    $.removeCookie("userId", { path: "/" })
+    window.location.href = "../pages/login-page.html"
+  })
 })
 
 function initializeDashboard() {
   // Load initial dashboard data
-  loadDashboardStats()
-  loadRecentBookings()
+  loadDashboardStats();
 }
 
 function loadDashboardStats() {
-  // Simulate API call to load dashboard statistics
-  const stats = {
-    totalUsers: 1234,
-    activeWorkers: 856,
-    totalBookings: 2456,
-    totalRevenue: 1250000,
+  const token = getAuthToken()
+  
+  if (!token) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Authentication Required',
+      text: 'Please login to access this feature.',
+    }).then(() => {
+      window.location.href = '../pages/login-page.html'
+    })
+    return
   }
 
-  $("#totalUsers").text(stats.totalUsers.toLocaleString())
-  $("#activeWorkers").text(stats.activeWorkers.toLocaleString())
-  $("#totalBookings").text(stats.totalBookings.toLocaleString())
-  $("#totalRevenue").text(stats.totalRevenue.toLocaleString())
-}
-
-function loadRecentBookings() {
-  // Simulate loading recent bookings
-  const bookings = [
-    {
-      id: "#001",
-      client: "John Silva",
-      worker: "Kamal Perera",
-      service: "Plumbing",
-      status: "Completed",
-      date: "2024-01-15",
+  // Fetch dashboard statistics from API
+  $.ajax({
+    url: 'http://localhost:8080/api/v1/admin/dashboard/stats',
+    type: 'GET',
+    headers: createAuthHeaders(),
+    success: function(response) {
+      console.log("Dashboard stats loaded successfully:", response)
+      
+      // Update dashboard stats (adjust based on your API response structure)
+      if (response.data) {
+        $("#totalUsers").text((response.data.totalUsers || 0).toLocaleString())
+        $("#activeWorkers").text((response.data.activeWorkers || 0).toLocaleString())
+        $("#totalBookings").text((response.data.totalBookings || 0).toLocaleString())
+        $("#totalRevenue").text((response.data.totalRevenue || 0).toLocaleString())
+      }
     },
-    {
-      id: "#002",
-      client: "Mary Fernando",
-      worker: "Sunil Jayawardena",
-      service: "Electrical",
-      status: "In Progress",
-      date: "2024-01-14",
-    },
-  ]
+    error: function(error) {
+      console.error("Error loading dashboard stats:", error)
+      
+      // Show default stats if API fails
+      const defaultStats = {
+        totalUsers: 0,
+        activeWorkers: 0,
+        totalBookings: 0,
+        totalRevenue: 0,
+      }
 
-  const tbody = $("#recentBookingsTable tbody")
-  tbody.empty()
+      $("#totalUsers").text(defaultStats.totalUsers.toLocaleString())
+      $("#activeWorkers").text(defaultStats.activeWorkers.toLocaleString())
+      $("#totalBookings").text(defaultStats.totalBookings.toLocaleString())
+      $("#totalRevenue").text(defaultStats.totalRevenue.toLocaleString())
 
-  bookings.forEach((booking) => {
-    const statusClass = booking.status === "Completed" ? "bg-success" : "bg-warning"
-    const row = `
-            <tr>
-                <td>${booking.id}</td>
-                <td>${booking.client}</td>
-                <td>${booking.worker}</td>
-                <td>${booking.service}</td>
-                <td><span class="badge ${statusClass}">${booking.status}</span></td>
-                <td>${booking.date}</td>
-            </tr>
-        `
-    tbody.append(row)
+      if (error.status === 401) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Session Expired',
+          text: 'Please login again.',
+        }).then(() => {
+          window.location.href = '../pages/login-page.html'
+        })
+      }
+    }
   })
 }
+
+
 
 function loadSectionData(section) {
   switch (section) {
@@ -191,9 +218,6 @@ function loadSectionData(section) {
     case "categories":
       loadCategories()
       break
-    case "bookings":
-      loadBookings()
-      break
     case "reports":
       loadReports()
       break
@@ -201,109 +225,151 @@ function loadSectionData(section) {
 }
 
 function loadUsers() {
-  // Simulate loading users data
-  const users = [
-    {
-      id: 1,
-      name: "John Silva",
-      email: "john@email.com",
-      phone: "+94771234567",
-      district: "Colombo",
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Mary Fernando",
-      email: "mary@email.com",
-      phone: "+94777654321",
-      district: "Kandy",
-      status: "Active",
-    },
-  ]
+  const token = getAuthToken()
+  
+  if (!token) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Authentication Required',
+      text: 'Please login to access this feature.',
+    }).then(() => {
+      window.location.href = '../pages/login-page.html'
+    })
+    return
+  }
 
+  // Show loading state
   const tbody = $("#usersTable tbody")
-  tbody.empty()
+  tbody.html('<tr><td colspan="6" class="text-center">Loading users...</td></tr>')
 
-  users.forEach((user) => {
-    const statusClass = user.status === "Active" ? "bg-success" : "bg-danger"
-    const row = `
+  $.ajax({
+    url: 'http://localhost:8080/api/v1/admin/users',
+    type: 'GET',
+    headers: createAuthHeaders(),
+    success: function(response) {
+      console.log("Users loaded successfully:", response)
+      
+      tbody.empty()
+      
+      if (response.data && response.data.length > 0) {
+        response.data.forEach((user) => {
+          const statusClass = user.status === "ACTIVE" ? "bg-success" : "bg-danger"
+          const row = `
             <tr>
-                <td>${user.id}</td>
-                <td>${user.name}</td>
+                <td>${user.userId || user.id}</td>
+                <td>${user.firstName} ${user.lastName}</td>
                 <td>${user.email}</td>
-                <td>${user.phone}</td>
-                <td>${user.district}</td>
-                <td><span class="badge ${statusClass}">${user.status}</span></td>
+                <td>${user.role || 'Client'}</td>
+                <td><span class="badge ${statusClass}">${user.status || 'Active'}</span></td>
                 <td>
-                    <button class="btn btn-sm btn-primary" onclick="editUser(${user.id})">
+                    <button class="btn btn-sm btn-primary" onclick="editUser(${user.userId || user.id})">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id})">
+                    <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.userId || user.id})">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
             </tr>
-        `
-    tbody.append(row)
+          `
+          tbody.append(row)
+        })
+      } else {
+        tbody.html('<tr><td colspan="6" class="text-center">No users found</td></tr>')
+      }
+    },
+    error: function(error) {
+      console.error("Error loading users:", error)
+      tbody.html('<tr><td colspan="6" class="text-center text-danger">Error loading users</td></tr>')
+      
+      if (error.status === 401) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Session Expired',
+          text: 'Please login again.',
+        }).then(() => {
+          window.location.href = '../pages/login-page.html'
+        })
+      }
+    }
   })
 }
 
 function loadWorkers() {
-  // Simulate loading workers data
-  const workers = [
-    {
-      id: 1,
-      name: "Kamal Perera",
-      email: "kamal@email.com",
-      phone: "+94771111111",
-      category: "Plumbing",
-      district: "Colombo",
-      rating: 4.8,
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "Sunil Jayawardena",
-      email: "sunil@email.com",
-      phone: "+94772222222",
-      category: "Electrical",
-      district: "Gampaha",
-      rating: 4.6,
-      status: "Active",
-    },
-  ]
+  const token = getAuthToken()
+  
+  if (!token) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Authentication Required',
+      text: 'Please login to access this feature.',
+    }).then(() => {
+      window.location.href = '../pages/login-page.html'
+    })
+    return
+  }
 
+  // Show loading state
   const tbody = $("#workersTable tbody")
-  tbody.empty()
+  tbody.html('<tr><td colspan="9" class="text-center">Loading workers...</td></tr>')
 
-  workers.forEach((worker) => {
-    const statusClass = worker.status === "Active" ? "bg-success" : "bg-danger"
-    const row = `
+  $.ajax({
+    url: 'http://localhost:8080/api/v1/admin/workers',
+    type: 'GET',
+    headers: createAuthHeaders(),
+    success: function(response) {
+      console.log("Workers loaded successfully:", response)
+      
+      tbody.empty()
+      
+      if (response.data && response.data.length > 0) {
+        response.data.forEach((worker) => {
+          const statusClass = worker.status === "ACTIVE" ? "bg-success" : "bg-danger"
+          const rating = worker.rating || 'N/A'
+          const row = `
             <tr>
-                <td>${worker.id}</td>
-                <td>${worker.name}</td>
+                <td>${worker.workerId || worker.id}</td>
+                <td>${worker.firstName} ${worker.lastName}</td>
                 <td>${worker.email}</td>
-                <td>${worker.phone}</td>
-                <td>${worker.category}</td>
-                <td>${worker.district}</td>
+                <td>${worker.phoneNumber || worker.phone || 'N/A'}</td>
+                <td>${worker.category || 'N/A'}</td>
+                <td>${worker.location || worker.district || 'N/A'}</td>
                 <td>
                     <div class="d-flex align-items-center">
-                        <span class="me-1">${worker.rating}</span>
-                        <i class="fas fa-star text-warning"></i>
+                        <span class="me-1">${rating}</span>
+                        ${rating !== 'N/A' ? '<i class="fas fa-star text-warning"></i>' : ''}
                     </div>
                 </td>
-                <td><span class="badge ${statusClass}">${worker.status}</span></td>
+                <td><span class="badge ${statusClass}">${worker.status || 'Active'}</span></td>
                 <td>
-                    <button class="btn btn-sm btn-primary" onclick="editWorker(${worker.id})">
+                    <button class="btn btn-sm btn-primary" onclick="editWorker(${worker.workerId || worker.id})">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteWorker(${worker.id})">
+                    <button class="btn btn-sm btn-danger" onclick="deleteWorker(${worker.workerId || worker.id})">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
             </tr>
-        `
-    tbody.append(row)
+          `
+          tbody.append(row)
+        })
+      } else {
+        tbody.html('<tr><td colspan="9" class="text-center">No workers found</td></tr>')
+      }
+    },
+    error: function(error) {
+      console.error("Error loading workers:", error)
+      tbody.html('<tr><td colspan="9" class="text-center text-danger">Error loading workers</td></tr>')
+      
+      if (error.status === 401) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Session Expired',
+          text: 'Please login again.',
+        }).then(() => {
+          window.location.href = '../pages/login-page.html'
+        })
+      }
+    }
   })
 }
 
@@ -352,71 +418,6 @@ function loadCategories() {
   })
 }
 
-function loadBookings() {
-  // Simulate loading bookings data
-  const bookings = [
-    {
-      id: "BK001",
-      client: "John Silva",
-      worker: "Kamal Perera",
-      service: "Plumbing Repair",
-      date: "2024-01-15",
-      amount: 5000,
-      status: "Completed",
-    },
-    {
-      id: "BK002",
-      client: "Mary Fernando",
-      worker: "Sunil Jayawardena",
-      service: "Electrical Installation",
-      date: "2024-01-14",
-      amount: 8000,
-      status: "In Progress",
-    },
-  ]
-
-  const tbody = $("#bookingsTable tbody")
-  tbody.empty()
-
-  bookings.forEach((booking) => {
-    let statusClass = "bg-secondary"
-    switch (booking.status) {
-      case "Completed":
-        statusClass = "bg-success"
-        break
-      case "In Progress":
-        statusClass = "bg-warning"
-        break
-      case "Pending":
-        statusClass = "bg-info"
-        break
-      case "Cancelled":
-        statusClass = "bg-danger"
-        break
-    }
-
-    const row = `
-            <tr>
-                <td>${booking.id}</td>
-                <td>${booking.client}</td>
-                <td>${booking.worker}</td>
-                <td>${booking.service}</td>
-                <td>${booking.date}</td>
-                <td>LKR ${booking.amount.toLocaleString()}</td>
-                <td><span class="badge ${statusClass}">${booking.status}</span></td>
-                <td>
-                    <button class="btn btn-sm btn-primary" onclick="viewBooking('${booking.id}')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                    <button class="btn btn-sm btn-warning" onclick="editBooking('${booking.id}')">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                </td>
-            </tr>
-        `
-    tbody.append(row)
-  })
-}
 
 function loadReports() {
   // Load reports data - this would typically fetch from API
@@ -477,6 +478,12 @@ function refreshDashboard() {
     Swal.fire("Success!", "Dashboard refreshed successfully", "success")
   }, 2000)
 }
+
+
+
+
+
+
 
 function addNewUser() {
   Swal.fire({
