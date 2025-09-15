@@ -364,7 +364,7 @@ $(document).ready(() => {
       const workerId = $(this).data("worker-id")
       if (workerId) {
         // Navigate to ad-preview page with the worker/ad ID
-        window.location.href = `../pages/ad-preview.html?adId=${workerId}`
+        window.location.href = `ad-preview.html?adId=${workerId}`
       }
     })
   }
@@ -416,7 +416,7 @@ $(document).ready(() => {
 
       const workerCard = $(`
                 <div class="${gridClass} mb-4">
-                    <div class="worker-card clickable-card" data-worker-id="${worker.id}" style="cursor: pointer;">
+                    <div class="worker-card clickable-card" data-worker-id="${worker.id}"  style="cursor: pointer;">
                         <div class="d-flex align-items-start mb-3">
                             <img src="${avatarUrl}" alt="Worker Profile" class="worker-avatar me-3" 
                                  onerror="this.src='../assets/images/workerDefualtPP.png'">

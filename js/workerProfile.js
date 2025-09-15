@@ -593,12 +593,35 @@ $(document).ready(() => {
 
   // Add keyboard shortcuts
   $(document).on("keydown", (e) => {
-    // Escape key to close offcanvas
     if (e.key === "Escape") {
       $(".offcanvas.show").each(function () {
         const instance = bootstrap.Offcanvas.getInstance(this)
         if (instance) instance.hide()
       })
     }
+  })
+
+  // Preview Profile Button Click Handler
+  $("#previewProfileBtn").on("click", function (e) {
+    e.preventDefault()
+    
+    if (!workerId) {
+      showErrorMessage("Worker ID not found. Please refresh the page and try again.")
+      return
+    }
+    
+    // Add loading state to the button
+    const $btn = $(this)
+    const originalHtml = $btn.html()
+    $btn.html('<i class="fas fa-spinner fa-spin me-2"></i>Loading Preview...')
+      .prop('disabled', true)
+    
+    // Navigate to preview page with worker ID parameter
+    const previewUrl = `/pages/worker-profile-preview.html?workerId=${workerId}`
+    
+    // Small delay for visual feedback
+    setTimeout(() => {
+      window.location.href = previewUrl
+    }, 500)
   })
 })

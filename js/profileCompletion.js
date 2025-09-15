@@ -1119,7 +1119,6 @@ $(document).ready(() => {
           title: "Profile Saved!",
           text: "Your profile has been completed successfully.",
         }).then(() => {
-          $.cookie("profile_complete", "true", { path: "/" })
           window.location.href = "../pages/worker-dashboard.html"
         })
       },

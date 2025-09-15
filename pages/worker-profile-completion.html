@@ -1,248 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SkillWorker | Profile Completion</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css"
-    rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/worker-profile-completion.css">
-</head>
-
-<body class="bg-light">
-
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <a class="navbar-brand fw-bold text-white" href="#">Skill<span class="text-warning">W</span>orker.</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="../pages/worker-dashboard.html">Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" href="../pages/ads-overview.html">Ads</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
-      </ul>
-
-      <a href="#" class="me-3 text-white fs-5"><i class="fas fa-envelope"></i></a>
-      <a href="#" class="me-3 text-white fs-5"><i class="fas fa-bell"></i></a>
-      <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
-
-
-      <div class="dropdown">
-        <button class="profile-btn" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="/assets/images/workerDefualtPP.png" alt="Profile">
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-          <li><a class="dropdown-item" href="#">Account Settings</a></li>
-          <li><a class="dropdown-item" href="#">Profile</a></li>
-          <li><a class="dropdown-item" href="/pages/login-page.html"">Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <main class=" container mt-5">
-              <div class="card shadow-sm">
-                <div class="card-body">
-                  <h3 class="card-title mb-1">Complete Your Profile</h3>
-                  <p class="text-muted mb-3">Please fill in all the required fields to complete your profile.</p>
-
-                  <div class="step-indicator mb-4">
-                    <div class="step-item completed" data-step="1">
-                      <span class="badge rounded-pill bg-secondary">1</span>
-                      <div class="text-black">Personal Info</div>
-                    </div>
-                    <div class="step-item" data-step="2">
-                      <span class="badge rounded-pill bg-secondary">2</span>
-                      <div class="text-black">Skills & Categories</div>
-                    </div>
-                    <div class="step-item" data-step="3">
-                      <span class="badge rounded-pill bg-secondary">3</span>
-                      <div class="text-black">Service Areas</div>
-                    </div>
-                    <div class="step-item" data-step="4">
-                      <span class="badge rounded-pill bg-secondary">4</span>
-                      <div class="text-black">Profile Picture</div>
-                    </div>
-                  </div>
-
-                  <div class="progress mb-4">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
-                      style="width: 25%;" id="wizardProgress"></div>
-                  </div>
-
-                  <form id="profileWizard">
-                    <div class="step active" data-step="1">
-                      <div class="d-flex gap-3">
-                        <div class="mb-3">
-                          <label for="phone1" class="form-label">Mobile</label>
-                          <input type="text" class="form-control " id="phone1" required>
-                        </div>
-                        <div class="mb-3">
-                          <label for="phone2" class="form-label">Work / Home </label>
-                          <input type="text" class="form-control" id="phone2">
-                        </div>
-                      </div>
-                      <div class="mb-3">
-                        <label for="experience" class="form-label">Experience Years *</label>
-                        <input type="text" class="form-control" id="experience" required>
-                      </div>
-                      <div class="mb-3">
-                        <label for="about" class="form-label">About</label>
-                        <textarea class="form-control" id="about" rows="8"></textarea>
-                      </div>
-                      <a href="/pages/worker-dashboard.html" type="button" class="btn btn-secondary">Back</a>
-                      <button type="button" class="btn btn-dark nextBtn">Next</button>
-
-                    </div>
-
-                    <div class="step" data-step="2">
-                      <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="mb-0">Categories & Skills</h5>
-                        <div class="demo-controls">
-                          <small class="text-muted me-2">Demo:</small>
-                          <button type="button" class="btn btn-sm btn-outline-warning" id="togglePremiumDemo">
-                            <i class="fas fa-crown me-1"></i>Toggle Premium
-                          </button>
-                        </div>
-                      </div>
-
-                      <div class="alert alert-info" id="planStatus">
-                        <i class="fas fa-info-circle me-2"></i>
-                        <span id="planStatusText">Loading plan status...</span>
-                      </div>
-
-                      <div id="categoryContainer">
-                      </div>
-                      <button type="button" class="btn btn-sm btn-outline-dark mb-3" id="addCategoryBtn"><i
-                          class="fa-solid fa-plus me-1"></i>Add Category</button>
-                      <div class="mb-3">
-                        <label for="skills" class="form-label">Additional Skills (comma separated)</label>
-                        <input type="text" class="form-control" id="skills"
-                          placeholder="e.g. Advanced Plumbing, Custom Carpentry">
-                      </div>
-                      <button type="button" class="btn btn-secondary prevBtn">Previous</button>
-                      <button type="button" class="btn btn-dark nextBtn">Next</button>
-                    </div>
-
-                    <div class="step" data-step="3">
-                      <div id="locationContainer">
-                      </div>
-                      <button type="button" class="btn btn-sm btn-outline-dark mb-3" id="addLocationBtn"><i
-                          class="fa-solid fa-plus me-1"></i>Add Location</button>
-                      <br>
-                      <button type="button" class="btn btn-secondary prevBtn">Previous</button>
-                      <button type="button" class="btn btn-dark nextBtn">Next</button>
-                    </div>
-
-
-                    <div class="step" data-step="4">
-                      <div class="mb-3">
-                        <label for="profilePicture" class="form-label fw-bold">Upload Professional Profile
-                          Picture</label>
-                        <div class="d-flex align-items-center gap-3">
-                          <img id="profilePreview" src="/assets/images/workerDefualtPP.png" alt="Profile Preview"
-                            style="width:120px; height:120px; border-radius:50%; border:2px solid #ddd; object-fit:cover;">
-
-                          <div>
-                            <input type="file" class="form-control mb-2" id="profilePicture" accept="image/*">
-                            <button type="button" class="btn btn-dark" id="uploadBtn">
-                              <i class="bi bi-cloud-upload"></i> Upload
-                            </button>
-                          </div>
-                        </div>
-                        <small class="text-muted d-block mt-2">
-                          Recommended: Clear headshot, square image, max 2MB.
-                        </small>
-                      </div>
-
-                      <button type="button" class="btn btn-secondary prevBtn">Previous</button>
-                      <button type="submit" id="finishBtn" class="btn btn-dark">Finish</button>
-                    </div>
-                </div>
-                </form>
-              </div>
-      </div>
-      </main>
-
-      <footer class="bg-dark text-light pt-5 pb-3">
-        <div class="container">
-          <div class="row gy-4">
-            <div class="col-md-4">
-              <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
-              <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted
-                platform for finding talent and opportunities.</p>
-              <div class="footer-social mb-2">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="footer-links-title">Quick Links</div>
-              <ul class="footer-links-list list-unstyled">
-                <li><a href="/pages/worker-profile.html" class="text-light text-decoration-none">Profile</a></li>
-                <li><a href="/pages/worker-dashboard.html" class="text-light text-decoration-none">Dashboard</a>
-                </li>
-                <li><a href="/pages/workerMessages.html" class="text-light text-decoration-none">Messages</a>
-                </li>
-                <li><a href="/pages/workerSettings.html" class="text-light text-decoration-none">Settings</a>
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-2">
-              <div class="footer-links-title">Support</div>
-              <ul class="footer-links-list list-unstyled">
-                <li><a href="/pages/workerSupport.html" class="text-light text-decoration-none">Support
-                    Center</a></li>
-                <li><a href="/pages/workerFAQ.html" class="text-light text-decoration-none">FAQ</a></li>
-                <li><a href="/pages/workerContact.html" class="text-light text-decoration-none">Contact Us</a>
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-3">
-              <div class="footer-links-title">Contact</div>
-              <p class="small mb-1"><span class="footer-contact-icon"><i
-                    class="fas fa-envelope"></i></span>support@skillworker.com</p>
-              <p class="small mb-1"><span class="footer-contact-icon"><i class="fas fa-phone"></i></span>+1 (234)
-                567-890</p>
-              <p class="small"><span class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></span>123
-                Main St, City, Country</p>
-            </div>
-          </div>
-          <hr class="border-light my-4">
-          <div class="d-flex justify-content-between align-items-center flex-wrap">
-            <span class="small">&copy; 2025 SkillWorker. All Rights Reserved.</span>
-            <div>
-              <a href="#" class="text-light small me-3 text-decoration-none">Terms of Service</a>
-              <a href="#" class="text-light small text-decoration-none">Privacy Policy</a>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-      <script src="../js/util/tokenRefreshHandler.js"></script>
-      <script src="../js/profileCompletion.js"></script>
-
-
-</body>
-
-</html> -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -251,12 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SkillWorker | Complete Your Profile</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css"
+    rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-  <!-- Added Google Fonts for modern typography -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/worker-profile-completion.css">
+  <link rel="stylesheet" href="/css/style.css">
+
+
   <style>
     /* Modern SkillWorker branding and enhanced UX styling */
     :root {
@@ -268,7 +28,7 @@
       --warning-color: #f59e0b;
       --danger-color: #ef4444;
       --light-bg: #f8fafc;
-      --card-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       --border-radius: 12px;
     }
 
@@ -276,7 +36,12 @@
       font-family: 'Open Sans', sans-serif;
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       font-family: 'Montserrat', sans-serif;
       font-weight: 600;
     }
@@ -299,12 +64,12 @@
     }
 
     .navbar .profile-btn img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid #fff;
-}
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
 
     .profile-completion-container {
       max-width: 900px;
@@ -425,8 +190,15 @@
     }
 
     @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
     }
 
     .progress {
@@ -452,8 +224,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .form-label {
@@ -462,7 +241,8 @@
       margin-bottom: 0.5rem;
     }
 
-    .form-control, .form-select {
+    .form-control,
+    .form-select {
       border: 2px solid #e2e8f0;
       border-radius: 8px;
       padding: 0.75rem 1rem;
@@ -470,7 +250,8 @@
       transition: all 0.3s ease;
     }
 
-    .form-control:focus, .form-select:focus {
+    .form-control:focus,
+    .form-select:focus {
       border-color: var(--primary-color);
       box-shadow: 0 0 0 0.2rem rgba(21, 94, 117, 0.25);
     }
@@ -503,7 +284,8 @@
       transform: translateY(-2px);
     }
 
-    .category-item, .location-item {
+    .category-item,
+    .location-item {
       background: #f8fafc;
       border: 2px solid #e2e8f0;
       border-radius: var(--border-radius);
@@ -512,7 +294,8 @@
       transition: all 0.3s ease;
     }
 
-    .category-item:hover, .location-item:hover {
+    .category-item:hover,
+    .location-item:hover {
       border-color: var(--primary-color);
       box-shadow: 0 5px 15px rgba(21, 94, 117, 0.1);
     }
@@ -572,7 +355,8 @@
       margin-top: 0.25rem;
     }
 
-    .invalid-feedback, .valid-feedback {
+    .invalid-feedback,
+    .valid-feedback {
       font-size: 0.875rem;
       margin-top: 0.25rem;
     }
@@ -582,12 +366,12 @@
         flex-wrap: wrap;
         gap: 1rem;
       }
-      
+
       .step-item {
         flex: 1;
         min-width: calc(50% - 0.5rem);
       }
-      
+
       .step-item .step-text {
         font-size: 0.8rem;
       }
@@ -596,36 +380,34 @@
 </head>
 
 <body>
-  <!-- Enhanced navbar with modern styling -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#">Skill<span style="color: #10b981;">W</span>orker</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+  <nav class="navbar navbar-expand-lg navbar-dark px-3">
+    <a class="navbar-brand fw-bold text-white" href="#">Skill<span>W</span>orker.</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item"><a class="nav-link active" href="../pages/worker-dashboard.html">Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link" href="../pages/ads-overview.html">Ads</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link active" href="../pages/worker-dashboard.html">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pages/ads-overview.html">My Ads</a></li>
+        <li class="nav-item"><a class="nav-link" href="">Contacts</a></li>
+      </ul>
+
+
+      <a href="#" class="me-3 text-white fs-5 notification-icon"><i class="fas fa-envelope"></i></a>
+      <a href="#" class="me-3 text-white fs-5 notification-icon"><i class="fas fa-bell"></i></a>
+      <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
+
+      <div class="dropdown">
+        <button class="profile-btn" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="/assets/images/workerDefualtPP.png" alt="Profile">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+          <li><a class="dropdown-item" href="#">Account Settings</a></li>
+          <li><a class="dropdown-item" href="/pages/worker-profile.html">Profile</a></li>
+          <li><a class="dropdown-item" id="logoutBtn" href="/pages/login-page.html">Logout</a></li>
         </ul>
-
-        <a href="#" class="me-3 text-white fs-5"><i class="fas fa-envelope"></i></a>
-        <a href="#" class="me-3 text-white fs-5"><i class="fas fa-bell"></i></a>
-        <a href="#" class="me-3 text-white fs-5"><i class="fa-regular fa-circle-question"></i></a>
-
-        <div class="dropdown">
-          <button class="profile-btn" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="/assets/images/workerDefualtPP.png" alt="Profile">
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-            <li><a class="dropdown-item" href="#">Account Settings</a></li>
-            <li><a class="dropdown-item" href="#">Profile</a></li>
-            <li><a class="dropdown-item" href="/pages/login-page.html">Logout</a></li>
-          </ul>
-        </div>
       </div>
     </div>
   </nav>
@@ -662,7 +444,8 @@
 
         <!-- Enhanced progress bar -->
         <div class="progress">
-          <div class="progress-bar progress-bar progress-bar" role="progressbar" style="width: 25%;" id="wizardProgress"></div>
+          <div class="progress-bar progress-bar progress-bar" role="progressbar" style="width: 25%;"
+            id="wizardProgress"></div>
         </div>
 
         <form id="profileWizard">
@@ -685,7 +468,8 @@
             </div>
             <div class="mb-4">
               <label for="about" class="form-label">About Yourself</label>
-              <textarea class="form-control" id="about" rows="6" placeholder="Tell clients about your expertise, experience, and what makes you unique..."></textarea>
+              <textarea class="form-control" id="about" rows="6"
+                placeholder="Tell clients about your expertise, experience, and what makes you unique..."></textarea>
             </div>
             <div class="d-flex justify-content-between">
               <a href="/pages/worker-dashboard.html" class="btn btn-secondary">
@@ -743,7 +527,8 @@
             <h5 class="mb-4 text-primary">Professional Profile Picture</h5>
             <div class="upload-section">
               <div class="d-flex align-items-center justify-content-center gap-4 flex-wrap">
-                <img id="profilePreview" src="/assets/images/workerDefualtPP.png" alt="Profile Preview" class="profile-preview">
+                <img id="profilePreview" src="/assets/images/workerDefualtPP.png" alt="Profile Preview"
+                  class="profile-preview">
                 <div class="text-center">
                   <h6 class="mb-3">Upload Your Professional Photo</h6>
                   <input type="file" class="form-control mb-3" id="profilePicture" accept="image/*">
@@ -775,7 +560,7 @@
     <div class="container">
       <div class="row gy-4">
         <div class="col-md-4">
-          <div class="footer-brand mb-3">Skill<span style="color: #ffc107;">W</span>orker.</div>
+          <div class="footer-brand mb-3">Skill<span style="color: #7dcbfd ;">W</span>orker.</div>
           <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted
             platform for finding talent and opportunities.</p>
           <div class="footer-social mb-2">

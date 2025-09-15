@@ -19,12 +19,44 @@
   --surface: #ffffff;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  
 }
 
 body {
   background-color: var(--bg-light);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+
+.bg-success {
+  background-color: #d1fae5 !important;
+  color: #065f46;
+}
+
+.bg-danger {
+  background-color: #fee2e2 !important;
+  color: #b91c1c;
+}
+
+.bg-warning {
+  background-color: #fef3c7 !important;
+  color: #78350f;
+}
+
+.bg-primary {
+  background-color: #dbeafe !important;
+  color: #1e40af;
+}
+
+.bg-info {
+  background-color: #e9dbff !important;
+  color: #7634ca;
+}
+
+.bg-secondary {
+  background-color: #f5f6f6 !important;
+  color: #72737b;
+}
+
 
 #wrapper {
   min-height: 100vh;
@@ -148,10 +180,11 @@ body {
 }
 
 .badge {
-  padding: 6px 12px;
+  padding: 4px 12px;
   border-radius: 20px;
   font-weight: 500;
 }
+
 
 .text-xs {
   font-size: 0.75rem;

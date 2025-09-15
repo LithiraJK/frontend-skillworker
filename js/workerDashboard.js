@@ -12,8 +12,11 @@ $(document).ready(() => {
   }
   
   console.log('Worker dashboard initialized successfully')
+
   
   showLoadingAnimation()
+
+  profileComplete()
 
   initializeDashboard()
 
@@ -115,36 +118,7 @@ $(document).ready(() => {
     })
   })
 
-  const isProfileComplete = $.cookie("profile_complete") === "true"
-  console.log("Profile complete cookie value:", $.cookie("profile_complete"))
-  console.log("Is profile complete:", isProfileComplete)
 
-  if (isProfileComplete) {
-    $('.card-body:contains("Complete Profile")').each(function () {
-      console.log("Found card body with Complete Profile text")
-
-      $(this)
-        .find('a:contains("Complete Profile")')
-        .prop("disabled", true)
-        .html('<i class="fas fa-check me-2"></i>Profile Completed')
-        .off("click")
-        .css("pointer-events", "none")
-
-      $(this)
-        .closest(".card")
-        .find(".card-header h5")
-        .html('<i class="fas fa-user-check me-2"></i>Professional Profile')
-
-      const progressBar = $(this).find(".progress-bar")
-      progressBar
-        .animate({ width: "100%" }, 1000)
-        .attr("aria-valuenow", "100")
-        .text("100%")
-        .removeClass("progress-bar-striped progress-bar-animated")
-
-      $(this).find(".fas.fa-times.text-danger").removeClass("fa-times text-danger").addClass("fa-check text-success")
-    })
-  }
 
   $('.card-body button:contains("Complete Profile")').click(() => {
     Swal.fire({
@@ -234,6 +208,10 @@ function initializeDashboard() {
     },
   })
 
+
+   
+
+
   console.log("User Info:", userData)
 
   if (userData.firstName) {
@@ -264,6 +242,98 @@ function initializeDashboard() {
   $('.nav-link[data-section="dashboard-section"]').addClass("active")
   $("#dashboard-section").show()
 }
+
+
+function profileComplete(){
+  const workerId = $.cookie("userId")
+  const token = $.cookie("token")
+
+  if (!workerId || !token) {
+    console.error("Missing workerId or token for profile completion check")
+    return
+  }
+
+  $.ajax({
+    url: `http://localhost:8080/api/v1/worker/getworker/${workerId}`,
+    method: "GET",
+    dataType: "json",
+    headers: { Authorization: `Bearer ${token}` },
+    success: (response) => {
+      if (response.status === 200 && response.data) {
+        const workerData = {
+          profilePictureUrl: response.data.profilePictureUrl,
+          isProfileComplete: response.data.profileComplete,
+          averageRating: response.data.averageRating,
+          totalReviews: response.data.totalReviews,
+        }        
+
+        const isProfileComplete = workerData.isProfileComplete
+        console.log("Is profile complete:", isProfileComplete)
+
+
+        $('#profileImage').attr('src', workerData.profilePictureUrl)        
+
+        // Update average rating display
+        if (workerData.averageRating !== null && workerData.averageRating !== undefined) {
+          const formattedRating = parseFloat(workerData.averageRating).toFixed(1)
+          $('#averageRating').text(formattedRating)
+          $('.average-rating').text(formattedRating)
+          console.log(`Average Rating: ${formattedRating}`)
+        } else {
+          $('#averageRating').text('No ratings yet')
+          $('.average-rating').text('No ratings yet')
+          console.log('No average rating available')
+        }
+
+        // Update total reviews count
+        if (workerData.totalReviews !== null && workerData.totalReviews !== undefined) {
+          $('#totalReviews').text(workerData.totalReviews)
+          $('.total-reviews').text(workerData.totalReviews)
+        }
+
+        if (isProfileComplete) {
+          updateProfileCompletionUI()
+        }
+
+      } else {
+        console.warn("No worker data found!")
+        showModernNotification("No worker data found", "warning")
+      }
+    },
+    error: (xhr, status, error) => {
+      console.error("Error fetching worker data:", error)
+      showModernNotification("Error loading worker data", "error")
+    },
+  })
+}
+
+function updateProfileCompletionUI() {
+  $('.card-body:contains("Complete Profile")').each(function () {
+    console.log("Found card body with Complete Profile text")
+
+    $(this)
+      .find('a:contains("Complete Profile")')
+      .prop("disabled", true)
+      .html('<i class="fas fa-check me-2"></i>Profile Completed')
+      .off("click")
+      .css("pointer-events", "none")
+
+    $(this)
+      .closest(".card")
+      .find(".card-header h5")
+      .html('<i class="fas fa-user-check me-2"></i>Professional Profile')
+
+    const progressBar = $(this).find(".progress-bar")
+    progressBar
+      .animate({ width: "100%" }, 1000)
+      .attr("aria-valuenow", "100")
+      .text("100%")
+      .removeClass("progress-bar-striped progress-bar-animated")
+
+    $(this).find(".fas.fa-times.text-danger").removeClass("fa-times text-danger").addClass("fa-check text-success")
+  })
+}
+
 
 function showModernNotification(message, type = "info") {
   const Toast = Swal.mixin({

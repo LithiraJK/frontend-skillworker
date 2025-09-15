@@ -243,7 +243,7 @@ function loadUsers() {
   tbody.html('<tr><td colspan="6" class="text-center">Loading users...</td></tr>')
 
   $.ajax({
-    url: 'http://localhost:8080/api/v1/admin/users',
+    url: 'http://localhost:8080/api/v1/user/getall',
     type: 'GET',
     headers: createAuthHeaders(),
     success: function(response) {
@@ -253,20 +253,25 @@ function loadUsers() {
       
       if (response.data && response.data.length > 0) {
         response.data.forEach((user) => {
-          const statusClass = user.status === "ACTIVE" ? "bg-success" : "bg-danger"
+          if (user.role && user.role.toLowerCase() === 'admin') {
+            return
+          }
+
+          const statusClass = user.active ? "bg-success" : "bg-danger"
+          const status = user.active ? "Active" : "Deactive"
+          const action = user.active ? "Deactivate" : "Activate"
+          const actionClass = user.active ? "bg-danger" : "bg-success"
+
           const row = `
             <tr>
                 <td>${user.userId || user.id}</td>
                 <td>${user.firstName} ${user.lastName}</td>
                 <td>${user.email}</td>
+                <td><span class="badge ${statusClass}">${status}</span></td>
                 <td>${user.role || 'Client'}</td>
-                <td><span class="badge ${statusClass}">${user.status || 'Active'}</span></td>
                 <td>
-                    <button class="btn btn-sm btn-primary" onclick="editUser(${user.userId || user.id})">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.userId || user.id})">
-                        <i class="fas fa-trash"></i>
+                    <button class="btn btn-sm ${actionClass}" onclick="changeStatusUser(${user.userId || user.id})">
+                        ${action}
                     </button>
                 </td>
             </tr>
@@ -590,22 +595,61 @@ function generateReport() {
   })
 }
 
-function editUser(userId) {
-  Swal.fire("Edit User", `Editing user with ID: ${userId}`, "info")
-}
 
-function deleteUser(userId) {
+function changeStatusUser(userId) {
   Swal.fire({
-    title: "Delete User",
-    text: "Are you sure you want to delete this user?",
+    title: "Change Status",
+    text: "Are you sure you want to change status this user?",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#d33",
-    confirmButtonText: "Yes, delete!",
+    confirmButtonColor: "rgba(255, 191, 14, 1)",
+    confirmButtonText: "Yes, Change!",
   }).then((result) => {
     if (result.isConfirmed) {
-      Swal.fire("Deleted!", "User has been deleted.", "success")
-      loadUsers()
+      // Show loading state
+      Swal.fire({
+        title: "Changing Status",
+        text: "Please wait...",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading()
+        },
+      })
+
+      $.ajax({
+        url: `http://localhost:8080/api/v1/user/status/${userId}`,
+        type: 'PATCH',
+        headers: createAuthHeaders(),
+        success: function(response) {
+          console.log("User status changed successfully:", response)
+          Swal.fire("Changed", "User Status Changed Successfully!", "success")
+          loadUsers()
+        },
+        error: function(error) {
+          console.error("Error changing user status:", error)
+          
+          let errorMessage = "Failed to change user status"
+          if (error.status === 401) {
+            errorMessage = "Session expired. Please login again."
+          } else if (error.status === 403) {
+            errorMessage = "You don't have permission to perform this action"
+          } else if (error.responseJSON && error.responseJSON.message) {
+            errorMessage = error.responseJSON.message
+          }
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: errorMessage
+          })
+
+          if (error.status === 401) {
+            setTimeout(() => {
+              window.location.href = '../pages/login-page.html'
+            }, 2000)
+          }
+        }
+      })
     }
   })
 }

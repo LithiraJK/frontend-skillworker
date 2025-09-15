@@ -294,7 +294,7 @@ $(document).ready(() => {
         showError(errorMessage)
       },
       complete: () => {
-        $("#saveAdBtn").html('<i class="fas fa-save me-1"></i>Create Ad')
+        $("#saveAdBtn").html('<i class="fas fa-save me-1"></i>Create Service')
         $("#saveAdBtn").prop("disabled", false)
       },
     })
@@ -378,7 +378,7 @@ $(document).ready(() => {
       },
       complete: () => {
         // Reset button state
-        $("#updateAdBtn").html('<i class="fas fa-save me-1"></i>Update Ad')
+        $("#updateAdBtn").html('<i class="fas fa-save me-1"></i>Update Service')
         $("#updateAdBtn").prop("disabled", false)
       },
     })
@@ -409,6 +409,14 @@ $(document).ready(() => {
           $("#editAdDescription").val(ad.description)
           $("#editStartingPrice").val(ad.startingPrice)
           $("#editStatus").val(ad.status)
+          
+          // Set category after categories are loaded
+          if (ad.categoryId) {
+            $("#editCategoryId").val(ad.categoryId)
+            if ($("#editCategoryId").hasClass("selectpicker")) {
+              $("#editCategoryId").selectpicker("refresh")
+            }
+          }
 
           $("#editAdForm .form-control, #editAdForm .form-select").removeClass("is-valid is-invalid")
 
@@ -630,14 +638,14 @@ $(document).ready(() => {
   function resetForm() {
     $("#createAdForm")[0].reset()
     $(".form-control, .form-select").removeClass("is-valid is-invalid")
-    $("#saveAdBtn").html('<i class="fas fa-save me-1"></i>Create Ad')
+    $("#saveAdBtn").html('<i class="fas fa-save me-1"></i>Create Service')
     $("#saveAdBtn").prop("disabled", false)
   }
 
   function resetEditForm() {
     $("#editAdForm")[0].reset()
     $("#editAdForm .form-control, #editAdForm .form-select").removeClass("is-valid is-invalid")
-    $("#updateAdBtn").html('<i class="fas fa-save me-1"></i>Update Ad')
+    $("#updateAdBtn").html('<i class="fas fa-save me-1"></i>Update Service')
     $("#updateAdBtn").prop("disabled", false)
   }
 
