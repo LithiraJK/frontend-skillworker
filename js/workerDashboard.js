@@ -1,6 +1,5 @@
 
 $(document).ready(() => {
-  // Check if required libraries are loaded
   if (typeof $ === 'undefined') {
     console.error('jQuery is not loaded!')
     return
