@@ -30,6 +30,15 @@ $(document).ready(() => {
     console.log("Table found successfully")
   }
 
+
+  let workerSubscriptionPlan = "FREE" // Default plan
+  let currentAdCount = 0
+  let adLimits = {
+    FREE: 1,
+    PRO: 3,
+    PREMIUM: -1 
+  }
+
   setTimeout(() => {
     $("#adsTable").addClass("fade-in")
   }, 100)
@@ -222,6 +231,13 @@ $(document).ready(() => {
   function createAd() {
     if (!token) {
       showError("Authentication token not found. Please login again.")
+      return
+    }
+
+    // Check ad creation limit before proceeding
+    const limitCheck = checkAdCreationLimit()
+    if (!limitCheck.canCreate) {
+      showUpgradePrompt(limitCheck.message)
       return
     }
 
@@ -477,6 +493,7 @@ $(document).ready(() => {
         $("#adsTable tbody").empty()
 
         if (response && Array.isArray(response.data) && response.data.length > 0) {
+          currentAdCount = response.data.length // Update current ad count
           response.data.forEach((ad, index) => {
             let statusBadge = ""
             switch (ad.status) {
@@ -532,6 +549,7 @@ $(document).ready(() => {
             $("#adsTable tbody").append(row)
           })
         } else {
+          currentAdCount = 0 // No ads found
           $("#adsTable tbody").html(`
                         <tr>
                             <td colspan="5" class="text-center py-5">
@@ -540,13 +558,14 @@ $(document).ready(() => {
                                     <h5 class="text-muted">No ads found</h5>
                                     <p class="text-muted">Start growing your business by creating your first ad!</p>
                                 </div>
-                                <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#createAdOffcanvas">
+                                <button class="btn btn-primary" onclick="$('#createAdBtn').click()">
                                     <i class="fas fa-plus me-2"></i>Create Your First Ad
                                 </button>
                             </td>
                         </tr>
                     `)
         }
+        updateSubscriptionDisplay() // Update the subscription display after loading ads
       },
       error: (xhr, status, error) => {
         console.error("Failed to retrieve ads:", {
@@ -572,6 +591,222 @@ $(document).ready(() => {
 
         showError(errorMessage)
       },
+    })
+  }
+
+  function getWorkerSubscription() {
+    if (!token) {
+      console.warn("Token not available for subscription check")
+      return
+    }
+
+    $.ajax({
+      url: `http://localhost:8080/api/v1/worker/subscription/${workerId}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      success: (response) => {
+        console.log("Subscription data:", response)
+        if (response && response.data) {
+          workerSubscriptionPlan = response.data.planType || "FREE"
+        }
+        updateSubscriptionDisplay()
+      },
+      error: (xhr, status, error) => {
+        console.warn("Failed to fetch subscription data:", error)
+        // Default to FREE plan if subscription data is not available
+        workerSubscriptionPlan = "FREE"
+        updateSubscriptionDisplay()
+      },
+    })
+  }
+
+  function checkAdCreationLimit() {
+    const limit = adLimits[workerSubscriptionPlan]
+    
+    if (limit === -1) {
+      return { canCreate: true, message: "" } // Unlimited for premium
+    }
+    
+    if (currentAdCount >= limit) {
+      let upgradeMessage = ""
+      if (workerSubscriptionPlan === "FREE") {
+        upgradeMessage = "Upgrade to Pro plan to create up to 3 ads, or Premium for unlimited ads!"
+      } else if (workerSubscriptionPlan === "PRO") {
+        upgradeMessage = "Upgrade to Premium plan for unlimited ad creation!"
+      }
+      
+      return {
+        canCreate: false,
+        message: `You've reached your ad limit (${currentAdCount}/${limit}). ${upgradeMessage}`,
+        showUpgrade: true
+      }
+    }
+    
+    return { 
+      canCreate: true, 
+      message: `You can create ${limit - currentAdCount} more ad${limit - currentAdCount > 1 ? 's' : ''}.` 
+    }
+  }
+
+  function updateSubscriptionDisplay() {
+    const limit = adLimits[workerSubscriptionPlan]
+    const limitText = limit === -1 ? "∞" : limit
+    const percentage = limit === -1 ? 0 : (currentAdCount / limit) * 100
+    
+    // Update the plan card
+    $("#currentPlan").text(workerSubscriptionPlan + " Plan")
+    $("#adsUsed").text(currentAdCount)
+    $("#adsLimit").text(limitText)
+    $("#usageProgress").css("width", percentage + "%")
+    
+    // Update progress bar color based on usage
+    const progressBar = $("#usageProgress")
+    progressBar.removeClass("bg-success bg-warning bg-danger")
+    if (percentage >= 90) {
+      progressBar.addClass("bg-dark")
+    } else if (percentage >= 70) {
+      progressBar.addClass("bg-warning")
+    } else {
+      progressBar.addClass("bg-success")
+    }
+    
+    // Show/hide upgrade button
+    if (workerSubscriptionPlan !== "PREMIUM") {
+      $("#upgradeBtn").removeClass("d-none").on("click", function() {
+        showUpgradePrompt(`Upgrade from ${workerSubscriptionPlan} plan to get more features!`)
+      })
+    } else {
+      $("#upgradeBtn").addClass("d-none")
+    }
+    
+    // Update the subscription info in the header (keep the old one for backward compatibility)
+    if ($("#subscriptionInfo").length === 0) {
+      $(".ads-overview-container").append(`
+        <div id="subscriptionInfo" class="mt-2">
+          <small class="text-muted">
+            <i class="fas fa-crown me-1"></i>
+            <span id="planName">${workerSubscriptionPlan}</span> Plan | 
+            <span id="adCount">${currentAdCount}</span>/<span id="adLimit">${limitText}</span> ads
+          </small>
+        </div>
+      `)
+    } else {
+      $("#planName").text(workerSubscriptionPlan)
+      $("#adCount").text(currentAdCount)
+      $("#adLimit").text(limitText)
+    }
+    
+    // Update the create button state
+    const limitCheck = checkAdCreationLimit()
+    const createBtn = $("#createAdBtn")
+    
+    if (!limitCheck.canCreate) {
+      createBtn.addClass("disabled").attr("title", "Ad limit reached")
+      createBtn.off("click").on("click", function(e) {
+        e.preventDefault()
+        showUpgradePrompt(limitCheck.message)
+      })
+    } else {
+      createBtn.removeClass("disabled").removeAttr("title")
+      createBtn.off("click")
+    }
+  }
+
+  function showUpgradePrompt(message) {
+    let upgradeOptions = {}
+    
+    if (workerSubscriptionPlan === "FREE") {
+      upgradeOptions = {
+        title: "🚀 Upgrade Your Plan",
+        html: `
+          <div class="text-start">
+            <p>${message}</p>
+            <div class="row mt-4 p-3">
+              <div class="col-6">
+                <div class="card border-dark">
+                  <div class="card-header bg-secondary text-white text-center">
+                    <h6 class="mb-0 text-dark">PRO Plan</h6>
+                  </div>
+                  <div class="card-body text-center">
+                    <h4 class="text-dark">$9.99<small class="text-muted">/month</small></h4>
+                    <ul class="list-unstyled mt-3">
+                      <li><i class="fas fa-check text-success"></i> Up to 3 ads</li>
+                      <li><i class="fas fa-check text-success"></i> 24/7 support</li>
+                      <li><i class="fas fa-check text-success"></i> Verified Batch</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="card border-warning">
+                  <div class="card-header bg-warning text-dark text-center">
+                    <h6 class="mb-0">PREMIUM Plan</h6>
+                  </div>
+                  <div class="card-body text-center">
+                    <h4 class="text-warning">$19.99<small class="text-muted">/month</small></h4>
+                    <ul class="list-unstyled mt-3">
+                      <li><i class="fas fa-check text-success"></i> Unlimited ads</li>
+                      <li><i class="fas fa-check text-success"></i> 24/7 support</li>
+                      <li><i class="fas fa-check text-success"></i> Verified Batch</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `,
+        showCancelButton: true,
+        confirmButtonColor: "#023047",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Choose Plan",
+        cancelButtonText: "Maybe Later",
+      }
+    } else if (workerSubscriptionPlan === "PRO") {
+      upgradeOptions = {
+        title: "⭐ Upgrade to Premium",
+        html: `
+          <div class="text-center">
+            <p>${message}</p>
+            <div class="card border-warning mt-3">
+              <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">PREMIUM Plan</h5>
+              </div>
+              <div class="card-body">
+                <h3 class="text-warning">$19.99<small class="text-muted">/month</small></h3>
+                <ul class="list-unstyled mt-3">
+                  <li><i class="fas fa-check text-success"></i> Unlimited ad creation</li>
+                  <li><i class="fas fa-check text-success"></i> Featured listings</li>
+                  <li><i class="fas fa-check text-success"></i> 24/7 premium support</li>
+                  <li><i class="fas fa-check text-success"></i> Advanced analytics dashboard</li>
+                  <li><i class="fas fa-check text-success"></i> Priority in search results</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        `,
+        showCancelButton: true,
+        confirmButtonColor: "#023047",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Upgrade to Premium",
+        cancelButtonText: "Maybe Later",
+      }
+    }
+
+    Swal.fire({
+      ...upgradeOptions,
+      showClass: {
+        popup: "animate__animated animate__fadeInUp",
+      },
+      customClass: {
+        popup: 'swal-wide'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Redirect to subscription/pricing page
+        window.location.href = "../pages/subscription.html" // You'll need to create this page
+      }
     })
   }
 
@@ -684,6 +919,7 @@ $(document).ready(() => {
   })
 
   loadCategories()
+  getWorkerSubscription() // Fetch subscription info on page load
 
   // Action functions for table buttons
   window.previewAd = (adId) => {

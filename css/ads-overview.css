@@ -2,6 +2,62 @@ body {
   font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
   background: #f6f7fb;
 }
+
+.bg-success {
+  background-color: #d1fae5 !important;
+  color: #065f46;
+}
+
+.bg-danger {
+  background-color: #fee2e2 !important;
+  color: #b91c1c;
+}
+
+.bg-warning {
+  background-color: #fef3c7 !important;
+  color: #78350f;
+}
+
+.bg-primary {
+  background-color: #dbeafe !important;
+  color: #1e40af;
+}
+
+.bg-info {
+  background-color: #e9dbff !important;
+  color: #7634ca;
+}
+
+.bg-secondary {
+  background-color: #f5f6f6 !important;
+  color: #72737b;
+}
+
+
+/* SweetAlert2 custom styles for upgrade prompts */
+.swal-wide {
+  width: 600px !important;
+}
+
+/* Plan card styles */
+#planCard {
+  transition: all 0.3s ease;
+}
+
+#planCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+.progress {
+  border-radius: 10px;
+  background-color: #e9ecef;
+}
+
+.progress-bar {
+  border-radius: 10px;
+  transition: width 0.6s ease;
+}
 .navbar .profile-btn {
   padding: 0;
   border: none;
