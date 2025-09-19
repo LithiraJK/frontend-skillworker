@@ -1383,3 +1383,41 @@ function addSubscriptionPlan() {
     }
   })
 }
+
+function previewBroadcast() {
+  const subject = $('#broadcastSubject').val()
+  const content = $('#broadcastMessage').val()
+  
+  if (!subject || !content) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Incomplete Message',
+      text: 'Please enter both subject and message content.'
+    })
+    return
+  }
+  
+  Swal.fire({
+    title: 'Email Preview',
+    html: `
+      <div style="text-align: left; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
+        <h4 style="margin-bottom: 10px; color: #333;">Subject: ${subject}</h4>
+        <hr style="margin: 15px 0;">
+        <div style="white-space: pre-wrap;">${content}</div>
+      </div>
+    `,
+    width: '600px',
+    confirmButtonText: 'Send Email',
+    showCancelButton: true,
+    cancelButtonText: 'Edit Message'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Here you would typically send the broadcast email
+      Swal.fire({
+        icon: 'success',
+        title: 'Email Sent!',
+        text: 'Broadcast email has been sent successfully.'
+      })
+    }
+  })
+}

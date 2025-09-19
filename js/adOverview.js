@@ -3,7 +3,6 @@ const Swal = window.Swal
 const bootstrap = window.bootstrap
 
 $(document).ready(() => {
-  // Check if required libraries are loaded
   if (typeof $ === "undefined") {
     console.error("jQuery is not loaded!")
     return
@@ -234,7 +233,6 @@ $(document).ready(() => {
       return
     }
 
-    // Check ad creation limit before proceeding
     const limitCheck = checkAdCreationLimit()
     if (!limitCheck.canCreate) {
       showUpgradePrompt(limitCheck.message)
@@ -364,7 +362,7 @@ $(document).ready(() => {
           if (bsOffcanvas) {
             bsOffcanvas.hide()
           }
-          getAds() // Refresh the table
+          getAds()
         })
       },
       error: (xhr, status, error) => {
@@ -393,7 +391,6 @@ $(document).ready(() => {
         showError(errorMessage)
       },
       complete: () => {
-        // Reset button state
         $("#updateAdBtn").html('<i class="fas fa-save me-1"></i>Update Service')
         $("#updateAdBtn").prop("disabled", false)
       },
@@ -426,7 +423,6 @@ $(document).ready(() => {
           $("#editStartingPrice").val(ad.startingPrice)
           $("#editStatus").val(ad.status)
           
-          // Set category after categories are loaded
           if (ad.categoryId) {
             $("#editCategoryId").val(ad.categoryId)
             if ($("#editCategoryId").hasClass("selectpicker")) {
@@ -436,7 +432,6 @@ $(document).ready(() => {
 
           $("#editAdForm .form-control, #editAdForm .form-select").removeClass("is-valid is-invalid")
 
-          // Show the offcanvas
           const offcanvasElement = document.getElementById("editAdOffcanvas")
           const bsOffcanvas = new bootstrap.Offcanvas(offcanvasElement)
           bsOffcanvas.show()
@@ -493,7 +488,7 @@ $(document).ready(() => {
         $("#adsTable tbody").empty()
 
         if (response && Array.isArray(response.data) && response.data.length > 0) {
-          currentAdCount = response.data.length // Update current ad count
+          currentAdCount = response.data.length
           response.data.forEach((ad, index) => {
             let statusBadge = ""
             switch (ad.status) {
@@ -565,7 +560,7 @@ $(document).ready(() => {
                         </tr>
                     `)
         }
-        updateSubscriptionDisplay() // Update the subscription display after loading ads
+        updateSubscriptionDisplay()
       },
       error: (xhr, status, error) => {
         console.error("Failed to retrieve ads:", {
@@ -615,7 +610,6 @@ $(document).ready(() => {
       },
       error: (xhr, status, error) => {
         console.warn("Failed to fetch subscription data:", error)
-        // Default to FREE plan if subscription data is not available
         workerSubscriptionPlan = "FREE"
         updateSubscriptionDisplay()
       },
@@ -626,7 +620,7 @@ $(document).ready(() => {
     const limit = adLimits[workerSubscriptionPlan]
     
     if (limit === -1) {
-      return { canCreate: true, message: "" } // Unlimited for premium
+      return { canCreate: true, message: "" }
     }
     
     if (currentAdCount >= limit) {
@@ -655,13 +649,12 @@ $(document).ready(() => {
     const limitText = limit === -1 ? "∞" : limit
     const percentage = limit === -1 ? 0 : (currentAdCount / limit) * 100
     
-    // Update the plan card
     $("#currentPlan").text(workerSubscriptionPlan + " Plan")
     $("#adsUsed").text(currentAdCount)
     $("#adsLimit").text(limitText)
     $("#usageProgress").css("width", percentage + "%")
     
-    // Update progress bar color based on usage
+  
     const progressBar = $("#usageProgress")
     progressBar.removeClass("bg-success bg-warning bg-danger")
     if (percentage >= 90) {
@@ -672,7 +665,6 @@ $(document).ready(() => {
       progressBar.addClass("bg-success")
     }
     
-    // Show/hide upgrade button
     if (workerSubscriptionPlan !== "PREMIUM") {
       $("#upgradeBtn").removeClass("d-none").on("click", function() {
         showUpgradePrompt(`Upgrade from ${workerSubscriptionPlan} plan to get more features!`)
@@ -681,7 +673,6 @@ $(document).ready(() => {
       $("#upgradeBtn").addClass("d-none")
     }
     
-    // Update the subscription info in the header (keep the old one for backward compatibility)
     if ($("#subscriptionInfo").length === 0) {
       $(".ads-overview-container").append(`
         <div id="subscriptionInfo" class="mt-2">
@@ -698,7 +689,6 @@ $(document).ready(() => {
       $("#adLimit").text(limitText)
     }
     
-    // Update the create button state
     const limitCheck = checkAdCreationLimit()
     const createBtn = $("#createAdBtn")
     

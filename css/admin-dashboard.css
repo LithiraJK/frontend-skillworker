@@ -232,6 +232,15 @@ body {
   }
 }
 
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

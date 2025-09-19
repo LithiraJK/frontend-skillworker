@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillWorker | Choose Your Role</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="../css/signup-role-selection.css" rel="stylesheet">
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="main-container">
+        <div class="role-selection-card">
+            <div class="logo-section">
+                <h1>SkillWorker</h1>
+                <h2 class="subtitle">Choose Your Path</h2>
+                <p class="description">Join our community as a skilled professional or find the perfect worker for your project</p>
+            </div>
+
+            <div class="role-cards-container">
+                <div class="role-card user-type-toggle" data-type="worker">
+                    <div class="role-icon">
+                        <img src="../assets/images/icons8-repair.gif" alt="Worker Icon">
+                    </div>
+                    <h3 class="role-title">I'm a Worker</h3>
+                    <p class="role-description">Looking for work opportunities and ready to showcase my skills</p>
+                </div>
+
+                <div class="role-card user-type-toggle" data-type="client">
+                    <div class="role-icon">
+                        <img src="../assets/images/icons8-businessman.gif" alt="Client Icon">
+                    </div>
+                    <h3 class="role-title">I'm a Client</h3>
+                    <p class="role-description">Hiring skilled professionals for my projects and tasks</p>
+                </div>
+            </div>
+
+            <div class="continue-section">
+                <button id="continueBtn" class="continue-btn" disabled>
+                    <div class="loading-spinner"></div>
+                    <span class="btn-text">Select Your Role</span>
+                </button>
+            </div>
+
+            <div class="login-link">
+                <p>Already have an account? <a href="/pages/login-page.html">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/signupRoleSelection.js"></script>
+</body>
+</html>

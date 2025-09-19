@@ -51,13 +51,22 @@ $(document).ready(() => {
             popup: "modern-swal-popup",
           },
         }).then(() => {
-          window.location.href = "../pages/login-page.html"
+          window.location.href = "/pages/login-page.html"
         })
       }
     })
   })
 
   $(".nav-link").click(function (e) {
+    // Only prevent default for section-based navigation within the same page
+    const href = $(this).attr('href')
+    
+    // If it's an external page navigation, allow normal behavior
+    if (href && (href.includes('.html') || href.startsWith('http'))) {
+      return // Allow normal navigation
+    }
+    
+    // For internal section navigation, prevent default
     e.preventDefault()
 
     $(".nav-link").removeClass("active")
@@ -130,7 +139,7 @@ $(document).ready(() => {
         popup: "modern-swal-popup",
       },
     })
-    window.location.href = "../pages/worker-profile-completion.html"
+    window.location.href = "/pages/worker-profile-completion.html"
   })
 
   setTimeout(() => {
@@ -382,15 +391,15 @@ function showLoadingAnimation() {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(21, 94, 117, 0.9);
+            background: rgba(255, 255, 255, 0.2);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
         ">
-            <div style="text-align: center; color: white;">
-                <div class="spinner-border text-light mb-3" role="status" style="width: 3rem; height: 3rem;">
-                    <span class="visually-hidden">Loading...</span>
+            <div style="text-align: center; color: #0c4a6e;">
+                <div class="spinner-border color: #0c4a6e mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden"></span>
                 </div>
                 <h5>Loading Dashboard...</h5>
             </div>
@@ -450,7 +459,7 @@ $(document).keydown((e) => {
   // Alt + P for Profile
   if (e.altKey && e.keyCode === 80) {
     e.preventDefault()
-    window.location.href = "worker-profile.html"
+    window.location.href = "/pages/worker-profile.html"
   }
 
   // Alt + L for Logout

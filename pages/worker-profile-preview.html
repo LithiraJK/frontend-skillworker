@@ -5,297 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Worker Profile Preview</title>
+    <!-- External CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
+    <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600&display=swap"
         rel="stylesheet">
+    
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/style.css">
-    <style>
-        :root {
-            --primary-color: #023047;
-            --primary-hover: #0c4a6e;
-            --accent-color: #274c77;
-            --accent-hover: #457b9d;
-            --gradient-primary: linear-gradient(135deg, #155e75 0%, #0891b2 100%);
-            --gradient-accent: linear-gradient(135deg, #274c77 0%, #457b9d 100%);
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --border-color: #e5e7eb;
-            --bg-light: #f8fafc;
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Open Sans', sans-serif;
-            /* Updated background to use new light background color */
-            background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar {
-            /* Updated navbar to use primary color */
-            background: var(--primary-color) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .navbar-brand {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-
-        .footer-brand span {
-            color: #7dcbfd !important;
-        }
-
-        .profile-header {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border-color);
-            border-radius: 25px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .profile-pic {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            /* Updated border to use accent color */
-            border: 4px solid var(--accent-color);
-            object-fit: cover;
-            box-shadow: 0 8px 25px rgba(39, 76, 119, 0.3);
-        }
-
-        .star {
-
-            color: var(--accent-color);
-        }
-
-        .skill-badge {
-            /* Updated skill badge to use gradient accent */
-            background: var(--gradient-accent);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin: 0.25rem;
-            display: inline-block;
-            box-shadow: 0 4px 15px rgba(39, 76, 119, 0.3);
-        }
-
-        .modern-service-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            transition: all 0.3s ease;
-            margin-bottom: 1.5rem;
-        }
-
-        .modern-service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-primary-custom {
-            /* Updated button to use primary gradient */
-            background: var(--gradient-primary);
-            border: none;
-            color: white;
-            font-weight: 600;
-            padding: 0.75rem 2rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(2, 48, 71, 0.4);
-            color: white;
-            background: var(--gradient-accent);
-        }
-
-        .contact-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            position: sticky;
-            top: 2rem;
-        }
-
-        .review-bar {
-            height: 8px;
-            background: rgba(107, 114, 128, 0.2);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .review-bar-fill {
-            height: 100%;
-            /* Updated review bar fill to use primary gradient */
-            background: var(--gradient-primary);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        .section-divider {
-            border: none;
-            height: 2px;
-            /* Updated section divider to use accent color */
-            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
-            margin: 2rem 0;
-        }
-
-        /* Star Rating Styles */
-        .star-rating {
-            display: flex;
-            gap: 5px;
-            margin: 10px 0;
-        }
-
-        .star-rating i {
-            font-size: 1rem;
-            color: #ddd;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .star-rating i:hover {
-            color: #ffc107;
-            transform: scale(1.1);
-        }
-
-        .star-rating i.active {
-            color: var(--accent-color);
-        }
-
-        .star-rating i.active:hover {
-            color: #ffc107;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .submit-review-btn {
-            transition: all 0.3s ease;
-        }
-
-        .submit-review-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Worker Cards */
-        .worker-card {
-            background-color: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s;
-            backdrop-filter: blur(15px);
-        }
-        
-        .worker-card:hover {
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
-        }
-        
-        .worker-avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--accent-color);
-        }
-        
-        .rating-stars {
-            color: var(--accent-color);
-        }
-        
-        .skill-badge {
-            background-color: #f3f4f6;
-            color: var(--text-primary);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            margin: 2px;
-        }
-
-        .clickable-card {
-            cursor: pointer;
-        }
-
-        .skillworker-btn-primary {
-            background: var(--gradient-primary);
-            border: none;
-            color: white;
-            font-weight: 500;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .skillworker-btn-primary:hover {
-            background: var(--gradient-accent);
-            color: white;
-            transform: translateY(-1px);
-        }
-
-
-
-        @media (max-width: 768px) {
-            .profile-header {
-                text-align: center;
-            }
-
-            .profile-pic {
-                width: 100px;
-                height: 100px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/worker-profile-preview.css">
 </head>
 
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark px-3 fixed-top">
-        <a class="navbar-brand fw-bold" href="#">Skill<span style="color: var(--accent-color);">W</span>orker.</a>
+        <a class="navbar-brand fw-bold" href="#">Skill<span class="accent-color">W</span>orker.</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -303,7 +31,7 @@
         <div class="collapse navbar-collapse" id="navMain">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="/pages/worker-dashboard.html">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Ads</a></li>
+                <li class="nav-item"><a class="nav-link" href="/pages/ads-overview.html">Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contacts</a></li>
             </ul>
 
@@ -327,7 +55,7 @@
     </nav>
 
 
-    <div class="container py-5" style="margin-top: 80px;">
+    <div class="container py-5 container-with-margin-top">
         <div class="row">
 
             <div class="col-lg-8">
@@ -348,8 +76,7 @@
                             <span class="fw-semibold">4.8</span>
                         </p>
                         <p class="mb-1" id="displayCategory"><strong>Plumber</strong></p>
-                        <p class="mb-1" id="displayLocation"><i class="bi bi-geo-alt"
-                                style="color: var(--accent-color);"></i> Galle, Colombo</p>
+                        <p class="mb-1" id="displayLocation"><i class="bi bi-geo-alt accent-color"></i> Galle, Colombo</p>
                         <p class="text-muted"><span id="displayExperience">11</span> Years Experience</p>
                     </div>
                 </div>
@@ -408,14 +135,14 @@
                     <div class="d-flex align-items-center mb-3 w-75">
                         <span class="me-2">5 Stars</span>
                         <div class="flex-grow-1 review-bar">
-                            <div class="review-bar-fill" style="width:100%"></div>
+                            <div class="review-bar-fill review-bar-fill-100"></div>
                         </div>
                         <span class="ms-2">(4)</span>
                     </div>
                     <div class="d-flex align-items-center mb-3 w-75">
                         <span class="me-2">4 Stars</span>
                         <div class="flex-grow-1 review-bar">
-                            <div class="review-bar-fill" style="width:80%"></div>
+                            <div class="review-bar-fill review-bar-fill-80"></div>
                         </div>
                         <span class="ms-2">(1)</span>
                     </div>
@@ -447,8 +174,7 @@
                                 style="border-radius: 10px;">
                         </div>
                         <div class="form-group mb-3">
-                            <textarea class="form-control" rows="4" placeholder="Share your experience..." required
-                                style="border-radius: 10px;"></textarea>
+                            <textarea class="form-control border-radius-10" rows="4" placeholder="Share your experience..." required></textarea>
                         </div>
                         <div class="form-group mb-3">
                             <label class="form-label">Rating:</label>
@@ -475,7 +201,7 @@
         <div class="container">
             <div class="row gy-4">
                 <div class="col-md-4">
-                    <div class="footer-brand mb-3">Skill<span style="color: var(--accent-color);">W</span>orker.</div>
+                    <div class="footer-brand mb-3">Skill<span class="accent-color">W</span>orker.</div>
                     <p class="footer-description mb-3">Connecting skilled workers with clients worldwide. Your trusted
                         platform for finding talent and opportunities.</p>
                     <div class="footer-social mb-2">
@@ -528,11 +254,15 @@
         </div>
     </footer>
 
-
+    <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    
+    <!-- Utility Scripts -->
     <script src="../js/util/tokenRefreshHandler.js"></script>
+    
+    <!-- Custom JavaScript -->
     <script type="module" src="../js/workerProfilePreview.js"></script>
 </body>
 

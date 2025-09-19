@@ -1,5 +1,4 @@
 $(document).ready(() => {
-  // Check if required libraries are loaded
   if (typeof $ === 'undefined') {
     console.error('jQuery is not loaded!')
     return
@@ -10,19 +9,14 @@ $(document).ready(() => {
   let selectedType = null
 
   $(".user-type-toggle").on("click", function () {
-    // Remove active class from all cards with animation
     $(".user-type-toggle").removeClass("active")
 
-    // Add active class to clicked card
     $(this).addClass("active")
 
-    // Store selected type
     selectedType = $(this).data("type")
 
-    // Enable continue button with animation
     $("#continueBtn").prop("disabled", false)
 
-    // Update button text based on selection with smooth transition
     const btnText = $("#continueBtn .btn-text")
     if (btnText.length) {
       btnText.fadeOut(200, () => {
@@ -33,7 +27,6 @@ $(document).ready(() => {
         }
       })
     } else {
-      // Fallback if btn-text element doesn't exist
       const btn = $("#continueBtn")
       if (selectedType === "worker") {
         btn.text("Join as a Worker")
@@ -42,7 +35,6 @@ $(document).ready(() => {
       }
     }
 
-    // Add subtle success feedback
     $(this).css("transform", "translateY(-8px) scale(1.02)")
     setTimeout(() => {
       $(this).css("transform", "translateY(-8px) scale(1)")
@@ -57,7 +49,6 @@ $(document).ready(() => {
 
     console.log('Continue button clicked, selected type:', selectedType)
 
-    // Show loading state
     const btn = $(this)
     const spinner = btn.find(".loading-spinner")
     const btnText = btn.find(".btn-text")
@@ -67,11 +58,9 @@ $(document).ready(() => {
     if (btnText.length) {
       btnText.text("Redirecting...")
     } else {
-      // Fallback if btn-text element doesn't exist
       btn.text("Redirecting...")
     }
 
-    // Simulate loading delay for better UX
     setTimeout(() => {
       console.log('Redirecting to signup page for role:', selectedType)
       if (selectedType === "worker") {

@@ -10,176 +10,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
-    <style>
-   
-        .profile-card, .welcome-card, .card {
-            background: var(--surface);
-            border: none;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-
-        .profile-card:hover, .welcome-card:hover, .card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .profile-card {
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .welcome-card {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-            color: white;
-            border-left: 4px solid var(--accent-color);
-        }
-
-        .welcome-card h3 {
-            color: white;
-            margin-bottom: 0.5rem;
-        }
-
-        .welcome-card p {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .welcome-card hr {
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .btn {
-            border-radius: 10px;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            transition: all 0.3s ease;
-            border: none;
-        }
-
-        .btn-dark {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-            color: white;
-        }
-
-        .btn-dark:hover {
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent-color) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(21, 94, 117, 0.3);
-        }
-
-        .btn-outline-primary {
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-outline-primary:hover {
-            background: var(--primary-color);
-            transform: translateY(-1px);
-        }
-
-        .progress {
-            height: 12px;
-            border-radius: 10px;
-            background: #e2e8f0;
-        }
-
-        .progress-bar {
-            background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-light) 100%) !important;
-            border-radius: 10px;
-        }
-
-        /* Inbox and review items */
-        .inbox-item {
-            padding: 1rem;
-            border-left: 3px solid var(--accent-color);
-            background: #f8fafc;
-            margin-bottom: 0.75rem;
-            border-radius: 0 8px 8px 0;
-            transition: all 0.3s ease;
-        }
-
-        .inbox-item:hover {
-            background: #f1f5f9;
-            transform: translateX(4px);
-        }
-
-        /* Card headers */
-        .card-header {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            border-bottom: 2px solid var(--border-color);
-            padding: 1.25rem;
-        }
-
-        .card-header h5 {
-            color: var(--text-primary);
-            margin: 0;
-            font-weight: 600;
-        }
-
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        /* List styling */
-        .list-unstyled li {
-            padding: 0.5rem 0;
-            font-weight: 500;
-        }
-
-        .fa-check {
-            color: var(--accent-color) !important;
-        }
-
-        .fa-times {
-            color: #ef4444 !important;
-        }
-
-
-        /* Responsive improvements */
-        @media (max-width: 768px) {
-            .profile-card {
-                padding: 1.5rem;
-            }
-            
-            .welcome-card {
-                padding: 1.5rem;
-            }
-        }
-
-        /* Animation classes */
-        .fade-in {
-            animation: fadeIn 0.6s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .notification-icon {
-            position: relative;
-        }
-
-        .notification-icon::after {
-            content: '';
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 8px;
-            height: 8px;
-            background: var(--accent-color);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/worker-dashboard.css">
 </head>
 
 <body>
@@ -192,10 +23,11 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
+
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link active" href="../pages/worker-dashboard.html">Dashboard</a></li>
-                <li class="nav-item"><a class="nav-link" href="/pages/ads-overview.html">My Ads</a></li>
-                <li class="nav-item"><a class="nav-link" href="">Contacts</a></li>
+                <li class="nav-item"><a class="nav-link active" href="/pages/worker-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/pages/ads-overview.html">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="/pages/worker-profile.html">Contacts</a></li>
             </ul>
 
             

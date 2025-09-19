@@ -28,6 +28,32 @@ body {
 }
 
 /* Navigation Styles */
+/* Navigation Styles */
+.navbar-primary-bg {
+  background: var(--primary-color) !important;
+}
+
+.brand-highlight {
+  color: var(--warning-color);
+}
+
+.footer-brand-highlight {
+  color: #7dcbfd;
+}
+
+/* Rating Bar Width Classes */
+.rating-fill-100 {
+  width: 100%;
+}
+
+.rating-fill-80 {
+  width: 80%;
+}
+
+.rating-fill-0 {
+  width: 0%;
+}
+
 .nav-icon {
   color: rgba(255, 255, 255, 0.8);
   font-size: 1.1rem;

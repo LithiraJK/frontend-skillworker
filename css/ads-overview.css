@@ -42,6 +42,7 @@ body {
 /* Plan card styles */
 #planCard {
   transition: all 0.3s ease;
+  min-width: 200px;
 }
 
 #planCard:hover {
@@ -57,6 +58,19 @@ body {
 .progress-bar {
   border-radius: 10px;
   transition: width 0.6s ease;
+}
+
+.progress-small {
+  height: 4px;
+}
+
+.usage-progress-initial {
+  width: 0%;
+}
+
+/* Footer brand styling */
+.footer-brand-accent {
+  color: #7dcbfd;
 }
 .navbar .profile-btn {
   padding: 0;

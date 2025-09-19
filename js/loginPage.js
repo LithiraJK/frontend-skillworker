@@ -128,13 +128,13 @@ $(document).ready(() => {
 
       setTimeout(() => {
         if (response.data.role === "WORKER") {
-          window.location.href = "../pages/worker-dashboard.html"
+          window.location.href = "/pages/worker-dashboard.html"
         } else if (response.data.role === "CLIENT") {
-          window.location.href = "../pages/client-dashboard.html"
+          window.location.href = "/pages/client-dashboard.html"
         } else if (response.data.role === "ADMIN") {
-          window.location.href = "../pages/admin-dashboard.html"
+          window.location.href = "/pages/admin-dashboard.html"
         } else {
-          window.location.href = "../pages/dashboard.html"
+          window.location.href = "/pages/dashboard.html"
         }
       }, 1500)
     } catch (error) {

@@ -30,7 +30,6 @@ function showToast(message, type = "info") {
 }
 
 $(document).ready(() => {
-  // Check if required libraries are loaded
   if (typeof $ === 'undefined') {
     console.error('jQuery is not loaded!')
     return
@@ -69,10 +68,8 @@ $(document).ready(() => {
   $(".nextBtn").click(() => {
     const stepDiv = $(".step[data-step='" + currentStep + "']")
 
-    // Clear previous validation errors
     clearValidationErrors()
 
-    // Validate current step
     const validationResult = validateCurrentStep(currentStep)
 
     if (!validationResult.isValid) {

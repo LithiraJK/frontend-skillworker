@@ -1,11 +1,6 @@
-/* eslint-env jquery */
-/* global $:readonly, jQuery:readonly */
-
-// Declare jQuery variables
 const $ = window.jQuery || window.$
 
 $(document).ready(() => {
-  // Check if required libraries are loaded
   if (typeof $ === "undefined") {
     console.error("jQuery is not loaded!")
     return
@@ -17,7 +12,6 @@ $(document).ready(() => {
   const adId = urlParams.get("adId")
   const token = $.cookie("token")
 
-  // Check if tokenHandler is available (loaded via script tag)
   if (typeof window.tokenHandler !== "undefined" && token) {
     try {
       window.tokenHandler.scheduleSilentRefresh(token)
@@ -268,11 +262,10 @@ $(document).ready(() => {
 
   $(".review-form").submit((e) => {
     e.preventDefault()
-    // Add review submission logic here
     alert("Review submitted successfully!")
   })
 
-  // Handle View Profile button click
+  
   $("#viewProfileBtn").click((e) => {
     e.preventDefault()
     if (adData.workerId) {

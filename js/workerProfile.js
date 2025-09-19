@@ -1,5 +1,3 @@
-// Enhanced Worker Profile Management with Modern UI/UX
-
 $(document).ready(() => {
   // Check if required libraries are loaded
   if (typeof $ === 'undefined') {

@@ -1,11 +1,6 @@
-/* global $, bootstrap */
-
-// Declare the $ variable to fix lint/correctness/noUndeclaredVariables error
 const $ = window.$
 
-
 $(document).ready(() => {
-  // Application state
   let currentPage = 1
   const itemsPerPage = 8
   let viewMode = "grid"
@@ -15,7 +10,6 @@ $(document).ready(() => {
 
   const token = $.cookie("token");
 
-  // Data storage
   let categories = []
   let workerAds = []
 
@@ -47,7 +41,7 @@ $(document).ready(() => {
     "Kegalle",
   ]
 
-  // Initialize the application
+  
   function init() {
     populateDistricts()
     bindEvents()
@@ -55,7 +49,7 @@ $(document).ready(() => {
     fetchAds()
   }
 
-  // Fetch categories from API
+ 
   function fetchCategories() {
     $.ajax({
       url: 'http://localhost:8080/api/v1/category/getactive',
@@ -68,11 +62,11 @@ $(document).ready(() => {
         console.log('Categories fetched successfully:', result)
 
         if (result.status === 200) {
-          // Transform API data to match our component structure
+         
           categories = result.data.map(category => ({
             id: category.name.toLowerCase(),
             name: category.name,
-            count: 0 // Will be updated after fetching ads
+            count: 0 
           }))
 
           populateCategories()
@@ -88,9 +82,9 @@ $(document).ready(() => {
     })
   }
 
-  // Fetch ads from API
+ 
   function fetchAds(district = null) {
-    // Show loading state
+  
     $('#workersContainer').html(`
       <div class="col-12">
         <div class="text-center py-5">
@@ -102,7 +96,7 @@ $(document).ready(() => {
       </div>
     `)
 
-    // Determine the API URL based on whether a district is specified
+   
     let apiUrl = 'http://localhost:8080/api/v1/ad/getall/active'
     if (district && district !== 'all') {
       apiUrl = `http://localhost:8080/api/v1/ad/getall/active/${district.toUpperCase()}`
@@ -119,35 +113,33 @@ $(document).ready(() => {
         console.log('Ads fetched successfully:', result)
 
         if (result.status === 200) {
-          // Transform API data to match our component structure
+         
           workerAds = result.data.map(ad => ({
             id: ad.adId,
-            name: `${ad.categoryName} Service Provider`, // Better default name
+            name: `${ad.categoryName} Service Provider`,
             category: ad.categoryName.toLowerCase(),
             district: ad.location,
-            rating: 4.5, // Default rating since API doesn't provide this
-            reviews: Math.floor(Math.random() * 200) + 50, // Random reviews
+            rating: 4.5, 
+            reviews: Math.floor(Math.random() * 200) + 50, 
             hourlyRate: `LKR ${ad.startingPrice.toLocaleString()}`,
-            experience: `${Math.floor(Math.random() * 10) + 1} years`, // Random experience
+            experience: `${Math.floor(Math.random() * 10) + 1} years`, 
             title: ad.title,
             description: ad.description,
             avatar: ad.profilePictureUrl,
             verified: true,
-            responseTime: "Within 2 hours", // Default response time
-            completedJobs: Math.floor(Math.random() * 500) + 100, // Random completed jobs
+            responseTime: "Within 2 hours", 
+            completedJobs: Math.floor(Math.random() * 500) + 100, 
             skills: ad.skills,
             phoneNumbers: ad.phoneNumbers,
             createdDate: ad.createdDate,
             status: ad.status
           }))
 
-          // Update category counts
           updateCategoryCounts()
           populateCategories()
           filterAndDisplayWorkers()
         } else {
           console.error('Failed to fetch ads:', result.message)
-          // Show error message to user
           $('#workersContainer').html(`
             <div class="col-12">
               <div class="alert alert-warning text-center">
@@ -164,8 +156,6 @@ $(document).ready(() => {
         console.error('Response:', xhr.responseText)
 
         const errorResponse = xhr.responseJSON.message;
-
-        // Show error message to user
         
         $('#workersContainer').html(`
           <div class="col-12">
@@ -179,7 +169,6 @@ $(document).ready(() => {
     })
   }
 
-  // Update category counts based on fetched ads
   function updateCategoryCounts() {
     const categoryCount = {}
 
@@ -188,16 +177,13 @@ $(document).ready(() => {
       categoryCount[category] = (categoryCount[category] || 0) + 1
     })
 
-    // Update existing categories with counts
     categories.forEach(category => {
       category.count = categoryCount[category.id] || 0
     })
 
-    // Sort categories by count (descending)
     categories.sort((a, b) => b.count - a.count)
   }
 
-  // Populate categories
   function populateCategories() {
     const container = $("#categoriesContainer")
     container.empty()
@@ -215,7 +201,6 @@ $(document).ready(() => {
     })
   }
 
-  // Populate districts dropdown
   function populateDistricts() {
     const select = $("#districtSelect")
     districts.forEach((district) => {
@@ -223,10 +208,7 @@ $(document).ready(() => {
     })
   }
 
-
-  // Bind event handlers
   function bindEvents() {
-    // Mobile menu toggle
     $("#mobileMenuToggle").on("click", () => {
       $("#mobileMenuOverlay").toggleClass("show")
     })
@@ -237,7 +219,6 @@ $(document).ready(() => {
       }
     })
 
-    // Search functionality
     $("#searchBtn").on("click", () => {
       searchQuery = $("#searchInput").val()
       currentPage = 1
@@ -250,7 +231,6 @@ $(document).ready(() => {
       }
     })
 
-    // Category search
     $("#categorySearch").on("input", function () {
       const searchTerm = $(this).val().toLowerCase()
       $(".category-item").each(function () {
@@ -259,7 +239,6 @@ $(document).ready(() => {
       })
     })
 
-    // Category selection
     $(document).on("click", ".category-item", function () {
       $(".category-item").removeClass("active")
       $(this).addClass("active")
@@ -268,22 +247,18 @@ $(document).ready(() => {
       filterAndDisplayWorkers()
     })
 
-    // District selection
     $("#districtSelect").on("change", function () {
       selectedDistrict = $(this).val() === "All Districts" ? "all" : $(this).val()
       currentPage = 1
       
-      // Fetch ads for the selected district
       fetchAds(selectedDistrict)
 
-      // Update map selection
       $(".district-path").removeClass("selected")
       if (selectedDistrict !== "all") {
         $(`.district-path[data-district="${selectedDistrict}"]`).addClass("selected")
       }
     })
 
-    // Map district selection (fallback for simple map)
     $(document).on("click", ".district-path", function () {
       if (!$(this).hasClass('enhanced-map-district')) {
         const district = $(this).data("district")
@@ -293,12 +268,10 @@ $(document).ready(() => {
         $(this).addClass("selected")
         currentPage = 1
         
-        // Fetch ads for the selected district
         fetchAds(district)
       }
     })
 
-    // View mode toggle
     $("#gridViewBtn").on("click", () => {
       viewMode = "grid"
       $("#gridViewBtn").addClass("active")
@@ -313,12 +286,10 @@ $(document).ready(() => {
       filterAndDisplayWorkers()
     })
 
-    // Contact button click
     $(document).on("click", ".contact-btn", function () {
       const workerId = $(this).data("worker-id")
       const phoneNumbers = $(this).data("phone")
 
-      // Show contact modal or alert
       if (phoneNumbers && phoneNumbers !== 'No phone available') {
         const modal = $(`
           <div class="modal fade" id="contactModal" tabindex="-1">
@@ -352,7 +323,6 @@ $(document).ready(() => {
       }
     })
 
-    // Favorite button click
     $(document).on("click", ".favorite-btn", function () {
       $(this).toggleClass("text-danger")
       const icon = $(this).find("i")
@@ -369,7 +339,6 @@ $(document).ready(() => {
     })
   }
 
-  // Filter and display workers
   function filterAndDisplayWorkers() {
     const filteredWorkers = workerAds.filter((worker) => {
       const matchesSearch =
@@ -390,7 +359,6 @@ $(document).ready(() => {
     updatePagination(filteredWorkers.length)
   }
 
-  // Display workers
   function displayWorkers(workers) {
     const container = $("#workersContainer")
     const startIndex = (currentPage - 1) * itemsPerPage
@@ -406,7 +374,6 @@ $(document).ready(() => {
         ? worker.skills.slice(0, 3).join(', ') + (worker.skills.length > 3 ? '...' : '')
         : 'Various skills'
 
-      // Handle avatar URL - use default if starts with /assets or is invalid
       let avatarUrl = worker.avatar
       if (avatarUrl && avatarUrl.startsWith('/assets')) {
         avatarUrl = '../assets/images/workerDefualtPP.png'
@@ -468,12 +435,10 @@ $(document).ready(() => {
     })
   }
 
-  // Update results count
   function updateResultsCount(count) {
     $("#resultsCount").text(`${count} services found`)
   }
 
-  // Update pagination
   function updatePagination(totalItems) {
     const totalPages = Math.ceil(totalItems / itemsPerPage)
     const pagination = $("#pagination")
@@ -482,7 +447,6 @@ $(document).ready(() => {
 
     if (totalPages <= 1) return
 
-    // Previous button
     const prevDisabled = currentPage === 1 ? "disabled" : ""
     pagination.append(`
             <li class="page-item ${prevDisabled}">
@@ -492,7 +456,6 @@ $(document).ready(() => {
             </li>
         `)
 
-    // Page numbers
     for (let i = 1; i <= totalPages; i++) {
       const active = i === currentPage ? "active" : ""
       pagination.append(`
@@ -502,7 +465,6 @@ $(document).ready(() => {
             `)
     }
 
-    // Next button
     const nextDisabled = currentPage === totalPages ? "disabled" : ""
     pagination.append(`
             <li class="page-item ${nextDisabled}">
@@ -512,7 +474,6 @@ $(document).ready(() => {
             </li>
         `)
 
-    // Bind pagination events
     $(".page-link").on("click", function (e) {
       e.preventDefault()
       const page = Number.parseInt($(this).data("page"))
@@ -523,19 +484,15 @@ $(document).ready(() => {
     })
   }
 
-  // Initialize the application
   init()
 
-  // Global function for map district clicks (referenced in mapdata.js)
   window.district_click = function (districtCode, districtName) {
     selectedDistrict = districtName
     $("#districtSelect").val(districtName)
     currentPage = 1
     
-    // Fetch ads for the selected district
     fetchAds(districtName)
     
-    // Update map selection visually
     $(".district-path").removeClass("selected")
     $(`.district-path[data-district="${districtName}"]`).addClass("selected")
   }

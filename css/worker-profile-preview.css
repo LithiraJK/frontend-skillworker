@@ -1,30 +1,170 @@
-body {
-  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
-  background: #f6f7fb;
+/* ====================
+   WORKER PROFILE PREVIEW STYLES
+   ==================== */
+
+/* CSS Variables */
+:root {
+  --primary-color: #023047;
+  --primary-hover: #0c4a6e;
+  --accent-color: #274c77;
+  --accent-hover: #457b9d;
+  --gradient-primary: linear-gradient(135deg, #155e75 0%, #0891b2 100%);
+  --gradient-accent: linear-gradient(135deg, #274c77 0%, #457b9d 100%);
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --bg-light: #f8fafc;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
 }
 
+/* ====================
+   BASE STYLES
+   ==================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  /* Updated background to use new light background color */
+  background: linear-gradient(135deg, var(--bg-light) 0%, #ffffff 100%);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ====================
+   GLASS CARD STYLES
+   ==================== */
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* ====================
+   NAVIGATION STYLES
+   ==================== */
+
+.navbar {
+  /* Updated navbar to use primary color */
+  background: var(--primary-color) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-brand {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+/* ====================
+   PROFILE HEADER STYLES
+   ==================== */
+
 .profile-header {
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--border-color);
+  border-radius: 25px;
+  padding: 2rem;
+  margin-bottom: 2rem;
   text-align: center;
-  padding: 20px 0;
 }
 
 .profile-pic {
-  width: 180px;
-  height: 180px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
+  /* Updated border to use accent color */
+  border: 4px solid var(--accent-color);
   object-fit: cover;
-  border: 4px solid #ffc107;
+  box-shadow: 0 8px 25px rgba(39, 76, 119, 0.3);
 }
 
-.skill-badge {
-  background-color: transparent;
-  color: #111;
-  margin: 3px;
-  padding: 5px 15px;
-  border-radius: 20px;
-  border: 1px solid #111;
-  font-size: 14px;
+/* ====================
+   STAR RATING STYLES
+   ==================== */
+
+.star {
+  color: var(--accent-color);
 }
+
+.star-rating {
+  display: flex;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.star-rating i {
+  font-size: 1rem;
+  color: #ddd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.star-rating i:hover {
+  color: #ffc107;
+  transform: scale(1.1);
+}
+
+.star-rating i.active {
+  color: var(--accent-color);
+}
+
+.star-rating i.active:hover {
+  color: #ffc107;
+}
+
+/* ====================
+   SKILL BADGE STYLES
+   ==================== */
+
+.skill-badge {
+  /* Updated skill badge to use gradient accent */
+  background: var(--gradient-accent);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin: 0.25rem;
+  display: inline-block;
+  box-shadow: 0 4px 15px rgba(39, 76, 119, 0.3);
+}
+
+/* Override for specific skill badge style */
+.worker-card .skill-badge {
+  background-color: #f3f4f6;
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  margin: 2px;
+  box-shadow: none;
+}
+
+/* ====================
+   SERVICE CARD STYLES
+   ==================== */
 
 .service-card {
   border-radius: 15px;
@@ -34,15 +174,17 @@ body {
 }
 
 .modern-service-card {
-  border-radius: 16px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
   transition: all 0.3s ease;
-  border: 1px solid #e9ecef;
+  margin-bottom: 1.5rem;
 }
 
 .modern-service-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border-color: #ffc107;
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
 }
 
 .modern-service-card .card-body {
@@ -70,26 +212,151 @@ body {
   transform: scale(1.05);
 }
 
-.star {
-  color: #ffc107;
+/* ====================
+   BUTTON STYLES
+   ==================== */
+
+.btn-primary-custom {
+  /* Updated button to use primary gradient */
+  background: var(--gradient-primary);
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
 }
+
+.btn-primary-custom:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(2, 48, 71, 0.4);
+  color: white;
+  background: var(--gradient-accent);
+}
+
+.skillworker-btn-primary {
+  background: var(--gradient-primary);
+  border: none;
+  color: white;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.skillworker-btn-primary:hover {
+  background: var(--gradient-accent);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.submit-review-btn {
+  transition: all 0.3s ease;
+}
+
+.submit-review-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ====================
+   CONTACT CARD STYLES
+   ==================== */
+
+.contact-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  position: sticky;
+  top: 2rem;
+}
+
+/* ====================
+   REVIEW BAR STYLES
+   ==================== */
 
 .review-bar {
   height: 8px;
-  background-color: #e9ecef;
-  border-radius: 5px;
+  background: rgba(107, 114, 128, 0.2);
+  border-radius: 4px;
   overflow: hidden;
 }
 
 .review-bar-fill {
   height: 100%;
-  background-color: #ffc107;
+  /* Updated review bar fill to use primary gradient */
+  background: var(--gradient-primary);
+  border-radius: 4px;
+  transition: width 0.3s ease;
 }
 
-/* footer style> */
+/* ====================
+   SECTION DIVIDER STYLES
+   ==================== */
+
+.section-divider {
+  border: none;
+  height: 2px;
+  /* Updated section divider to use accent color */
+  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+  margin: 2rem 0;
+}
+
+/* ====================
+   FORM STYLES
+   ==================== */
+
+.form-label {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+/* ====================
+   WORKER CARD STYLES
+   ==================== */
+
+.worker-card {
+  background-color: var(--glass-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+  backdrop-filter: blur(15px);
+}
+
+.worker-card:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.worker-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent-color);
+}
+
+.rating-stars {
+  color: var(--accent-color);
+}
+
+.clickable-card {
+  cursor: pointer;
+}
+
+/* ====================
+   FOOTER STYLES
+   ==================== */
+
 footer {
   background: #000;
   color: #fff;
+}
+
+.footer-brand span {
+  color: #7dcbfd !important;
 }
 
 .footer-links-title {
@@ -127,6 +394,45 @@ footer {
 .footer-description {
   font-size: 0.95rem;
   color: #ccc;
+}
+
+/* ====================
+   UTILITY CLASSES
+   ==================== */
+
+.container-with-margin-top {
+  margin-top: 80px;
+}
+
+.accent-color {
+  color: var(--accent-color);
+}
+
+.border-radius-10 {
+  border-radius: 10px;
+}
+
+.review-bar-fill-100 {
+  width: 100%;
+}
+
+.review-bar-fill-80 {
+  width: 80%;
+}
+
+/* ====================
+   MEDIA QUERIES
+   ==================== */
+
+@media (max-width: 768px) {
+  .profile-header {
+    text-align: center;
+  }
+
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 @media (max-width: 425px) {
