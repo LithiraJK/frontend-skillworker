@@ -18,6 +18,9 @@ $(document).ready(() => {
   profileComplete()
 
   initializeDashboard()
+  
+  // Initialize navbar profile picture on page load
+  updateNavbarProfilePicture() // Call with default first, will be updated when profileComplete() finishes
 
   $("#logoutBtn").click(() => {
     Swal.fire({
@@ -175,6 +178,17 @@ $(document).ready(() => {
   hideLoadingAnimation()
 })
 
+// Function to update navbar profile picture (moved to global scope)
+function updateNavbarProfilePicture(imageUrl) {
+  const defaultImage = "/assets/images/workerDefualtPP.png"
+  const profileImageUrl = imageUrl || defaultImage
+  
+  // Update navbar profile picture
+  $('.navbar .profile-btn img').attr('src', profileImageUrl)
+  
+  console.log('Navbar profile picture updated:', profileImageUrl)
+}
+
 function initializeDashboard() {
   const workerId = $.cookie("userId")
   const token = $.cookie("token")
@@ -204,10 +218,8 @@ function initializeDashboard() {
           email: response.data.email,
         }
 
-        showModernNotification("Dashboard loaded successfully!", "success")
       } else {
         console.warn("No user data found!")
-        showModernNotification("No user data found", "warning")
       }
     },
     error: (xhr, status, error) => {
@@ -269,7 +281,7 @@ function profileComplete(){
     success: (response) => {
       if (response.status === 200 && response.data) {
         const workerData = {
-          profilePictureUrl: response.data.profilePictureUrl,
+          profilePictureUrl: response.data.profilePictureUrl || "/assets/images/workerDefualtPP.png",
           isProfileComplete: response.data.profileComplete,
           averageRating: response.data.averageRating,
           totalReviews: response.data.totalReviews,
@@ -280,6 +292,9 @@ function profileComplete(){
 
 
         $('#profileImage').attr('src', workerData.profilePictureUrl)        
+        
+        // Update navbar profile picture
+        updateNavbarProfilePicture(workerData.profilePictureUrl)        
 
         // Update average rating display
         if (workerData.averageRating !== null && workerData.averageRating !== undefined) {
@@ -305,12 +320,10 @@ function profileComplete(){
 
       } else {
         console.warn("No worker data found!")
-        showModernNotification("No worker data found", "warning")
       }
     },
     error: (xhr, status, error) => {
       console.error("Error fetching worker data:", error)
-      showModernNotification("Error loading worker data", "error")
     },
   })
 }

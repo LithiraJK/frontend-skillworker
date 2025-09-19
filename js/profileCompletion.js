@@ -44,7 +44,6 @@ $(document).ready(() => {
   
   let currentStep = 1
   const totalSteps = $(".step").length
-  let isPremiumUser = false
   let activeCategories = []
   let activeLocations = []
 
@@ -56,8 +55,6 @@ $(document).ready(() => {
       console.warn('Token refresh handler not available:', error)
     }
   }
-
-  checkPremiumStatus()
 
   fetchActiveCategories()
 
@@ -94,50 +91,14 @@ $(document).ready(() => {
 
   $("#addCategoryBtn").click(() => {
     const categoryCount = $(".category-item").length
-    const maxCategories = isPremiumUser ? 5 : 1
-
-    if (categoryCount === 0) {
-      addNewCategory()
-      return
-    }
-
-    if (!isPremiumUser && categoryCount >= 1) {
-      Swal.fire({
-        icon: "info",
-        title: "Premium Feature Required",
-        html: `
-          <div class="text-start">
-            <p>You already have <strong>1 category</strong> selected (free plan limit).</p>
-            <p>To add multiple categories, you need to upgrade to our Premium plan.</p>
-            <div class="mt-3 p-3 bg-light rounded">
-              <h6 class="text-primary"><i class="fas fa-crown me-2"></i>Premium Benefits:</h6>
-              <ul class="small mb-0">
-                <li>Add up to 5 categories</li>
-                <li>Priority job notifications</li>
-                <li>Advanced profile features</li>
-                <li>Enhanced visibility to clients</li>
-              </ul>
-            </div>
-          </div>
-        `,
-        confirmButtonText: '<i class="fas fa-crown me-2"></i>Upgrade to Premium',
-        showCancelButton: true,
-        cancelButtonText: "Maybe Later",
-        confirmButtonColor: "#ffc107",
-        width: "500px",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          showPremiumUpgradeModal()
-        }
-      })
-      return
-    }
+    
+    const maxCategories = 10
 
     if (categoryCount >= maxCategories) {
       Swal.fire({
         icon: "warning",
         title: "Maximum Categories Reached",
-        text: `You have reached the maximum of ${maxCategories} categories for your plan.`,
+        text: `You have reached the maximum of ${maxCategories} categories.`,
         confirmButtonText: "Got it",
       })
       return
@@ -164,7 +125,6 @@ $(document).ready(() => {
 
     console.log("New category dropdown added with ID:", newCategoryId)
     updateCategoryButton()
-    updatePlanStatus()
   }
 
   $(document).on("click", ".removeCategoryBtn", function () {
@@ -202,7 +162,6 @@ $(document).ready(() => {
 
         console.log("Category removed. Remaining categories:", $(".category-item").length)
         updateCategoryButton()
-        updatePlanStatus()
 
         Swal.fire({
           icon: "success",
@@ -268,18 +227,8 @@ $(document).ready(() => {
       }
     })
 
-    // Update progress line
     const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100
     $("#progressLine").css("width", progressPercent + "%")
-  }
-
-  function checkPremiumStatus() {
-    const userPlan = localStorage.getItem("userPlan") || "free"
-    isPremiumUser = userPlan === "premium"
-
-    console.log("User plan:", userPlan, "isPremium:", isPremiumUser)
-    updateCategoryButton()
-    updatePlanStatus()
   }
 
   async function fetchActiveCategories() {
@@ -325,11 +274,6 @@ $(document).ready(() => {
 
         $(".retry-categories-container").remove()
 
-        if (activeCategories.length > 0) {
-          showToast(`${activeCategories.length} categories loaded successfully`, "success")
-        } else {
-          showToast("No active categories found", "warning")
-        }
       },
       error: (xhr, status, error) => {
         console.error("Failed to fetch categories:", error)
@@ -391,6 +335,11 @@ $(document).ready(() => {
     })
 
     console.log("Category dropdowns populated successfully")
+
+    if ($(".category-item").length === 0) {
+      console.log("No category dropdowns found, adding initial category")
+      addNewCategory()
+    }
 
     if (activeCategories.length > 0) {
       console.log(`✅ ${activeCategories.length} active categories loaded successfully`)
@@ -455,11 +404,6 @@ $(document).ready(() => {
 
         $(".retry-locations-container").remove()
 
-        if (activeLocations.length > 0) {
-          showToast(`${activeLocations.length} locations loaded successfully`, "success")
-        } else {
-          showToast("No active locations found", "warning")
-        }
       },
       error: (xhr, status, error) => {
         console.error("Failed to fetch locations:", error)
@@ -521,6 +465,24 @@ $(document).ready(() => {
 
     console.log("Location dropdowns populated successfully")
 
+    // Ensure at least one location dropdown exists  
+    if ($(".location-item").length === 0) {
+      console.log("No location dropdowns found, adding initial location")
+      const locationCount = $(".location-item").length
+      const newLocationId = "workingArea_" + (locationCount + 1)
+
+      const locationHtml = `<div class="mb-3 location-item">
+        <label class="form-label">Working Area ${locationCount + 1}</label>
+        <select class="form-select selectpicker locationInput" id="${newLocationId}" data-live-search="true" data-size="5">
+          ${generateLocationOptions()}
+        </select>
+      </div>`
+
+      $("#locationContainer").append(locationHtml)
+      $(`#${newLocationId}`).selectpicker()
+      console.log("Initial location dropdown added with ID:", newLocationId)
+    }
+
     if (activeLocations.length > 0) {
       console.log(`✅ ${activeLocations.length} active locations loaded successfully`)
     }
@@ -541,146 +503,30 @@ $(document).ready(() => {
     return optionsHtml
   }
 
-  $("#togglePremiumDemo").click(() => {
-    const newPlan = isPremiumUser ? "free" : "premium"
-    localStorage.setItem("userPlan", newPlan)
-    isPremiumUser = !isPremiumUser
-    updateCategoryButton()
-    updatePlanStatus()
-
-    Swal.fire({
-      icon: "info",
-      title: "Plan Changed",
-      text: `Switched to ${newPlan.toUpperCase()} plan for demo purposes`,
-      timer: 1500,
-      showConfirmButton: false,
-    })
-  })
-
-  function updatePlanStatus() {
-    const statusElement = $("#planStatusText")
-    const categoryCount = $(".category-item").length
-    const maxCategories = isPremiumUser ? 5 : 1
-
-    if (isPremiumUser) {
-      statusElement.html(`
-        <i class="fas fa-crown text-warning me-1"></i>
-        <strong>Premium Plan:</strong> You can add up to ${maxCategories} categories (${categoryCount}/${maxCategories} used)
-      `)
-      $("#planStatus").removeClass("alert-warning").addClass("alert-success")
-    } else {
-      statusElement.html(`
-        <i class="fas fa-user me-1"></i>
-        <strong>Free Plan:</strong> You can add ${maxCategories} category (${categoryCount}/${maxCategories} used). 
-        <a href="#" onclick="showPremiumUpgradeModal()" class="alert-link">Upgrade to Premium</a> for more categories.
-      `)
-      $("#planStatus").removeClass("alert-success").addClass("alert-warning")
-    }
-  }
   function updateCategoryButton() {
     const categoryCount = $(".category-item").length
-    const maxCategories = isPremiumUser ? 5 : 1
+    const maxCategories = 10
 
-    if (!isPremiumUser) {
-      if (categoryCount >= 1) {
-        $("#addCategoryBtn")
-          .html('<i class="fas fa-crown me-1"></i>Add More Categories (Premium)')
-          .removeClass("btn-success btn-outline-dark")
-          .addClass("btn-warning")
-          .prop("disabled", false)
-      } else {
-        $("#addCategoryBtn")
-          .html('<i class="fas fa-plus me-1"></i>Add Category')
-          .removeClass("btn-warning")
-          .addClass("btn-outline-dark")
-          .prop("disabled", false)
-      }
+    if (categoryCount >= maxCategories) {
+      $("#addCategoryBtn")
+        .prop("disabled", true)
+        .removeClass("btn-outline-dark")
+        .addClass("btn-secondary")
+        .html('<i class="fa-solid fa-ban me-1"></i>Maximum Reached')
     } else {
-      if (categoryCount >= maxCategories) {
-        $("#addCategoryBtn")
-          .html(`<i class="fas fa-check me-1"></i>Maximum Categories (${maxCategories})`)
-          .removeClass("btn-warning btn-outline-dark")
-          .addClass("btn-success")
-          .prop("disabled", true)
-      } else {
-        $("#addCategoryBtn")
-          .html('<i class="fas fa-plus me-1"></i>Add Category')
-          .removeClass("btn-warning")
-          .addClass("btn-success")
-          .prop("disabled", false)
-      }
+      $("#addCategoryBtn")
+        .prop("disabled", false)
+        .removeClass("btn-secondary")
+        .addClass("btn-outline-dark")
+        .html('<i class="fa-solid fa-plus me-1"></i>Add Category')
     }
 
     const currentText = $("#addCategoryBtn").text()
     if (categoryCount > 0 && !$("#addCategoryBtn").prop("disabled")) {
-      const countText = ` (${categoryCount}/${maxCategories})`
-      if (!currentText.includes("(")) {
-        $("#addCategoryBtn").append(countText)
+      if (!currentText.includes("Add Another")) {
+        $("#addCategoryBtn").html('<i class="fa-solid fa-plus me-1"></i>Add Another Category')
       }
     }
-  }
-
-  // Simulate premium upgrade
-  function showPremiumUpgradeModal() {
-    Swal.fire({
-      icon: "info",
-      title: "Upgrade to Premium",
-      html: `
-        <div class="text-start">
-          <div class="card border-warning mb-3">
-            <div class="card-header bg-warning text-dark">
-              <h5 class="mb-0"><i class="fas fa-crown me-2"></i>Premium Plan Benefits</h5>
-            </div>
-            <div class="card-body">
-              <ul class="list-unstyled">
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Add up to 5 categories</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Priority job notifications</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Advanced profile features</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Enhanced visibility to clients</li>
-                <li class="mb-2"><i class="fas fa-check text-success me-2"></i>24/7 Premium support</li>
-              </ul>
-              <div class="text-center mt-3">
-                <h4 class="text-primary">$9.99/month</h4>
-                <small class="text-muted">Cancel anytime</small>
-              </div>
-            </div>
-          </div>
-          <p class="text-center text-muted small">
-            <strong>For demo purposes:</strong> Click "Upgrade Now" to simulate premium activation
-          </p>
-        </div>
-      `,
-      confirmButtonText: '<i class="fas fa-crown me-2"></i>Upgrade Now',
-      showCancelButton: true,
-      cancelButtonText: "Maybe Later",
-      confirmButtonColor: "#ffc107",
-      width: "500px",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        simulatePremiumUpgrade()
-      }
-    })
-  }
-
-  function simulatePremiumUpgrade() {
-    localStorage.setItem("userPlan", "premium")
-    isPremiumUser = true
-    updateCategoryButton()
-    updatePlanStatus()
-
-    Swal.fire({
-      icon: "success",
-      title: "Welcome to Premium!",
-      html: `
-        <div class="text-center">
-          <i class="fas fa-crown text-warning" style="font-size: 3rem;"></i>
-          <p class="mt-3">Congratulations! You're now a Premium member.</p>
-          <p>You can now add up to <strong>5 categories</strong> to your profile.</p>
-        </div>
-      `,
-      timer: 3000,
-      showConfirmButton: false,
-    })
   }
 
   function updateCategoryLabels() {
@@ -1012,8 +858,6 @@ $(document).ready(() => {
 
   window.fetchActiveCategories = fetchActiveCategories
   window.fetchActiveLocations = fetchActiveLocations
-  window.showPremiumUpgradeModal = showPremiumUpgradeModal
-  window.simulatePremiumUpgrade = simulatePremiumUpgrade
 
   $("#finishBtn").click((e) => {
     e.preventDefault()

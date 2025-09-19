@@ -1,101 +1,11 @@
-// import tokenHandler from './util/tokenRefreshHandler.js'; 
-
-// $(document).ready(function () {    
-//     const workerId = $.cookie('userId');
-//     const apiUrl = `http://localhost:8080/api/v1/worker/getworker/${workerId}`;
-//     const token = $.cookie("token");
-//     let userData = {};
-
-//     if (token) {
-//         tokenHandler.scheduleSilentRefresh(token);
-//     }
-
-//     $.ajax({
-//         url: `http://localhost:8080/api/v1/user/getuser/${workerId}`,
-//         method: "GET",
-//         dataType: "json",
-//         headers: { "Authorization": `Bearer ${token}` },
-//         async: false,
-//         success: function (response) {
-//             if (response.status === 200 && response.data) {
-//                 userData = {
-//                     firstName: response.data.firstName,
-//                     lastName: response.data.lastName,
-//                     email: response.data.email
-//                 };
-//             } else {
-//                 console.warn("No user data found!");
-//             }
-//         },
-//         error: function (xhr, status, error) {
-//             console.error("Error fetching user data:", error);
-//         }
-//     });
-
-//     $.ajax({
-//         url: apiUrl,
-//         method: "GET",
-//         dataType: "json",
-//         headers: { "Authorization": `Bearer ${token}` },
-//         success: function (response) {
-//             if (response.status === 200 && response.data) {
-//                 const worker = response.data;
-
-//                 $(".profile-pic").attr("src", worker.profilePictureUrl || "/assets/images/workerDefualtPP.png");
-
-//                 // Display Name (no direct name field in API, fallback from category or ID)
-//                 $("#displayFirstName").text(userData.firstName);
-//                 $("#displayLastName").text(userData.lastName);
-
-//                 // Email (API doesn't return email, so just show placeholder for now)
-//                 $("#displayEmail").text(userData.email);
-
-//                 // Category
-//                 if (worker.categories && worker.categories.length > 0) {
-//                     $("#displayCategory").html(`<strong>${worker.categories[0].name}</strong>`);
-//                 }
-
-//                 // Location
-//                 if (worker.locations && worker.locations.length > 0) {
-//                     let locationText = worker.locations.map(loc => loc.district).join(", ");
-//                     $("#displayLocation").html(`<i class="bi bi-geo-alt"></i> ${locationText}`);
-//                 }
-
-//                 // Experience
-//                 $("#displayExperience").text(worker.experienceYears || 0);
-
-//                 // Bio
-//                 $("#displayBio").text(worker.bio || "No bio available");
-
-//                 // Skills
-//                 const $skillsContainer = $("#skillsContainer").next(); // the <span> list
-//                 $skillsContainer.empty(); // clear old
-//                 if (worker.skills && worker.skills.length > 0) {
-//                     worker.skills.forEach(skill => {
-//                         $skillsContainer.append(`<span class="skill-badge">${skill}</span> `);
-//                     });
-//                 } else {
-//                     $skillsContainer.append(`<span class="text-muted">No skills added</span>`);
-//                 }
-
-//                 $(".card.mb-4 img").attr("src", worker.profilePictureUrl || "/assets/images/workerDefualtPP.png");
-//                 $(".card.mb-4 h6").text(worker.name || `Worker ${worker.workerId}`);
-//                 $(".card.mb-4 small").text(worker.categories?.[0]?.name || "No Category");
-
-//             } else {
-//                 console.warn("No worker data found!");
-//             }
-//         },
-//         error: function (xhr, status, error) {
-//             console.error("Error fetching worker data:", error);
-//         }
-//     });
-// });
-
 $(document).ready(() => {
-  // Check if required libraries are loaded
   if (typeof $ === 'undefined') {
     console.error('jQuery is not loaded!')
+    return
+  }
+
+  if (typeof Swal === 'undefined') {
+    console.error('SweetAlert2 is not loaded!')
     return
   }
   
@@ -105,6 +15,63 @@ $(document).ready(() => {
   const workerId = urlParams.get('workerId') 
   const apiUrl = `http://localhost:8080/api/v1/worker/profile/${workerId}`
   const token = $.cookie("token")
+  let subscriptionPlan = "FREE" 
+
+  function getVerifiedBadge(size = 'md') {
+    const isVerified = subscriptionPlan === "PRO" || subscriptionPlan === "PREMIUM"
+    if (!isVerified) return ''
+    
+    const sizeClass = size === 'lg' ? 'fs-4' : size === 'md' ? 'fs-5' : 'fs-6'
+    
+    return `<i class=" ${sizeClass} verified-badge" title="Verified ${subscriptionPlan} Worker" style="filter: drop-shadow(0 0 3px rgba(10, 31, 64, 0.4)); animation: verifiedPulse 2s infinite;"></i>`
+  }
+
+  function getWorkerSubscription() {
+    if (!token || !workerId) {
+      console.warn("Token or workerId not available for subscription check")
+      return
+    }
+
+    $.ajax({
+      url: `http://localhost:8080/api/v1/subscription/status/${workerId}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      success: (response) => {
+        console.log("Subscription data:", response)
+        if (response && response.plan) {
+          subscriptionPlan = response.plan.toUpperCase()
+          console.log("Updated subscription plan:", subscriptionPlan)
+          updateVerifiedBadge()
+        } else {
+          console.warn("Invalid subscription response format:", response)
+          subscriptionPlan = "FREE"
+        }
+      },
+      error: (xhr, status, error) => {
+        console.warn("Failed to fetch subscription data:", error)
+        subscriptionPlan = "FREE"
+      },
+    })
+  }
+
+  function updateVerifiedBadge() {
+    const nameContainer = $("h3").first() 
+    nameContainer.find('.verified-badge, .verified-worker-badge').remove() 
+    
+    const isVerified = subscriptionPlan === "PRO" || subscriptionPlan === "PREMIUM"
+    if (isVerified) {
+      const verifiedBadge = getVerifiedBadge('md')
+      nameContainer.append(verifiedBadge)
+      
+      const professionalBadge = `<span class="verified-worker-badge">
+        <i class="fas fa-award"></i>
+        VERIFIED ${subscriptionPlan}
+      </span>`
+      nameContainer.append(professionalBadge)
+    }
+  }
 
   // Check if we have the required parameters
   if (!workerId) {
@@ -141,46 +108,56 @@ $(document).ready(() => {
   }
 
   function showError(message) {
-    const errorHtml = `
-            <div class="alert alert-danger glass-card" role="alert">
-                <i class="fas fa-exclamation-triangle me-2"></i>
-                ${message}
-            </div>
-        `
-    $(".container").prepend(errorHtml)
-    setTimeout(() => {
-      $(".alert").fadeOut()
-    }, 5000)
+    Swal.fire({
+      title: '⚠️ Error',
+      text: message,
+      icon: 'error',
+      confirmButtonColor: '#023047',
+      confirmButtonText: 'Understood',
+      customClass: {
+        popup: 'skillworker-swal-popup',
+        confirmButton: 'skillworker-swal-confirm',
+        title: 'skillworker-swal-title',
+        content: 'skillworker-swal-content'
+      },
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      }
+    })
   }
 
   function generateStars(rating) {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    // Ensure rating is a number and within valid range
+    const validRating = Math.max(0, Math.min(5, parseFloat(rating) || 0))
+    const fullStars = Math.floor(validRating)
+    const hasHalfStar = (validRating % 1) >= 0.5
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0)
     
-    let starsHtml = '';
+    let starsHtml = ''
     
-    // Full stars
+    // Add full stars
     for (let i = 0; i < fullStars; i++) {
-      starsHtml += '<i class="fa-sharp fa-solid fa-star"></i>';
+      starsHtml += '<i class="fa-sharp fa-solid fa-star text-warning"></i>'
     }
     
-    // Half star
+    // Add half star if needed
     if (hasHalfStar) {
-      starsHtml += '<i class="fa-sharp fa-solid fa-star-half-stroke"></i>';
+      starsHtml += '<i class="fa-sharp fa-solid fa-star-half-stroke text-warning"></i>'
     }
     
-    // Empty stars
+    // Add empty stars
     for (let i = 0; i < emptyStars; i++) {
-      starsHtml += '<i class="fa-sharp fa-regular fa-star"></i>';
+      starsHtml += '<i class="fa-sharp fa-regular fa-star text-muted"></i>'
     }
     
-    return starsHtml;
+    return starsHtml
   }
 
   showLoadingState()
 
-  // Fetch worker profile data using the new API endpoint
   $.ajax({
     url: apiUrl,
     method: "GET",
@@ -192,36 +169,44 @@ $(document).ready(() => {
       if (response.status === 200 && response.data) {
         const worker = response.data
 
-        // Profile Picture
         const profilePicUrl = worker.profilePictureUrl || "/assets/images/workerDefualtPP.png"
         $(".profile-pic").attr("src", profilePicUrl)
 
-        // Display Name
         $("#displayFirstName").text(worker.firstName || "N/A")
         $("#displayLastName").text(worker.lastName || "")
 
-        // Email
+        // Get subscription and update verified badge after names are set
+        getWorkerSubscription()
+
         $("#displayEmail").text(worker.email || "No email provided")
 
-        // Rating and Reviews
-        const rating = worker.averageRating || 0
-        const totalReviews = worker.totalReviews || 0
+        // Enhanced rating display with proper validation
+        const rating = parseFloat(worker.averageRating) || 0
+        const totalReviews = parseInt(worker.totalReviews) || 0
         
-        // Update the star rating display
+        // Update star display
         $(".star").html(generateStars(rating))
-        $(".star").next(".fw-semibold").text(rating.toFixed(1))
         
-        // Update reviews count in the reviews section
-        $("h5:contains('Reviews')").text(`(${totalReviews}) Reviews`)
+        // Update rating text with better formatting
+        const formattedRating = rating > 0 ? rating.toFixed(1) : "0.0"
+        $(".star").next(".fw-semibold").text(formattedRating)
+        
+        // Update review count with proper text formatting
+        const reviewText = totalReviews === 1 ? "Review" : "Reviews"
+        $("h5:contains('Reviews')").text(`(${totalReviews}) ${reviewText}`)
+        
+        // Also update any other rating elements that might exist
+        $(".average-rating").text(formattedRating)
+        $(".total-reviews").text(totalReviews)
+        
+        console.log(`Rating updated: ${formattedRating}/5.0 with ${totalReviews} reviews`)
 
-        // Category
         if (worker.categories && worker.categories.length > 0) {
           $("#displayCategory").html(`<strong>${worker.categories[0].name}</strong>`)
         } else {
           $("#displayCategory").html(`<strong>No Category</strong>`)
         }
 
-        // Location
         if (worker.locations && worker.locations.length > 0) {
           const locationText = worker.locations
             .filter(loc => loc.active)
@@ -435,19 +420,27 @@ $(document).ready(() => {
   }
 
   function showSuccessMessage(message) {
-    const successHtml = `
-      <div class="alert alert-success glass-card position-fixed" role="alert" 
-           style="top: 100px; right: 20px; z-index: 9999; min-width: 300px;">
-        <i class="fas fa-check-circle me-2"></i>
-        ${message}
-      </div>
-    `
-    $("body").append(successHtml)
-    setTimeout(() => {
-      $(".alert-success").fadeOut(() => {
-        $(".alert-success").remove()
-      })
-    }, 3000)
+    Swal.fire({
+      title: '✅ Success!',
+      text: message,
+      icon: 'success',
+      confirmButtonColor: '#023047',
+      confirmButtonText: 'Great!',
+      timer: 3000,
+      timerProgressBar: true,
+      customClass: {
+        popup: 'skillworker-swal-popup',
+        confirmButton: 'skillworker-swal-confirm',
+        title: 'skillworker-swal-title',
+        content: 'skillworker-swal-content'
+      },
+      showClass: {
+        popup: 'animate__animated animate__fadeInUp'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutDown'
+      }
+    })
   }
 
   $('a[href^="#"]').on("click", function (event) {
@@ -465,63 +458,163 @@ $(document).ready(() => {
     }
   })
 
-  $(".btn-primary-custom").on("click", function () {
+  // Contact button handler - more specific to avoid conflicts with review form
+  $(".btn-primary-custom").not(".submit-review-btn").on("click", function (e) {
+    e.preventDefault()
+    e.stopPropagation()
+    
     const phoneNumber = $(this).data("phone")
     
-    if (phoneNumber) {
-      // Show phone number options if multiple numbers available
-      const confirmMessage = `Contact via phone: ${phoneNumber}?\n\nThis will open your phone app.`
-      
-      if (confirm(confirmMessage)) {
-        // Open phone app with the number
-        window.location.href = `tel:${phoneNumber}`
-      }
+    if (phoneNumber && phoneNumber !== 'No phone available') {
+      // Show SweetAlert confirmation for phone contact
+      Swal.fire({
+        title: '📞 Contact Worker',
+        html: `
+          <div class="text-center">
+            <p class="mb-3">Contact via phone:</p>
+            <h5 class="text-primary mb-3">${phoneNumber}</h5>
+            <p class="text-muted small">This will open your phone app to make the call.</p>
+          </div>
+        `,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#023047',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="fas fa-phone me-2"></i>Call Now',
+        cancelButtonText: 'Cancel',
+        customClass: {
+          popup: 'skillworker-swal-popup',
+          confirmButton: 'skillworker-swal-confirm',
+          cancelButton: 'skillworker-swal-cancel',
+          title: 'skillworker-swal-title',
+          content: 'skillworker-swal-content'
+        },
+        showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Open phone app with the number
+          window.location.href = `tel:${phoneNumber}`
+        }
+      })
     } else {
-      // Fallback if no phone number available
-      $(this).html('<i class="fas fa-spinner fa-spin me-2"></i>Connecting...')
+      // Fallback if no phone number available using SweetAlert
+      const $btn = $(this)
+      const originalHtml = $btn.html()
+      
+      $btn.html('<i class="fas fa-spinner fa-spin me-2"></i>Connecting...')
 
       setTimeout(() => {
-        $(this).html('<i class="fa-regular fa-paper-plane me-2"></i>Contact Me')
+        $btn.html(originalHtml)
         showError("No contact information available for this worker")
       }, 1000)
     }
   })
 
-  // Enhanced Star Rating System
-  $(".star-rating i").click(function () {
+  // Enhanced Star Rating System with hover effects
+  $(document).on("mouseover", ".star-rating i", function() {
     const rating = $(this).data("rating")
-    $(".star-rating i").removeClass("active")
-    $(".star-rating i").each(function () {
+    $(".star-rating i").each(function() {
       if ($(this).data("rating") <= rating) {
-        $(this).addClass("active")
+        $(this).removeClass("far").addClass("fas text-warning")
+      } else {
+        $(this).removeClass("fas text-warning").addClass("far text-muted")
       }
     })
   })
 
-  // Submit Review Form Handler
-  $('.review-form').on("submit", function (e) {
+  $(document).on("mouseout", ".star-rating", function() {
+    // Reset to selected rating when mouse leaves
+    const selectedRating = $(".star-rating i.active").length
+    $(".star-rating i").each(function() {
+      if ($(this).data("rating") <= selectedRating) {
+        $(this).removeClass("far text-muted").addClass("fas text-warning active")
+      } else {
+        $(this).removeClass("fas text-warning active").addClass("far text-muted")
+      }
+    })
+  })
+
+  $(document).on("click", ".star-rating i", function() {
+    const rating = $(this).data("rating")
+    
+    // Remove all active classes first
+    $(".star-rating i").removeClass("active fas text-warning").addClass("far text-muted")
+    
+    // Add active class to selected stars
+    $(".star-rating i").each(function() {
+      if ($(this).data("rating") <= rating) {
+        $(this).removeClass("far text-muted").addClass("fas text-warning active")
+      }
+    })
+    
+    console.log(`Rating selected: ${rating} stars`)
+  })
+
+  // Submit Review Form Handler with enhanced validation and conflict prevention
+  $(document).on('submit', '.review-form', function (e) {
     e.preventDefault()
+    e.stopPropagation()
 
     const $form = $(this)
-    const name = $form.find('input[placeholder="Your Name"]').val()
-    const review = $form.find("textarea").val()
+    const name = $form.find('input[placeholder="Your Name"]').val().trim()
+    const review = $form.find("textarea").val().trim()
     
     // Get the selected rating from active stars
     const rating = $form.find(".star-rating i.active").length
 
-    if (!name || !review || rating === 0) {
-      showError("Please fill in all fields and select a rating to submit your review")
-      return
+    // Enhanced validation
+    if (!name) {
+      showError("Please enter your name")
+      $form.find('input[placeholder="Your Name"]').focus()
+      return false
+    }
+
+    if (name.length < 2) {
+      showError("Name must be at least 2 characters long")
+      $form.find('input[placeholder="Your Name"]').focus()
+      return false
+    }
+
+    if (!review) {
+      showError("Please write a review")
+      $form.find("textarea").focus()
+      return false
+    }
+
+    if (review.length < 10) {
+      showError("Review must be at least 10 characters long")
+      $form.find("textarea").focus()
+      return false
+    }
+
+    if (rating === 0) {
+      showError("Please select a rating by clicking on the stars")
+      return false
     }
 
     const $submitBtn = $form.find('.submit-review-btn')
-    $submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Submitting...')
+    const originalText = $submitBtn.html()
+    $submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Submitting...').prop('disabled', true)
 
-    // Get reviewer ID from cookie and worker ID from URL params
     const reviewerId = $.cookie("userId")
     const urlParams = new URLSearchParams(window.location.search)
     const workerId = urlParams.get('workerId')
     const token = $.cookie("token")
+
+    // Validate required data
+    if (!reviewerId) {
+      showError("You must be logged in to submit a review")
+      $submitBtn.html(originalText).prop('disabled', false)
+      return false
+    }
+
+    if (!workerId) {
+      showError("Invalid worker ID")
+      $submitBtn.html(originalText).prop('disabled', false)
+      return false
+    }
 
     // Prepare review data
     const reviewData = {
@@ -530,6 +623,8 @@ $(document).ready(() => {
       reviewerId: parseInt(reviewerId),
       workerId: parseInt(workerId)
     }
+
+    console.log('Submitting review:', reviewData)
 
     // Submit review to backend
     $.ajax({
@@ -543,35 +638,161 @@ $(document).ready(() => {
       },
       data: JSON.stringify(reviewData),
       success: (response) => {
-        $submitBtn.html('<i class="fas fa-paper-plane me-2"></i>Submit Review')
+        console.log('Review submitted successfully:', response)
+        
+        $submitBtn.html('<i class="fas fa-check me-2"></i>Review Submitted!').removeClass('btn-primary-custom').addClass('btn-success')
+        
+        // Reset form
         $form.find("input, textarea").val("")
         
-        // Reset star rating
-        $form.find(".star-rating i").removeClass("active")
+        // Reset star rating with better visual feedback
+        $form.find(".star-rating i").removeClass("active fas text-warning").addClass("far text-muted")
 
-        // Show success message
-        const successHtml = `
-                <div class="alert alert-success glass-card" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    Thank you for your ${rating}-star review! It has been submitted successfully.
-                </div>
-            `
-        $(".container").prepend(successHtml)
+        // Show enhanced success message with SweetAlert
+        Swal.fire({
+          title: '🌟 Thank You!',
+          html: `
+            <div class="text-center">
+              <h5 class="mb-3">Your ${rating}-star review has been submitted successfully!</h5>
+              <p class="text-muted mb-0">Your feedback helps other clients make better decisions.</p>
+            </div>
+          `,
+          icon: 'success',
+          confirmButtonColor: '#023047',
+          confirmButtonText: 'You\'re Welcome!',
+          timer: 5000,
+          timerProgressBar: true,
+          customClass: {
+            popup: 'skillworker-swal-popup',
+            confirmButton: 'skillworker-swal-confirm',
+            title: 'skillworker-swal-title',
+            content: 'skillworker-swal-content'
+          },
+          showClass: {
+            popup: 'animate__animated animate__zoomIn'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__zoomOut'
+          }
+        })
+
+        // Reset button after delay
         setTimeout(() => {
-          $(".alert-success").fadeOut()
-        }, 5000)
+          $submitBtn.html('<i class="fas fa-paper-plane me-2"></i>Submit Review')
+                   .removeClass('btn-success')
+                   .addClass('btn-primary-custom')
+                   .prop('disabled', false)
+        }, 3000)
+
+        // Optionally refresh the ratings display (if you want to show updated data immediately)
+        // You could add a function here to re-fetch worker data to show updated ratings
       },
       error: (xhr, status, error) => {
-        $submitBtn.html('<i class="fas fa-paper-plane me-2"></i>Submit Review')
-        console.error("Error submitting review:", error)
+        console.error("Error submitting review:", error, xhr.responseText)
+        
+        $submitBtn.html('<i class="fas fa-exclamation-triangle me-2"></i>Failed to Submit')
+                 .removeClass('btn-primary-custom')
+                 .addClass('btn-danger')
         
         let errorMessage = "Failed to submit review. Please try again."
-        if (xhr.responseJSON && xhr.responseJSON.message) {
+        
+        if (xhr.status === 400) {
+          errorMessage = "Invalid review data. Please check your input and try again."
+        } else if (xhr.status === 401) {
+          errorMessage = "You must be logged in to submit a review."
+        } else if (xhr.status === 403) {
+          errorMessage = "You don't have permission to review this worker."
+        } else if (xhr.status === 409) {
+          errorMessage = "You have already reviewed this worker."
+        } else if (xhr.responseJSON && xhr.responseJSON.message) {
           errorMessage = xhr.responseJSON.message
         }
         
         showError(errorMessage)
+
+        // Reset button after delay
+        setTimeout(() => {
+          $submitBtn.html('<i class="fas fa-paper-plane me-2"></i>Submit Review')
+                   .removeClass('btn-danger')
+                   .addClass('btn-primary-custom')
+                   .prop('disabled', false)
+        }, 3000)
       }
     })
   })
+
+  // Prevent submit review button from triggering contact functionality
+  $(document).on('click', '.submit-review-btn', function(e) {
+    e.stopPropagation()
+    // Let the form submit handler take care of this
+    $(this).closest('form').trigger('submit')
+    return false
+  })
+
+  // Add custom SweetAlert styling to match app theme
+  const swalStyles = `
+    <style>
+      .skillworker-swal-popup {
+        border-radius: 15px !important;
+        font-family: 'Montserrat', 'Open Sans', sans-serif !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+      }
+      
+      .skillworker-swal-title {
+        color: #023047 !important;
+        font-weight: 600 !important;
+        font-size: 1.5rem !important;
+      }
+      
+      .skillworker-swal-content {
+        color: #374151 !important;
+        font-size: 1rem !important;
+        line-height: 1.5 !important;
+      }
+      
+      .skillworker-swal-confirm {
+        background: linear-gradient(135deg, #023047 0%, #126E8C 100%) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 500 !important;
+        padding: 10px 25px !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      .skillworker-swal-confirm:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 20px rgba(2, 48, 71, 0.3) !important;
+      }
+      
+      .skillworker-swal-cancel {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 500 !important;
+        padding: 10px 25px !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      .skillworker-swal-cancel:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3) !important;
+      }
+      
+      .swal2-timer-progress-bar {
+        background: linear-gradient(90deg, #023047 0%, #126E8C 100%) !important;
+      }
+      
+      .swal2-icon.swal2-success {
+        border-color: #10b981 !important;
+        color: #10b981 !important;
+      }
+      
+      .swal2-icon.swal2-error {
+        border-color: #ef4444 !important;
+        color: #ef4444 !important;
+      }
+    </style>
+  `
+  
+  $('head').append(swalStyles)
 })

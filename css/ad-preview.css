@@ -54,6 +54,15 @@ body {
   width: 0%;
 }
 
+/* Error Message Styles */
+.error-alert {
+  border-radius: 12px !important;
+}
+
+.error-icon {
+  font-size: 1.5rem;
+}
+
 .nav-icon {
   color: rgba(255, 255, 255, 0.8);
   font-size: 1.1rem;

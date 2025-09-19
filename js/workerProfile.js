@@ -18,7 +18,24 @@ $(document).ready(() => {
   const token = Cookies.get("token")
   let userData = {}
 
-  // Check if tokenHandler is available (loaded via script tag)
+  // Function to update navbar profile picture
+  function updateNavbarProfilePicture(imageUrl) {
+    const defaultImage = "/assets/images/workerDefualtPP.png"
+    const profileImageUrl = imageUrl || defaultImage
+    
+    // Update navbar profile picture
+    $('.navbar .profile-btn img').attr('src', profileImageUrl)
+    
+    console.log('Navbar profile picture updated:', profileImageUrl)
+  }
+
+  if (workerId) {
+    $("#previewProfileBtn").attr("href", `/pages/worker-profile-preview.html?workerId=${workerId}`)
+  } else {
+    console.warn("Worker ID not found in cookies")
+    $("#previewProfileBtn").attr("href", "#").addClass("disabled")
+  }
+
   if (typeof window.tokenHandler !== 'undefined' && token) {
     try {
       window.tokenHandler.scheduleSilentRefresh(token)
@@ -27,7 +44,6 @@ $(document).ready(() => {
     }
   }
 
-  // Enhanced toast notifications with modern styling
   function showSuccessMessage(message) {
     const toast = $(`
             <div class="alert alert-success alert-dismissible fade show position-fixed" 
@@ -46,7 +62,6 @@ $(document).ready(() => {
 
     $("body").append(toast)
 
-    // Auto-dismiss with animation
     setTimeout(() => {
       toast.addClass("animate__animated animate__fadeOutRight")
       setTimeout(() => toast.remove(), 500)
@@ -119,7 +134,6 @@ $(document).ready(() => {
     })
   }
 
-  // Fetch user data with loading state
   function fetchUserData() {
     $.ajax({
       url: `http://localhost:8080/api/v1/user/getuser/${workerId}`,
@@ -134,7 +148,6 @@ $(document).ready(() => {
             email: response.data.email,
           }
 
-          // Update UI with fade-in animation
           $("#displayFirstName").text(userData.firstName).addClass("fade-in")
           $("#displayLastName").text(userData.lastName)
           $("#displayEmail").text(userData.email).addClass("fade-in")
@@ -217,6 +230,9 @@ $(document).ready(() => {
         // Update profile picture with loading state
         const profilePicUrl = w.profilePictureUrl || "/assets/images/workerDefualtPP.png"
         $("#profilePic, #profilePreview").attr("src", profilePicUrl)
+        
+        // Update navbar profile picture
+        updateNavbarProfilePicture(profilePicUrl)
 
         // Update contact info
         $("#displayMobile")
@@ -266,6 +282,15 @@ $(document).ready(() => {
 
   // Initialize profile loading
   loadWorker()
+  
+  // Initialize navbar profile picture on page load
+  $(document).ready(() => {
+    // Check if we have a stored profile picture URL or fetch it
+    if (workerId && token) {
+      // This will be updated when loadWorker() completes
+      updateNavbarProfilePicture() // Call with default first
+    }
+  })
 
   // Enhanced skill removal with confirmation
   $(document).on("click", ".remove-skill", function (e) {
@@ -351,6 +376,8 @@ $(document).ready(() => {
         $("#displayExperience, #displayExperience2").text(experience)
         if (uploadedUrl) {
           $("#profilePic").attr("src", uploadedUrl)
+          // Update navbar profile picture when profile is updated
+          updateNavbarProfilePicture(uploadedUrl)
         }
 
         Cookies.set("first_name", firstName, { path: "/" })
@@ -539,6 +566,10 @@ $(document).ready(() => {
 
           $("#profilePreview").attr("src", imageUrl)
           $("#profilePic").attr("src", imageUrl)
+          
+          // Update navbar profile picture
+          updateNavbarProfilePicture(imageUrl)
+          
           $("#uploadBtn")
             .html('<i class="bi bi-check-circle"></i> Uploaded')
             .removeClass("btn-dark")

@@ -99,10 +99,10 @@ $(document).ready(() => {
 
     $(this).addClass("active")
 
-    $(".content-section").hide()
+    $(".content-section").addClass("d-none")
 
     const section = $(this).data("section")
-    $(`#${section}-section`).show()
+    $(`#${section}-section`).removeClass("d-none")
 
     loadSectionData(section)
   })
@@ -1344,8 +1344,8 @@ function manageAds() {
   // Switch to services/ads section
   $(".sidebar-item").removeClass("active")
   $(".sidebar-item[data-section='services']").addClass("active")
-  $(".content-section").hide()
-  $("#services-section").show()
+  $(".content-section").addClass("d-none")
+  $("#services-section").removeClass("d-none")
   loadServices()
 }
 
@@ -1353,8 +1353,8 @@ function sendBroadcast() {
   // Switch to broadcast section
   $(".sidebar-item").removeClass("active")
   $(".sidebar-item[data-section='broadcast']").addClass("active")
-  $(".content-section").hide()
-  $("#broadcast-section").show()
+  $(".content-section").addClass("d-none")
+  $("#broadcast-section").removeClass("d-none")
   loadBroadcast()
 }
 

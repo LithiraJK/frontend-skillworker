@@ -1,8 +1,18 @@
 const $ = window.jQuery || window.$
+const Swal = window.Swal
 
 $(document).ready(() => {
   if (typeof $ === "undefined") {
     console.error("jQuery is not loaded!")
+    return
+  }
+
+  if (typeof Swal === "undefined") {
+    console.error("SweetAlert2 is not loaded!")
+    alert("Authentication required. Redirecting to login page...")
+    setTimeout(() => {
+      window.location.href = "../pages/login-page.html"
+    }, 2000)
     return
   }
 
@@ -28,11 +38,47 @@ $(document).ready(() => {
 
   if (!token) {
     console.error("No token found")
-    showError("Authentication required. Redirecting to login...", false)
+    Swal.fire({
+      icon: "warning",
+      title: "Authentication Required",
+      text: "You need to be logged in to view this service. Redirecting to login page...",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false
+    }).then(() => {
+      window.location.href = "../pages/login-page.html"
+    })
+    
     setTimeout(() => {
       window.location.href = "../pages/login-page.html"
-    }, 2000)
+    }, 3000)
     return
+  }
+
+
+  function handleAuthError() {
+    if (typeof Swal !== "undefined") {
+      Swal.fire({
+        icon: "error",
+        title: "Authentication Failed",
+        text: "Your session has expired. Redirecting to login page...",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then(() => {
+        window.location.href = "../pages/login-page.html"
+      })
+    } else {
+      alert("Authentication failed. Your session has expired. Redirecting to login page...")
+    }
+    
+    setTimeout(() => {
+      window.location.href = "../pages/login-page.html"
+    }, 3000)
   }
 
   showLoading()
@@ -40,6 +86,70 @@ $(document).ready(() => {
   let adData = {}
   let workerData = {}
   let userData = {}
+  let subscriptionPlan = "FREE" // Default plan
+
+  function getVerifiedBadge(size = 'sm') {
+    const isVerified = subscriptionPlan === "PRO" || subscriptionPlan === "PREMIUM"
+    if (!isVerified) return ''
+    
+    const sizeClass = size === 'lg' ? 'fs-4' : size === 'md' ? 'fs-5' : 'fs-6'
+    
+    return ` <i class="fas fa-award  ${sizeClass} verified-badge" title="Verified ${subscriptionPlan} Worker" style="filter: drop-shadow(0 0 3px rgba(13, 110, 253, 0.4)); animation: verifiedPulse 2s infinite; margin-left: 6px;"></i>`
+  }
+
+  function getWorkerSubscription(workerId) {
+    if (!token || !workerId) {
+      console.warn("Token or workerId not available for subscription check")
+      return
+    }
+
+    $.ajax({
+      url: `http://localhost:8080/api/v1/subscription/status/${workerId}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      success: (response) => {
+        console.log("Subscription data:", response)
+        if (response && response.plan) {
+          subscriptionPlan = response.plan.toUpperCase()
+          console.log("Updated subscription plan:", subscriptionPlan)
+          updateVerifiedBadge() 
+        } else {
+          console.warn("Invalid subscription response format:", response)
+          subscriptionPlan = "FREE"
+        }
+      },
+      error: (xhr, status, error) => {
+        console.warn("Failed to fetch subscription data:", error)
+        subscriptionPlan = "FREE"
+      },
+    })
+  }
+
+  function updateVerifiedBadge() {
+    const verifiedBadge = getVerifiedBadge('sm')
+    const isVerified = subscriptionPlan === "PRO" || subscriptionPlan === "PREMIUM"
+    
+    $(".worker-name").not(".contact-card .worker-name, .quick-contact .worker-name").each(function() {
+      const $element = $(this)
+      const currentHtml = $element.html()
+      
+      const nameWithoutBadge = currentHtml
+        .replace(/<i class="fas fa-award[^>]*><\/i>/g, '') 
+        .replace(/<span class="verified-worker-badge[^>]*>.*?<\/span>/g, '') 
+        .replace(/\s*✓.*$/, '') 
+        .trim()
+      
+      
+      if (isVerified) {
+        $element.html(nameWithoutBadge + verifiedBadge)
+      } else {
+        $element.html(nameWithoutBadge)
+      }
+    })
+  }
+
 
   $.ajax({
     url: `http://localhost:8080/api/v1/ad/get/${adId}`,
@@ -69,11 +179,8 @@ $(document).ready(() => {
       let showBackButton = true
 
       if (xhr.status === 401) {
-        errorMessage = "Authentication failed. Redirecting to login..."
-        showBackButton = false
-        setTimeout(() => {
-          window.location.href = "../pages/login-page.html"
-        }, 3000)
+        handleAuthError()
+        return
       } else if (xhr.status === 404) {
         errorMessage = "Ad not found."
       } else if (xhr.status >= 500) {
@@ -100,9 +207,9 @@ $(document).ready(() => {
       ? '<a href="../pages/ads-overview.html" class="btn btn-primary mt-3">← Back to Ads</a>'
       : ""
     $(".container").html(`
-            <div class="alert alert-danger border-0 shadow-sm" style="border-radius: 12px;">
+            <div class="alert alert-danger border-0 shadow-sm error-alert">
                 <div class="d-flex align-items-center mb-3">
-                    <i class="fas fa-exclamation-triangle text-danger me-3" style="font-size: 1.5rem;"></i>
+                    <i class="fas fa-exclamation-triangle text-danger me-3 error-icon"></i>
                     <h4 class="mb-0">Oops! Something went wrong</h4>
                 </div>
                 <p class="mb-3">${message}</p>
@@ -142,6 +249,10 @@ $(document).ready(() => {
       },
       error: (xhr, status, error) => {
         console.error("Error fetching user data:", error)
+        if (xhr.status === 401) {
+          handleAuthError()
+          return
+        }
         userDataLoaded = true
         checkAndPopulate()
       },
@@ -164,6 +275,10 @@ $(document).ready(() => {
       },
       error: (xhr, status, error) => {
         console.error("Error fetching worker data:", error)
+        if (xhr.status === 401) {
+          handleAuthError()
+          return
+        }
         workerDataLoaded = true
         checkAndPopulate()
       },
@@ -183,6 +298,11 @@ $(document).ready(() => {
     const lastName = userData.lastName || ""
     const fullName = `${firstName} ${lastName}`.trim() || `Worker ${adData.workerId || "Unknown"}`
     $(".worker-name").text(fullName)
+
+    // Get worker subscription to show verified badge
+    if (adData.workerId) {
+      getWorkerSubscription(adData.workerId)
+    }
 
     if (adData.categoryName) {
       $(".worker-category").text(adData.categoryName)
@@ -225,6 +345,9 @@ $(document).ready(() => {
     } else {
       $(".price-amount").text("Contact for pricing")
     }
+
+    // Add trusted pricing badge for verified workers
+    updatePricingSection()
 
     if (workerData.phoneNumbers && workerData.phoneNumbers.length > 0) {
       $("#displayMobile").text(workerData.phoneNumbers[0])
