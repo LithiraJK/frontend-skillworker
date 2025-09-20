@@ -312,12 +312,17 @@ h1, h2, h3, h4, h5, h6 {
 /* Loading States */
 .loading-spinner {
   display: none;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border: 2px solid transparent;
   border-top: 2px solid currentColor;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+.loading-spinner.show {
+  display: inline-block;
 }
 
 @keyframes spin {
@@ -329,14 +334,10 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-.btn-plan.loading {
+.btn-plan:disabled {
   pointer-events: none;
   opacity: 0.7;
-}
-
-.btn-plan.loading .loading-spinner {
-  display: inline-block;
-  margin-right: 0.5rem;
+  cursor: not-allowed;
 }
 
 /* Features Section */

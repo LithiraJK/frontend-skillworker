@@ -11,134 +11,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/index.css">
     
-    <style>
-        :root {
-            --primary: #155e75;
-            --primary-foreground: #ffffff;
-            --secondary: #f1f5f9;
-            --secondary-foreground: #0f172a;
-            --accent: #059669;
-            --accent-foreground: #ffffff;
-            --background: #ffffff;
-            --foreground: #0f172a;
-            --muted: #f8fafc;
-            --muted-foreground: #64748b;
-            --border: #e2e8f0;
-        }
-
-        body {
-            font-family: 'Open Sans', sans-serif;
-            color: var(--foreground);
-            background-color: var(--background);
-        }
-
-        .font-serif {
-            font-family: 'Montserrat', serif;
-        }
-
-        .text-primary { color: var(--primary) !important; }
-        .bg-primary { background-color: var(--primary) !important; }
-        .text-primary-foreground { color: var(--primary-foreground) !important; }
-        .bg-accent { background-color: var(--accent) !important; }
-        .text-accent-foreground { color: var(--accent-foreground) !important; }
-        .text-muted-foreground { color: var(--muted-foreground) !important; }
-        .bg-muted { background-color: var(--muted) !important; }
-        .border-custom { border-color: var(--border) !important; }
-
-        .navbar-custom {
-            background-color: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .hero-gradient {
-            background: linear-gradient(135deg, var(--background) 0%, var(--muted) 50%, rgba(5, 150, 105, 0.1) 100%);
-        }
-
-        .service-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .worker-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary-custom {
-            background-color: var(--primary);
-            border-color: var(--primary);
-            color: var(--primary-foreground);
-        }
-
-        .btn-primary-custom:hover {
-            background-color: #0c4a6e;
-            border-color: #0c4a6e;
-        }
-
-        .btn-accent {
-            background-color: var(--accent);
-            border-color: var(--accent);
-            color: var(--accent-foreground);
-        }
-
-        .btn-accent:hover {
-            background-color: #047857;
-            border-color: #047857;
-        }
-
-        .icon-circle {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-        }
-
-        .service-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .star-rating {
-            color: #fbbf24;
-        }
-
-        .verified-badge {
-            background-color: var(--secondary);
-            color: var(--secondary-foreground);
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.375rem;
-        }
-
-        .floating-card {
-            position: absolute;
-            bottom: -24px;
-            left: -24px;
-            background: var(--background);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        @media (max-width: 768px) {
-            .floating-card {
-                position: static;
-                margin-top: 1rem;
-            }
-        }
-    </style>
+    
 </head>
 <body>
     
@@ -170,7 +45,7 @@
                 
                 <div class="d-flex gap-2">
                     <a href="pages/login-page.html" class="btn btn-outline-secondary">Sign In</a>
-                    <a href="pages/signup-first-page.html" class="btn btn-primary-custom">Get Started</a>
+                    <a href="pages/signup-role-selection.html" class="btn btn-primary-custom">Get Started</a>
                 </div>
             </div>
         </div>
@@ -449,7 +324,7 @@
                     <div class="card h-100 worker-card border-custom">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-3">
-                                <img src="/professional-woman-contractor.png" alt="Emily Chen" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;">
+                                <img src="/assets/images/workerDefualtPP.png" alt="Emily Chen" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;">
                                 <div class="flex-grow-1">
                                     <div class="d-flex align-items-center gap-2 mb-1">
                                         <h5 class="card-title mb-0">Emily Chen</h5>
@@ -617,7 +492,7 @@
                             Find Workers
                             <i class="fas fa-arrow-right ms-2"></i>
                         </a>
-                        <a href="pages/signup-first-page.html" class="btn btn-outline-light btn-lg">
+                        <a href="pages/signup-role-selection.html" class="btn btn-outline-light btn-lg">
                             Become a Worker
                             <i class="fas fa-arrow-right ms-2"></i>
                         </a>
@@ -681,40 +556,7 @@
 
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    
-    <script>
-        $(document).ready(function() {
-            // Search form functionality
-            $('#searchForm').on('submit', function(e) {
-                e.preventDefault();
-                const searchQuery = $('#searchQuery').val();
-                const location = $('#location').val();
-                console.log('Searching for:', searchQuery, 'in', location);
-                // Add your search logic here
-            });
-
-            // Smooth scrolling for navigation links
-            $('a[href^="#"]').on('click', function(e) {
-                e.preventDefault();
-                const target = $(this.getAttribute('href'));
-                if (target.length) {
-                    $('html, body').animate({
-                        scrollTop: target.offset().top - 80
-                    }, 1000);
-                }
-            });
-
-            // Add scroll effect to navbar
-            $(window).scroll(function() {
-                if ($(window).scrollTop() > 50) {
-                    $('.navbar-custom').addClass('shadow-sm');
-                } else {
-                    $('.navbar-custom').removeClass('shadow-sm');
-                }
-            });
-        });
-    </script>
+    <script src="/js/main.js"></script>
 </body>
 </html>
