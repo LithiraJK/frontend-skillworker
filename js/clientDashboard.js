@@ -1,8 +1,8 @@
 const $ = window.$
 
 $(document).ready(() => {
-  let currentPage = 1
-  const itemsPerPage = 8
+  let currentPage = 0
+  const itemsPerPage = 6
   let viewMode = "grid"
   let selectedCategory = "all"
   let selectedDistrict = "all"
@@ -12,6 +12,8 @@ $(document).ready(() => {
 
   let categories = []
   let workerAds = []
+  let totalPages = 0
+  let totalElements = 0
 
   const districts = [
     "Colombo",
@@ -83,7 +85,7 @@ $(document).ready(() => {
   }
 
  
-  function fetchAds(district = null) {
+  function fetchAds(district = null, page = 0) {
   
     $('#workersContainer').html(`
       <div class="col-12">
@@ -97,9 +99,9 @@ $(document).ready(() => {
     `)
 
    
-    let apiUrl = 'http://localhost:8080/api/v1/ad/getall/active'
+    let apiUrl = `http://localhost:8080/api/v1/ad/getall/active?page=${page}&size=${itemsPerPage}`
     if (district && district !== 'all') {
-      apiUrl = `http://localhost:8080/api/v1/ad/getall/active/${district.toUpperCase()}`
+      apiUrl = `http://localhost:8080/api/v1/ad/getall/active/${district.toUpperCase()}?page=${page}&size=${itemsPerPage}`
     }
 
     $.ajax({
@@ -113,8 +115,12 @@ $(document).ready(() => {
         console.log('Ads fetched successfully:', result)
 
         if (result.status === 200) {
+          // Update pagination info from server response
+          totalPages = result.data.totalPages
+          totalElements = result.data.totalElements
+          currentPage = result.data.currentPage
          
-          workerAds = result.data.map(ad => ({
+          workerAds = result.data.content.map(ad => ({
             id: ad.adId,
             name: `${ad.categoryName} Service Provider`,
             category: ad.categoryName.toLowerCase(),
@@ -137,7 +143,9 @@ $(document).ready(() => {
 
           updateCategoryCounts()
           populateCategories()
-          filterAndDisplayWorkers()
+          displayWorkers(workerAds)
+          updateResultsCount(totalElements)
+          updatePagination()
         } else {
           console.error('Failed to fetch ads:', result.message)
           $('#workersContainer').html(`
@@ -155,7 +163,7 @@ $(document).ready(() => {
         console.error('Status:', status)
         console.error('Response:', xhr.responseText)
 
-        const errorResponse = xhr.responseJSON.message;
+        const errorResponse = xhr.responseJSON ? xhr.responseJSON.message : 'Error loading services';
         
         $('#workersContainer').html(`
           <div class="col-12">
@@ -221,8 +229,8 @@ $(document).ready(() => {
 
     $("#searchBtn").on("click", () => {
       searchQuery = $("#searchInput").val()
-      currentPage = 1
-      filterAndDisplayWorkers()
+      currentPage = 0
+      fetchAds(selectedDistrict, 0)
     })
 
     $("#searchInput").on("keypress", (e) => {
@@ -243,15 +251,15 @@ $(document).ready(() => {
       $(".category-item").removeClass("active")
       $(this).addClass("active")
       selectedCategory = $(this).data("category")
-      currentPage = 1
-      filterAndDisplayWorkers()
+      currentPage = 0
+      fetchAds(selectedDistrict, 0)
     })
 
     $("#districtSelect").on("change", function () {
       selectedDistrict = $(this).val() === "All Districts" ? "all" : $(this).val()
-      currentPage = 1
+      currentPage = 0
       
-      fetchAds(selectedDistrict)
+      fetchAds(selectedDistrict, 0)
 
       $(".district-path").removeClass("selected")
       if (selectedDistrict !== "all") {
@@ -266,9 +274,9 @@ $(document).ready(() => {
         $("#districtSelect").val(district)
         $(".district-path").removeClass("selected")
         $(this).addClass("selected")
-        currentPage = 1
+        currentPage = 0
         
-        fetchAds(district)
+        fetchAds(district, 0)
       }
     })
 
@@ -276,14 +284,14 @@ $(document).ready(() => {
       viewMode = "grid"
       $("#gridViewBtn").addClass("active")
       $("#listViewBtn").removeClass("active")
-      filterAndDisplayWorkers()
+      displayWorkers(workerAds)
     })
 
     $("#listViewBtn").on("click", () => {
       viewMode = "list"
       $("#listViewBtn").addClass("active")
       $("#gridViewBtn").removeClass("active")
-      filterAndDisplayWorkers()
+      displayWorkers(workerAds)
     })
 
     $(document).on("click", ".contact-btn", function () {
@@ -339,37 +347,13 @@ $(document).ready(() => {
     })
   }
 
-  function filterAndDisplayWorkers() {
-    const filteredWorkers = workerAds.filter((worker) => {
-      const matchesSearch =
-        searchQuery === "" ||
-        worker.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        worker.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (worker.description && worker.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (worker.skills && worker.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase())))
-
-      const matchesCategory = selectedCategory === "all" || worker.category === selectedCategory
-      const matchesDistrict = selectedDistrict === "all" || worker.district.toLowerCase() === selectedDistrict.toLowerCase()
-
-      return matchesSearch && matchesCategory && matchesDistrict
-    })
-
-    displayWorkers(filteredWorkers)
-    updateResultsCount(filteredWorkers.length)
-    updatePagination(filteredWorkers.length)
-  }
-
   function displayWorkers(workers) {
     const container = $("#workersContainer")
-    const startIndex = (currentPage - 1) * itemsPerPage
-    const endIndex = startIndex + itemsPerPage
-    const paginatedWorkers = workers.slice(startIndex, endIndex)
-
     container.empty()
 
-    const gridClass = viewMode === "grid" ? "col-md-6 col-lg-4 col-xl-3" : "col-12"
+    const gridClass = viewMode === "grid" ? "col-md-6 col-lg-4 col-xl-4" : "col-12"
 
-    paginatedWorkers.forEach((worker) => {
+    workers.forEach((worker) => {
       const skillsDisplay = worker.skills && worker.skills.length > 0
         ? worker.skills.slice(0, 3).join(', ') + (worker.skills.length > 3 ? '...' : '')
         : 'Various skills'
@@ -439,15 +423,16 @@ $(document).ready(() => {
     $("#resultsCount").text(`${count} services found`)
   }
 
-  function updatePagination(totalItems) {
-    const totalPages = Math.ceil(totalItems / itemsPerPage)
+  function updatePagination() {
     const pagination = $("#pagination")
-
     pagination.empty()
 
     if (totalPages <= 1) return
 
-    const prevDisabled = currentPage === 1 ? "disabled" : ""
+    // Display current page as 1-based for UI (server uses 0-based)
+    const displayCurrentPage = currentPage + 1
+    
+    const prevDisabled = currentPage === 0 ? "disabled" : ""
     pagination.append(`
             <li class="page-item ${prevDisabled}">
                 <a class="page-link" href="#" data-page="${currentPage - 1}">
@@ -456,16 +441,17 @@ $(document).ready(() => {
             </li>
         `)
 
-    for (let i = 1; i <= totalPages; i++) {
+    // Show page numbers (convert to 1-based for display)
+    for (let i = 0; i < totalPages; i++) {
       const active = i === currentPage ? "active" : ""
       pagination.append(`
                 <li class="page-item ${active}">
-                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
                 </li>
             `)
     }
 
-    const nextDisabled = currentPage === totalPages ? "disabled" : ""
+    const nextDisabled = currentPage === (totalPages - 1) ? "disabled" : ""
     pagination.append(`
             <li class="page-item ${nextDisabled}">
                 <a class="page-link" href="#" data-page="${currentPage + 1}">
@@ -477,9 +463,8 @@ $(document).ready(() => {
     $(".page-link").on("click", function (e) {
       e.preventDefault()
       const page = Number.parseInt($(this).data("page"))
-      if (page && page !== currentPage && page >= 1 && page <= totalPages) {
-        currentPage = page
-        filterAndDisplayWorkers()
+      if (page !== undefined && page !== currentPage && page >= 0 && page < totalPages) {
+        fetchAds(selectedDistrict, page)
       }
     })
   }
@@ -489,9 +474,9 @@ $(document).ready(() => {
   window.district_click = function (districtCode, districtName) {
     selectedDistrict = districtName
     $("#districtSelect").val(districtName)
-    currentPage = 1
+    currentPage = 0
     
-    fetchAds(districtName)
+    fetchAds(districtName, 0)
     
     $(".district-path").removeClass("selected")
     $(`.district-path[data-district="${districtName}"]`).addClass("selected")

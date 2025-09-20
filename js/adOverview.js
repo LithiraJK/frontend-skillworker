@@ -30,7 +30,7 @@ $(document).ready(() => {
   }
 
 
-  let workerSubscriptionPlan = "FREE" // Default plan
+  let workerSubscriptionPlan = "FREE"
   let currentAdCount = 0
   let adLimits = {
     FREE: 1,
@@ -42,11 +42,10 @@ $(document).ready(() => {
     $("#adsTable").addClass("fade-in")
   }, 100)
 
-  // Add verified badge styling
   $('head').append(`
     <style>
       .verified-badge {
-        color: #0d6efd !important;
+        color: #072552ff !important;
         filter: drop-shadow(0 0 2px rgba(13, 110, 253, 0.3));
         animation: verifiedPulse 2s infinite;
       }
@@ -67,7 +66,7 @@ $(document).ready(() => {
         left: 0;
         right: 0;
         height: 2px;
-        background: linear-gradient(90deg, #0d6efd, #6610f2, #0d6efd);
+        background: linear-gradient(90deg, #03224fff, #6610f2, #0d6efd);
         border-radius: 1px;
         opacity: 0.3;
       }
@@ -254,12 +253,6 @@ $(document).ready(() => {
     if (!categoryId) {
       showError("Please select a service category")
       $("#editCategoryId").addClass("is-invalid").focus()
-      return false
-    }
-
-    if (!status) {
-      showError("Please select a status")
-      $("#editStatus").addClass("is-invalid").focus()
       return false
     }
 
@@ -1032,12 +1025,9 @@ $(document).ready(() => {
       </style>
     `
 
-    // Append modal to body
     $("body").append(modalHTML)
 
-    // Wait for DOM insertion before setting up events
     setTimeout(() => {
-      // Handle confirm button click with loading state
       $("#upgradeConfirmBtn").off("click").on("click", function() {
         const $btn = $(this)
         const originalHtml = $btn.html()
@@ -1049,7 +1039,6 @@ $(document).ready(() => {
         }, 800)
       })
 
-      // Show the modal with enhanced backdrop
       const upgradeModal = new bootstrap.Modal(document.getElementById('upgradeModal'), {
         backdrop: 'static',
         keyboard: true
@@ -1057,7 +1046,6 @@ $(document).ready(() => {
       
       upgradeModal.show()
 
-      // Clean up modal after it's hidden with better cleanup
       $("#upgradeModal").off('hidden.bs.modal').on('hidden.bs.modal', function () {
         const modalElement = this
         const bsModal = bootstrap.Modal.getInstance(modalElement)
@@ -1068,7 +1056,6 @@ $(document).ready(() => {
         
         $(modalElement).remove()
         
-        // Ensure backdrop is removed and body classes are cleaned
         $('.modal-backdrop').remove()
         $('body').removeClass('modal-open')
         
@@ -1166,7 +1153,7 @@ $(document).ready(() => {
     const sizeClass = size === 'lg' ? 'fs-5' : size === 'md' ? 'fs-6' : ''
     const textContent = showText ? ' Verified' : ''
     
-    return `<i class="fas fa-check-circle verified-badge ms-1 ${sizeClass}" title="Verified ${workerSubscriptionPlan} Member">${textContent}</i>`
+    return `<i class="fas fa-award verified-badge ms-1 ${sizeClass}" title="Verified ${workerSubscriptionPlan} Member">${textContent}</i>`
   }
 
   function resetForm() {
@@ -1220,7 +1207,6 @@ $(document).ready(() => {
   loadCategories()
   getWorkerSubscription() 
 
-  // Make functions globally available for other parts of the application
   window.getVerifiedBadge = getVerifiedBadge
   window.isVerifiedWorker = () => workerSubscriptionPlan === "PRO" || workerSubscriptionPlan === "PREMIUM" 
 

@@ -13,8 +13,6 @@ $(document).ready(() => {
   console.log('Worker dashboard initialized successfully')
 
   
-  showLoadingAnimation()
-
   profileComplete()
 
   initializeDashboard()
