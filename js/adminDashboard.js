@@ -1,68 +1,3 @@
-// $(document).ready(function() {
-//     // Check if required libraries are loaded
-//     if (typeof $ === 'undefined') {
-//         console.error('jQuery is not loaded!')
-//         return
-//     }
-
-//     console.log('Admin dashboard initialized successfully')
-
-//     $('#changeTextBtn').click(async function() {
-//         const token = await $.cookie('token');
-
-//         // Check if tokenHandler is available (loaded via script tag)
-//         if (typeof window.tokenHandler !== 'undefined' && token) {
-//             try {
-//                 window.tokenHandler.scheduleSilentRefresh(token)
-//             } catch (error) {
-//                 console.warn('Token refresh handler not available:', error)
-//             }
-//         }
-//         $.ajax({
-//             url: 'http://localhost:8080/api/hello',
-//             type: 'GET',
-//             headers: {
-//                 'Authorization': 'Bearer ' + token
-//             },
-
-//             success: function(response) {
-//                 console.log("Data fetched successfully:", response);
-//                 $('#text').text(response);
-//             },
-//             error: function(error) {
-//                 console.error("Error fetching data:", error);
-//                 Swal.fire({
-//                     icon: 'error',
-//                     title: 'Error',
-//                     text: 'Failed to fetch data.'
-//                 });
-//             }
-//         });
-
-//         if (!token) {
-//             Swal.fire({
-//                 icon: 'error',
-//                 title: 'Authentication Required',
-//                 text: 'Please login to access this feature.',
-//             }).then(() => {
-//                 window.location.href = '../pages/login-page.html';
-//             });
-//         }
-//     });
-
-
-//     $('#logoutBtn').click(function() {
-//         $.removeCookie('token', { path: '/' });
-//         $.removeCookie('refresh_token', { path: '/' });
-//         $.removeCookie('user_role', { path: '/' });
-//         $.removeCookie('first_name', { path: '/' });
-//         $.removeCookie('last_name', { path: '/' });
-//         $.removeCookie('email', { path: '/' });
-
-//         window.location.href = '../pages/login-page.html';
-//     });
-// });
-
 
 const $ = window.$
 const Swal = window.Swal
@@ -81,14 +16,15 @@ function createAuthHeaders() {
 }
 
 $(document).ready(() => {
+  const token = $.cookie("token")
 
-  // if (typeof window.tokenHandler !== 'undefined' && token) {
-  //   try {
-  //     window.tokenHandler.scheduleSilentRefresh(token)
-  //   } catch (error) {
-  //     console.warn('Token refresh handler not available:', error)
-  //   }
-  // }
+  if (typeof window.tokenHandler !== 'undefined' && token) {
+    try {
+      window.tokenHandler.scheduleSilentRefresh(token)
+    } catch (error) {
+      console.warn('Token refresh handler not available:', error)
+    }
+  }
 
   initializeDashboard()
 

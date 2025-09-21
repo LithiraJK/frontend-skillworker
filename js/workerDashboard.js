@@ -176,12 +176,10 @@ $(document).ready(() => {
   hideLoadingAnimation()
 })
 
-// Function to update navbar profile picture (moved to global scope)
 function updateNavbarProfilePicture(imageUrl) {
   const defaultImage = "/assets/images/workerDefualtPP.png"
   const profileImageUrl = imageUrl || defaultImage
   
-  // Update navbar profile picture
   $('.navbar .profile-btn img').attr('src', profileImageUrl)
   
   console.log('Navbar profile picture updated:', profileImageUrl)
@@ -191,7 +189,6 @@ function initializeDashboard() {
   const workerId = $.cookie("userId")
   const token = $.cookie("token")
 
-  // Check if tokenHandler is available (loaded via script tag)
   if (typeof window.tokenHandler !== 'undefined' && token) {
     try {
       window.tokenHandler.scheduleSilentRefresh(token)

@@ -10,8 +10,18 @@ $(document).ready(() => {
 
   const token = $.cookie("token");
 
+  // Initialize token refresh handler
+  if (typeof window.tokenHandler !== 'undefined' && token) {
+    try {
+      window.tokenHandler.scheduleSilentRefresh(token)
+    } catch (error) {
+      console.warn('Token refresh handler not available:', error)
+    }
+  }
+
   let categories = []
   let workerAds = []
+  let filteredAds = []
   let totalPages = 0
   let totalElements = 0
 
@@ -145,6 +155,10 @@ $(document).ready(() => {
 
           updateCategoryCounts()
           populateCategories()
+          
+          // Reset filtered ads to show all loaded ads
+          filteredAds = [...workerAds]
+          
           displayWorkers(workerAds)
           updateResultsCount(totalElements)
           updatePagination()
@@ -194,6 +208,41 @@ $(document).ready(() => {
     categories.sort((a, b) => b.count - a.count)
   }
 
+  function filterAds(query = "") {
+    if (!query || query.trim() === "") {
+      filteredAds = [...workerAds]
+    } else {
+      const searchTerm = query.toLowerCase().trim()
+      
+      filteredAds = workerAds.filter(ad => {
+        // Search in multiple fields
+        const categoryMatch = ad.category.toLowerCase().includes(searchTerm)
+        const titleMatch = ad.title.toLowerCase().includes(searchTerm)
+        const descriptionMatch = ad.description.toLowerCase().includes(searchTerm)
+        const districtMatch = ad.district.toLowerCase().includes(searchTerm)
+        const nameMatch = ad.name.toLowerCase().includes(searchTerm)
+        
+        // Search in skills array
+        const skillsMatch = ad.skills && ad.skills.some(skill => 
+          skill.toLowerCase().includes(searchTerm)
+        )
+        
+        // Check if search term matches any criteria
+        return categoryMatch || titleMatch || descriptionMatch || 
+               districtMatch || nameMatch || skillsMatch
+      })
+    }
+    
+    // Update display with filtered results
+    displayWorkers(filteredAds)
+    updateResultsCount(filteredAds.length)
+    
+    // Clear pagination when filtering locally
+    $("#pagination").empty()
+    
+    return filteredAds
+  }
+
   function populateCategories() {
     const container = $("#categoriesContainer")
     container.empty()
@@ -217,6 +266,11 @@ $(document).ready(() => {
       $(this).addClass("active")
       selectedCategory = "all"
       currentPage = 0
+      
+      // Clear search when showing all services
+      $("#searchInput").val("")
+      searchQuery = ""
+      
       fetchAds(selectedDistrict, 0)
     })
   }
@@ -240,14 +294,19 @@ $(document).ready(() => {
     })
 
     $("#searchBtn").on("click", () => {
-      searchQuery = $("#searchInput").val()
+      searchQuery = $("#searchInput").val().trim()
       currentPage = 0
       
-      // Determine which endpoint to use based on current filters
-      if (selectedCategory !== 'all') {
-        fetchAds(null, 0, selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1))
+      if (searchQuery === "") {
+        // If search is empty, show all ads based on current filters
+        if (selectedCategory !== 'all') {
+          fetchAds(null, 0, selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1))
+        } else {
+          fetchAds(selectedDistrict, 0)
+        }
       } else {
-        fetchAds(selectedDistrict, 0)
+        // Filter the currently loaded ads
+        filterAds(searchQuery)
       }
     })
 
@@ -255,6 +314,25 @@ $(document).ready(() => {
       if (e.which === 13) {
         $("#searchBtn").click()
       }
+    })
+
+    // Real-time search functionality
+    $("#searchInput").on("input", function() {
+      const query = $(this).val().trim()
+      
+      // Use a debounce-like approach to avoid too many filter calls
+      clearTimeout(window.searchTimeout)
+      window.searchTimeout = setTimeout(() => {
+        if (query === "") {
+          // Show all currently loaded ads when search is cleared
+          displayWorkers(workerAds)
+          updateResultsCount(workerAds.length)
+          updatePagination()
+        } else {
+          // Filter and display results
+          filterAds(query)
+        }
+      }, 300) // 300ms delay
     })
 
     $("#categorySearch").on("input", function () {
@@ -272,6 +350,10 @@ $(document).ready(() => {
       selectedCategory = $(this).data("category")
       currentPage = 0
       
+      // Clear search when changing category
+      $("#searchInput").val("")
+      searchQuery = ""
+      
       // Fetch ads based on selected category
       if (selectedCategory === 'all') {
         // Reset district filter when showing all categories
@@ -285,6 +367,10 @@ $(document).ready(() => {
     $("#districtSelect").on("change", function () {
       selectedDistrict = $(this).val() === "All Districts" ? "all" : $(this).val()
       currentPage = 0
+      
+      // Clear search when changing district
+      $("#searchInput").val("")
+      searchQuery = ""
       
       // Reset category selection when changing district
       selectedCategory = "all"
@@ -306,6 +392,10 @@ $(document).ready(() => {
         $(".district-path").removeClass("selected")
         $(this).addClass("selected")
         currentPage = 0
+        
+        // Clear search when changing district
+        $("#searchInput").val("")
+        searchQuery = ""
         
         // Reset category selection when changing district
         selectedCategory = "all"
@@ -515,6 +605,10 @@ $(document).ready(() => {
     selectedDistrict = districtName
     $("#districtSelect").val(districtName)
     currentPage = 0
+    
+    // Clear search when changing district
+    $("#searchInput").val("")
+    searchQuery = ""
     
     // Reset category selection when changing district
     selectedCategory = "all"

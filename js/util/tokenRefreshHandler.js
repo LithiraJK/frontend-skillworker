@@ -28,7 +28,7 @@ function scheduleSilentRefresh(token) {
 
     if (delay <= 0) {
         console.log("Token expiring soon or expired, refreshing now...");
-        refreshAccessToken().catch(() => { 
+        refreshAccessToken().catch(() => {
             Swal.fire({
                 icon: 'error',
                 title: 'Session Expired',

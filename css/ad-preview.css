@@ -63,6 +63,44 @@ body {
   font-size: 1.5rem;
 }
 
+.verified-badge {
+  color: #0d6efd !important;
+  filter: drop-shadow(0 0 2px rgba(13, 110, 253, 0.3));
+}
+
+@keyframes verifiedPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 3px rgba(13, 110, 253, 0.4));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 5px rgba(13, 110, 253, 0.6));
+  }
+}
+
+.worker-name {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.verified-worker-info {
+  background: linear-gradient(
+    135deg,
+    rgba(13, 110, 253, 0.05),
+    rgba(102, 16, 242, 0.05)
+  );
+  border-left: 3px solid #0d6efd;
+  padding: 8px 12px;
+  border-radius: 0 8px 8px 0;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #0d6efd;
+}
+
 .nav-icon {
   color: rgba(255, 255, 255, 0.8);
   font-size: 1.1rem;

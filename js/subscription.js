@@ -1,4 +1,14 @@
 $(document).ready(() => {
+    const token = $.cookie("token");
+
+    // Initialize token refresh handler
+    if (typeof window.tokenHandler !== 'undefined' && token) {
+        try {
+            window.tokenHandler.scheduleSilentRefresh(token)
+        } catch (error) {
+            console.warn('Token refresh handler not available:', error)
+        }
+    }
 
     $(".btn-plan").on("click", function () {
         const plan = $(this).data("plan");

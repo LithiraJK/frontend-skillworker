@@ -251,107 +251,23 @@
                 </p>
             </div>
 
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 worker-card border-custom">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="/professional-woman-electrician.jpg" alt="Sarah Johnson" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;">
-                                <div class="flex-grow-1">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <h5 class="card-title mb-0">Sarah Johnson</h5>
-                                        <span class="verified-badge">
-                                            <i class="fas fa-shield-alt me-1"></i>Verified
-                                        </span>
-                                    </div>
-                                    <p class="small text-muted-foreground mb-0">Electrical Contractor</p>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-star star-rating me-1"></i>
-                                    <span class="fw-medium">4.9</span>
-                                    <span class="small text-muted-foreground ms-1">(127 reviews)</span>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex align-items-center text-muted-foreground small mb-3">
-                                <i class="fas fa-map-marker-alt me-1"></i>
-                                San Francisco, CA
-                            </div>
-                            
-                            <button class="btn btn-outline-primary w-100">View Profile</button>
-                        </div>
-                    </div>
+            <!-- Loading spinner -->
+            <div id="workers-loading" class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
                 </div>
-                
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 worker-card border-custom">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="/professional-plumber.png" alt="Mike Rodriguez" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;">
-                                <div class="flex-grow-1">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <h5 class="card-title mb-0">Mike Rodriguez</h5>
-                                        <span class="verified-badge">
-                                            <i class="fas fa-shield-alt me-1"></i>Verified
-                                        </span>
-                                    </div>
-                                    <p class="small text-muted-foreground mb-0">Plumbing Expert</p>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-star star-rating me-1"></i>
-                                    <span class="fw-medium">4.8</span>
-                                    <span class="small text-muted-foreground ms-1">(89 reviews)</span>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex align-items-center text-muted-foreground small mb-3">
-                                <i class="fas fa-map-marker-alt me-1"></i>
-                                Austin, TX
-                            </div>
-                            
-                            <button class="btn btn-outline-primary w-100">View Profile</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 worker-card border-custom">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="/assets/images/workerDefualtPP.png" alt="Emily Chen" class="rounded-circle me-3" style="width: 64px; height: 64px; object-fit: cover;">
-                                <div class="flex-grow-1">
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <h5 class="card-title mb-0">Emily Chen</h5>
-                                        <span class="verified-badge">
-                                            <i class="fas fa-shield-alt me-1"></i>Verified
-                                        </span>
-                                    </div>
-                                    <p class="small text-muted-foreground mb-0">Home Renovation</p>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="d-flex align-items-center">
-                                    <i class="fas fa-star star-rating me-1"></i>
-                                    <span class="fw-medium">5.0</span>
-                                    <span class="small text-muted-foreground ms-1">(156 reviews)</span>
-                                </div>
-                            </div>
-                            
-                            <div class="d-flex align-items-center text-muted-foreground small mb-3">
-                                <i class="fas fa-map-marker-alt me-1"></i>
-                                Seattle, WA
-                            </div>
-                            
-                            <button class="btn btn-outline-primary w-100">View Profile</button>
-                        </div>
-                    </div>
+            </div>
+
+            <!-- Workers container -->
+            <div id="top-workers-container" class="row g-4" style="display: none;">
+                <!-- Workers will be dynamically loaded here -->
+            </div>
+
+            <!-- Error message -->
+            <div id="workers-error" class="text-center" style="display: none;">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Unable to load top-rated workers at the moment. Please try again later.
                 </div>
             </div>
         </div>

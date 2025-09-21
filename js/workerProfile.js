@@ -18,6 +18,15 @@ $(document).ready(() => {
   const token = Cookies.get("token")
   let userData = {}
 
+  // Initialize token refresh handler
+  if (typeof window.tokenHandler !== 'undefined' && token) {
+    try {
+      window.tokenHandler.scheduleSilentRefresh(token)
+    } catch (error) {
+      console.warn('Token refresh handler not available:', error)
+    }
+  }
+
   // Function to update navbar profile picture
   function updateNavbarProfilePicture(imageUrl) {
     const defaultImage = "/assets/images/workerDefualtPP.png"

@@ -17,6 +17,15 @@ $(document).ready(() => {
   const token = $.cookie("token")
   let subscriptionPlan = "FREE" 
 
+  // Initialize token refresh handler
+  if (typeof window.tokenHandler !== 'undefined' && token) {
+    try {
+      window.tokenHandler.scheduleSilentRefresh(token)
+    } catch (error) {
+      console.warn('Token refresh handler not available:', error)
+    }
+  } 
+
   function getVerifiedBadge(size = 'md') {
     const isVerified = subscriptionPlan === "PRO" || subscriptionPlan === "PREMIUM"
     if (!isVerified) return ''
