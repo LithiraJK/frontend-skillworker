@@ -122,6 +122,49 @@ body::before {
     line-height: 1.6;
 }
 
+.btn-outline-custom {
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 500;
+  color: #475569;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.btn-outline-custom:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px);
+  box-shadow: var(--input-shadow);
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+}
+
+.divider span {
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  padding: 0 1rem;
+  color: #94a3b8;
+  font-weight: 500;
+  font-size: 14px;
+}
+
 /* Form Section */
 .form-section {
     padding: 3rem;

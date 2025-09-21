@@ -11,7 +11,6 @@ $(document).ready(() => {
   }
   
   console.log('Signup page initialized successfully')
-  // Password visibility toggle
   $("#passwordToggle").click(function () {
     const passwordField = $("#password")
     const icon = $(this).find("i")
@@ -25,7 +24,6 @@ $(document).ready(() => {
     }
   })
 
-  // Real-time validation
   function validateField(field, value, type) {
     const feedback = $(`#${field}Feedback`)
     const input = $(`#${field}`)
@@ -65,7 +63,6 @@ $(document).ready(() => {
     return isValid
   }
 
-  // Add real-time validation listeners
   $("#firstName").on("input blur", function () {
     validateField("firstName", $(this).val(), "firstName")
   })
@@ -87,7 +84,6 @@ $(document).ready(() => {
 
     console.log("Signup form submitted")
 
-    // Validate all fields
     const firstName = $("#firstName").val().trim()
     const lastName = $("#lastName").val().trim()
     const email = $("#email").val().trim()
@@ -110,7 +106,6 @@ $(document).ready(() => {
       return
     }
 
-    // Show loading state
     const signupBtn = $("#signupBtn")
     const spinner = $("#spinner")
     const buttonText = $("#buttonText")
@@ -139,7 +134,6 @@ $(document).ready(() => {
       success: (response) => {
         console.log("Signup successful:", response.message)
 
-        // Hide loading state
         if ($("#loadingOverlay").length) $("#loadingOverlay").hide()
         signupBtn.removeClass("loading").prop("disabled", false)
         if (spinner.length) spinner.hide()
@@ -159,7 +153,6 @@ $(document).ready(() => {
       error: (xhr, status, error) => {
         console.error("Sign-up failed:", xhr.responseJSON || error)
 
-        // Hide loading state
         if ($("#loadingOverlay").length) $("#loadingOverlay").hide()
         signupBtn.removeClass("loading").prop("disabled", false)
         if (spinner.length) spinner.hide()
@@ -184,6 +177,74 @@ $(document).ready(() => {
       },
     })
   })
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const selectedRole = urlParams.get('role') || localStorage.getItem('selectedUserType');
+  console.log('Selected role from URL or localStorage:', selectedRole);
+
+  if (selectedRole) {
+    const roleText = selectedRole.toLowerCase() === 'worker' ? 'Worker' : 'Client';
+    console.log(`User selected to join as: ${roleText}`);
+  }
+
+  $("#googleLoginBtn").click(async function () {
+    if (!selectedRole) {
+      Swal.fire({
+        icon: "error",
+        title: "Role Required",
+        text: "Please go back and select your role first.",
+        confirmButtonText: "Go Back"
+      }).then(() => {
+        window.location.href = "../pages/signup-role-selection.html";
+      });
+      return;
+    }
+
+    $(this).prop('disabled', true);
+    $(this).html('<i class="fas fa-spinner fa-spin me-2"></i>Connecting to Google...');
+
+    try {
+      const roleUpper = selectedRole.toUpperCase();
+
+      if (typeof $.cookie !== 'undefined') {
+        $.cookie("pendingOAuthRole", roleUpper, {
+          path: "/",
+          expires: new Date(Date.now() + 10 * 60 * 1000) 
+        });
+      }
+
+      localStorage.setItem("pendingOAuthRole", roleUpper);
+
+      try {
+        await $.ajax({
+          type: "POST",
+          url: "http://localhost:8080/oauth2/prepare",
+          data: JSON.stringify({ role: roleUpper }),
+          contentType: "application/json",
+          timeout: 3000,
+        });
+        console.log("Role stored in session successfully");
+      } catch (sessionError) {
+        console.warn("Failed to store role in session, proceeding with cookie/localStorage", sessionError);
+      }
+
+      console.log("Stored role in cookie and localStorage:", roleUpper);
+
+      window.location.href = "http://localhost:8080/oauth2/authorization/google";
+
+    } catch (error) {
+      console.error("Failed to prepare OAuth:", error);
+
+      $(this).prop('disabled', false);
+      $(this).html('<img width="20" height="20" class="me-2" src="https://img.icons8.com/color/48/google-logo.png" alt="google-logo" />Continue with Google');
+
+      Swal.fire({
+        icon: "error",
+        title: "Connection Error",
+        text: "Failed to connect to Google. Please try again.",
+      });
+    }
+  });
 
   $(".form-control").on("focus", function () {
     $(this).parent().addClass("focused")
