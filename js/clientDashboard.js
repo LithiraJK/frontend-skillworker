@@ -85,7 +85,7 @@ $(document).ready(() => {
   }
 
  
-  function fetchAds(district = null, page = 0) {
+  function fetchAds(district = null, page = 0, category = null) {
   
     $('#workersContainer').html(`
       <div class="col-12">
@@ -100,7 +100,10 @@ $(document).ready(() => {
 
    
     let apiUrl = `http://localhost:8080/api/v1/ad/getall/active?page=${page}&size=${itemsPerPage}`
-    if (district && district !== 'all') {
+    
+    if (category && category !== 'all') {
+      apiUrl = `http://localhost:8080/api/v1/ad/getads/active/${category}?page=${page}&size=${itemsPerPage}`
+    } else if (district && district !== 'all') {
       apiUrl = `http://localhost:8080/api/v1/ad/getall/active/${district.toUpperCase()}?page=${page}&size=${itemsPerPage}`
     }
 
@@ -115,7 +118,6 @@ $(document).ready(() => {
         console.log('Ads fetched successfully:', result)
 
         if (result.status === 200) {
-          // Update pagination info from server response
           totalPages = result.data.totalPages
           totalElements = result.data.totalElements
           currentPage = result.data.currentPage
@@ -207,6 +209,16 @@ $(document).ready(() => {
             `)
       container.append(categoryElement)
     })
+    
+    // Handle the "All Services" button click
+    $(".category-btn[data-category='all']").on("click", function() {
+      $(".category-item").removeClass("active")
+      $(".category-btn").removeClass("active")
+      $(this).addClass("active")
+      selectedCategory = "all"
+      currentPage = 0
+      fetchAds(selectedDistrict, 0)
+    })
   }
 
   function populateDistricts() {
@@ -230,7 +242,13 @@ $(document).ready(() => {
     $("#searchBtn").on("click", () => {
       searchQuery = $("#searchInput").val()
       currentPage = 0
-      fetchAds(selectedDistrict, 0)
+      
+      // Determine which endpoint to use based on current filters
+      if (selectedCategory !== 'all') {
+        fetchAds(null, 0, selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1))
+      } else {
+        fetchAds(selectedDistrict, 0)
+      }
     })
 
     $("#searchInput").on("keypress", (e) => {
@@ -249,15 +267,28 @@ $(document).ready(() => {
 
     $(document).on("click", ".category-item", function () {
       $(".category-item").removeClass("active")
+      $(".category-btn").removeClass("active")  // Also remove from "All Services" button
       $(this).addClass("active")
       selectedCategory = $(this).data("category")
       currentPage = 0
-      fetchAds(selectedDistrict, 0)
+      
+      // Fetch ads based on selected category
+      if (selectedCategory === 'all') {
+        // Reset district filter when showing all categories
+        fetchAds(selectedDistrict, 0)
+      } else {
+        // Fetch category-specific ads (category takes priority over district)
+        fetchAds(null, 0, selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1))
+      }
     })
 
     $("#districtSelect").on("change", function () {
       selectedDistrict = $(this).val() === "All Districts" ? "all" : $(this).val()
       currentPage = 0
+      
+      // Reset category selection when changing district
+      selectedCategory = "all"
+      $(".category-item").removeClass("active")
       
       fetchAds(selectedDistrict, 0)
 
@@ -275,6 +306,10 @@ $(document).ready(() => {
         $(".district-path").removeClass("selected")
         $(this).addClass("selected")
         currentPage = 0
+        
+        // Reset category selection when changing district
+        selectedCategory = "all"
+        $(".category-item").removeClass("active")
         
         fetchAds(district, 0)
       }
@@ -464,7 +499,12 @@ $(document).ready(() => {
       e.preventDefault()
       const page = Number.parseInt($(this).data("page"))
       if (page !== undefined && page !== currentPage && page >= 0 && page < totalPages) {
-        fetchAds(selectedDistrict, page)
+        // Use appropriate endpoint based on current filters
+        if (selectedCategory !== 'all') {
+          fetchAds(null, page, selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1))
+        } else {
+          fetchAds(selectedDistrict, page)
+        }
       }
     })
   }
@@ -475,6 +515,10 @@ $(document).ready(() => {
     selectedDistrict = districtName
     $("#districtSelect").val(districtName)
     currentPage = 0
+    
+    // Reset category selection when changing district
+    selectedCategory = "all"
+    $(".category-item").removeClass("active")
     
     fetchAds(districtName, 0)
     

@@ -1,16 +1,141 @@
 
 $(document).ready(() => {
-  // Check if required libraries are loaded
   if (typeof $ === 'undefined') {
     console.error('jQuery is not loaded!')
     return
   }
-  
+
   if (typeof Swal === 'undefined') {
     console.error('SweetAlert2 is not loaded!')
     return
   }
+
+  $("#googleLoginBtn").click(function () {
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
+  });
+
+  const params = new URLSearchParams(window.location.search);
   
+  // Debug: Log all URL parameters
+  console.log("URL parameters:", window.location.search);
+  console.log("Has token:", params.has("token"));
+  console.log("Has refreshToken:", params.has("refreshToken"));
+  
+  // Handle URL parameters (if backend sends via redirect)
+  if (params.has("token") && params.has("refreshToken")) {
+    const token = params.get("token");
+    const refreshToken = params.get("refreshToken");
+    const userId = params.get("userId");
+    const role = params.get("role");
+
+    console.log("Received OAuth data:", { token, refreshToken, userId, role });
+
+    $.cookie("token", token, { path: "/" })
+    $.cookie("refresh_token", refreshToken, { path: "/" })
+    $.cookie("user_role", role, { path: "/" })
+    $.cookie("userId", userId, { path: "/" })
+
+    console.log("Google login successful! Tokens saved.");
+
+    // Show success message and redirect
+    Swal.fire({
+      icon: "success",
+      title: "Welcome!",
+      text: "Google login successful",
+      timer: 1500,
+      showConfirmButton: false,
+      customClass: {
+        popup: "animated fadeInDown",
+      },
+    }).then(() => {
+      console.log("Redirecting user with role:", role);
+      
+      // Fixed the role checking logic
+      if (role === "CLIENT") {
+        console.log("Redirecting to client dashboard");
+        window.location.href = "/pages/client-dashboard.html";
+      } else if (role === "WORKER") {
+        console.log("Redirecting to worker dashboard");
+        window.location.href = "/pages/worker-dashboard.html";
+      } else if (role === "ADMIN") {
+        console.log("Redirecting to admin dashboard");
+        window.location.href = "/pages/admin-dashboard.html";
+      } else {
+        console.log("Unknown role, redirecting to client dashboard");
+        window.location.href = "/pages/client-dashboard.html";
+      }
+    });
+  } else if (params.has("token") || params.has("refreshToken") || params.has("role") || params.has("userId")) {
+    // Handle case where some but not all parameters are present
+    console.log("Incomplete OAuth parameters received:");
+    console.log("token:", params.get("token"));
+    console.log("refreshToken:", params.get("refreshToken"));
+    console.log("role:", params.get("role"));
+    console.log("userId:", params.get("userId"));
+    
+    Swal.fire({
+      icon: "error",
+      title: "Login Error",
+      text: "Incomplete authentication data received. Please try again.",
+      customClass: {
+        confirmButton: "btn btn-primary-custom",
+      },
+      buttonsStyling: false,
+    });
+  }
+
+ 
+  if (params.has("oauth_success") && params.get("oauth_success") === "true") {
+    $.ajax({
+      url: "http://localhost:8080/api/v1/auth/oauth/success",
+      type: "GET",
+      dataType: "json",
+      success: function(response) {
+        if (response.token && response.refreshToken) {
+          $.cookie("token", response.token, { path: "/" })
+          $.cookie("refresh_token", response.refreshToken, { path: "/" })
+          $.cookie("user_role", response.role, { path: "/" })
+          $.cookie("userId", response.userId, { path: "/" })
+
+          console.log("Google login successful! Tokens saved from API.");
+
+          // Show success message
+          Swal.fire({
+            icon: "success",
+            title: "Welcome!",
+            text: "Google login successful",
+            timer: 2000,
+            showConfirmButton: false,
+            customClass: {
+              popup: "animated fadeInDown",
+            },
+          }).then(() => {
+            // Redirect based on role
+            if (response.role === "CLIENT") {
+              window.location.href = "/pages/client-dashboard.html";
+            } else if (response.role === "WORKER") {
+              window.location.href = "/pages/worker-dashboard.html";
+            } else if (response.role === "ADMIN") {
+              window.location.href = "/pages/admin-dashboard.html";
+            }
+          });
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error("Failed to get OAuth success data:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: "Failed to complete Google authentication",
+          customClass: {
+            confirmButton: "btn btn-primary-custom",
+          },
+          buttonsStyling: false,
+        });
+      }
+    });
+  }
+
   console.log('Login page initialized successfully')
   $(".password-toggle").click(function () {
     const passwordInput = $("#password")
