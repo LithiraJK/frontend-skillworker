@@ -16,7 +16,7 @@ $(document).ready(() => {
         const userId = $.cookie("userId");
         const $button = $(this);
 
-        
+
         if (plan !== "basic") {
             $button.prop('disabled', true);
             $button.find('.loading-spinner').addClass('show');
@@ -46,135 +46,178 @@ $(document).ready(() => {
         }
     }
 
-   function showPaymentModal(plan, token, userId, $button) {
-    
-    function resetButton() {
-        if ($button && plan !== "basic") {
-            $button.prop('disabled', false);
-            $button.find('.loading-spinner').removeClass('show');
-            const originalText = plan === "pro" ? "Choose Pro Plan" : "Choose Premium";
-            $button.html(`<span class="loading-spinner"></span>${originalText}`);
+    function showPaymentModal(plan, token, userId, $button) {
+
+        function resetButton() {
+            if ($button && plan !== "basic") {
+                $button.prop('disabled', false);
+                $button.find('.loading-spinner').removeClass('show');
+                const originalText = plan === "pro" ? "Choose Pro Plan" : "Choose Premium";
+                $button.html(`<span class="loading-spinner"></span>${originalText}`);
+            }
         }
-    }
 
-    $.ajax({
-        url: `http://localhost:8080/api/v1/user/getuser/${userId}`,
-        type: "GET",
-        contentType: "application/json",
-        headers: { "Authorization": "Bearer " + token },
-        success: function(response) {
-            const userData = response.data;
-            console.log(userData);
-            
-            const data = { userId: userId, planType: plan };
+        $.ajax({
+            url: `http://localhost:8080/api/v1/user/getuser/${userId}`,
+            type: "GET",
+            contentType: "application/json",
+            headers: { "Authorization": "Bearer " + token },
+            success: function (response) {
+                const userData = response.data;
+                console.log(userData);
 
-            $.ajax({
-                url: "http://localhost:8080/api/v1/subscription/create",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(data),
-                headers: { "Authorization": "Bearer " + token },
-                success: function(response) {
-                    if (response.status === 201) {
-                        const sub = response.data;
+                const data = { userId: userId, planType: plan };
 
-                        const payment = {
-                            sandbox: true,
-                            merchant_id: sub.merchantId,
-                            return_url: window.location.origin + "/pages/subscription.html?success=true",
-                            cancel_url: window.location.origin + "/pages/subscription.html?cancelled=true",
-                            notify_url: "http://localhost:8080/api/v1/subscription/notify",
+                $.ajax({
+                    url: "http://localhost:8080/api/v1/subscription/create",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    headers: { "Authorization": "Bearer " + token },
+                    success: function (response) {
+                        if (response.status === 201) {
+                            const sub = response.data;
 
-                            order_id: sub.orderId,
-                            items: `SkillWorker ${sub.planType} Subscription`,
-                            amount: sub.amount,
-                            currency: sub.currency,
-                            hash: sub.hash,
+                            const payment = {
+                                sandbox: true,
+                                merchant_id: sub.merchantId,
+                                return_url: window.location.origin + "/pages/subscription.html?success=true",
+                                cancel_url: window.location.origin + "/pages/subscription.html?cancelled=true",
+                                notify_url: "http://localhost:8080/api/v1/subscription/notify",
 
-                            first_name: userData.firstName || "User",
-                            last_name: userData.lastName || "Name",
-                            email: userData.email,
-                            phone: userData.phone || "",
-                            address: userData.address || "",
-                            city: userData.city || "Colombo",
-                            country: "Sri Lanka"
-                        };
+                                order_id: sub.orderId,
+                                items: `SkillWorker ${sub.planType} Subscription`,
+                                amount: sub.amount,
+                                currency: sub.currency,
+                                hash: sub.hash,
 
-                        console.log(`Payment Object:`, payment);
-                        console.log(`BackEnd Hash : ${sub.hash}`);
-                        
-                        // Validate PayHere object exists
-                        if (typeof payhere === 'undefined') {
+                                first_name: userData.firstName || "User",
+                                last_name: userData.lastName || "Name",
+                                email: userData.email,
+                                phone: userData.phone || "",
+                                address: userData.address || "",
+                                city: userData.city || "Colombo",
+                                country: "Sri Lanka"
+                            };
+
+                            console.log(`Payment Object:`, payment);
+                            console.log(`BackEnd Hash : ${sub.hash}`);
+
+                            // Validate PayHere object exists
+                            if (typeof payhere === 'undefined') {
+                                resetButton();
+                                Swal.fire({
+                                    title: "Payment Error",
+                                    text: "PayHere payment gateway is not loaded. Please refresh the page and try again.",
+                                    icon: "error",
+                                    confirmButtonText: "OK",
+                                    confirmButtonColor: "#023047",
+                                });
+                                return;
+                            }
+
+                            // PayHere payment event handlers
+                            payhere.onCompleted = function onCompleted(orderId) {
+                                console.log("Payment completed. OrderID:" + orderId);
+
+                                // First get the correct notification hash from backend
+                                $.ajax({
+                                    url: `http://localhost:8080/api/v1/subscription/notification-hash/${orderId}/2`,
+                                    type: "GET",
+                                    headers: { "Authorization": "Bearer " + token },
+                                    success: function (hashResponse) {
+                                        if (hashResponse.status === 200) {
+                                            const notificationHash = hashResponse.data;
+
+                                            const payhereResponse = {
+                                                orderId: orderId,
+                                                statusCode: "2",
+                                                md5sig: notificationHash
+                                            };
+
+                                            console.log("Sending manual notification with correct hash:", payhereResponse);
+
+                                            $.ajax({
+                                                url: "http://localhost:8080/api/v1/subscription/payhere/success",
+                                                type: "POST",
+                                                contentType: "application/json",
+                                                data: JSON.stringify(payhereResponse),
+                                                headers: { "Authorization": "Bearer " + token },
+                                                success: function (response) {
+                                                    if (response.status === 200) {
+                                                        console.log("Subscription updated successfully");
+                                                        resetButton();
+                                                        Swal.fire({
+                                                            title: "Payment Successful!",
+                                                            text: `Your ${plan} subscription has been activated successfully. Order ID: ${orderId}`,
+                                                            icon: "success",
+                                                            confirmButtonText: "Continue",
+                                                            confirmButtonColor: "#023047",
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                window.location.href = "/pages/ads-overview.html";
+                                                            }
+                                                        });
+                                                    }
+                                                },
+                                                error: function (xhr, status, error) {
+                                                    console.error("Error updating subscription:", error);
+                                                    resetButton();
+                                                    Swal.fire("Error", "Failed to update subscription: " + error, "error");
+                                                }
+                                            });
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error("Error getting notification hash:", error);
+                                        resetButton();
+                                        Swal.fire("Error", "Failed to process payment verification: " + error, "error");
+                                    }
+                                });
+                            };
+
+                            payhere.onDismissed = function onDismissed() {
+                                console.log("Payment dismissed");
+                                resetButton();
+                                Swal.fire({
+                                    title: "Payment Cancelled",
+                                    text: "You have cancelled the payment process.",
+                                    icon: "info",
+                                    confirmButtonText: "OK",
+                                    confirmButtonColor: "#023047",
+                                });
+                            };
+
+                            payhere.onError = function onError(error) {
+                                console.log("Error:" + error);
+                                resetButton();
+                                Swal.fire({
+                                    title: "Payment Failed",
+                                    text: "There was an error processing your payment. Please try again.",
+                                    icon: "error",
+                                    confirmButtonText: "Try Again",
+                                    confirmButtonColor: "#023047",
+                                });
+                            };
+
+                            payhere.startPayment(payment);
+                        } else {
                             resetButton();
-                            Swal.fire({
-                                title: "Payment Error",
-                                text: "PayHere payment gateway is not loaded. Please refresh the page and try again.",
-                                icon: "error",
-                                confirmButtonText: "OK",
-                                confirmButtonColor: "#023047",
-                            });
-                            return;
+                            Swal.fire("Error", response.message, "error");
                         }
-
-                        // PayHere payment event handlers
-                        payhere.onCompleted = function onCompleted(orderId) {
-                            console.log("Payment completed. OrderID:" + orderId);
-                            resetButton();
-                            Swal.fire({
-                                title: "Payment Successful!",
-                                text: `Your ${plan} subscription has been activated successfully. Order ID: ${orderId}`,
-                                icon: "success",
-                                confirmButtonText: "Continue",
-                                confirmButtonColor: "#023047",
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    window.location.href = "/pages/ads-overview.html";
-                                }
-                            });
-                        };
-
-                        payhere.onDismissed = function onDismissed() {
-                            console.log("Payment dismissed");
-                            resetButton();
-                            Swal.fire({
-                                title: "Payment Cancelled",
-                                text: "You have cancelled the payment process.",
-                                icon: "info",
-                                confirmButtonText: "OK",
-                                confirmButtonColor: "#023047",
-                            });
-                        };
-
-                        payhere.onError = function onError(error) {
-                            console.log("Error:" + error);
-                            resetButton();
-                            Swal.fire({
-                                title: "Payment Failed",
-                                text: "There was an error processing your payment. Please try again.",
-                                icon: "error",
-                                confirmButtonText: "Try Again",
-                                confirmButtonColor: "#023047",
-                            });
-                        };
-
-                        payhere.startPayment(payment);
-                    } else {
+                    },
+                    error: function (xhr, status, error) {
                         resetButton();
-                        Swal.fire("Error", response.message, "error");
+                        Swal.fire("Error", "Request failed: " + error, "error");
                     }
-                },
-                error: function(xhr, status, error) {
-                    resetButton();
-                    Swal.fire("Error", "Request failed: " + error, "error");
-                }
-            });
-        },
-        error: function(error) {
-            resetButton();
-            Swal.fire("Error", "Request failed: " + error, "error");
-        }
-    });
-}
+                });
+            },
+            error: function (error) {
+                resetButton();
+                Swal.fire("Error", "Request failed: " + error, "error");
+            }
+        });
+    }
 
 
     $('a[href^="#"]').on("click", function (e) {

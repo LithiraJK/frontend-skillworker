@@ -81,6 +81,7 @@ $(document).ready(() => {
   `)
 
   getAds()
+  getWorkerSubscription()
 
   $("#adTitle").on("input", function () {
     const currentLength = $(this).val().trim().length
