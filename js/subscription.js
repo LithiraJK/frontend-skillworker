@@ -94,14 +94,28 @@ $(document).ready(() => {
                             first_name: userData.firstName || "User",
                             last_name: userData.lastName || "Name",
                             email: userData.email,
-                            phone: "",
-                            address: "",
-                            city: "",
+                            phone: userData.phone || "",
+                            address: userData.address || "",
+                            city: userData.city || "Colombo",
                             country: "Sri Lanka"
                         };
 
+                        console.log(`Payment Object:`, payment);
                         console.log(`BackEnd Hash : ${sub.hash}`);
                         
+                        // Validate PayHere object exists
+                        if (typeof payhere === 'undefined') {
+                            resetButton();
+                            Swal.fire({
+                                title: "Payment Error",
+                                text: "PayHere payment gateway is not loaded. Please refresh the page and try again.",
+                                icon: "error",
+                                confirmButtonText: "OK",
+                                confirmButtonColor: "#023047",
+                            });
+                            return;
+                        }
+
                         // PayHere payment event handlers
                         payhere.onCompleted = function onCompleted(orderId) {
                             console.log("Payment completed. OrderID:" + orderId);
