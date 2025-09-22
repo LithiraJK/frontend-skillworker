@@ -354,7 +354,7 @@ curl http://localhost:8080/api/v1/auth/test
 
 Watch our comprehensive demo showcasing all features of the SkillWorker platform:
 
-**🔗 [SkillWorker - Professional Service Platform Demo](https://youtu.be/your-demo-video-id)**
+**🔗 [Spring Boot Project - IJSE - GDSE72 - Galle - Lithira Jayanaka - 2nd Semester Final Project](https://youtu.be/yqRcDHTZrvU)**
 
 ### Demo Highlights:
 - 👤 User registration and authentication
